@@ -230,4 +230,11 @@ public class T_Config_Father {
 //        System.out.println(sql);
         method_i_d_u(sql);
     }
+
+    // 更新数据方法
+    public void Method_UpdateGroup(String groupNum) {
+        //update T_汽车之家_版本表_20240620 set config=1 where C_Group=6754
+        String sql = "update " + tableName + " set config = 1  where C_Group= "+ groupNum;
+        method_i_d_u(sql);
+    }
 }

@@ -214,7 +214,7 @@ public class DownLoadData {
     }
 
     //参数配置数据
-    public static void method_config(String url, String filePath, int i) {
+    public static boolean method_config(String url, String filePath, int i) {
         try {
             Document mainDoc = null;
             try {
@@ -228,18 +228,22 @@ public class DownLoadData {
                 JSONObject jsonRoot = JSON.parseObject(content);
                 if (jsonRoot.getString("message").equals("成功")) {
                     T_Config_File.method_写文件_根据路径创建文件夹(filePath.replace("params", "config"), i + "_config.txt", content);
-                    DataBaseMethod.updateDownLoadStatus(1, String.valueOf(i), "config");
+//                    DataBaseMethod.updateDownLoadStatus(1, String.valueOf(i), "config");
                     System.out.println("config\t成功");
+                    return true;
                 } else {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "出错"), "下载config.txt", url + "\n");
                     System.out.println("false");
+                    return false;
                 }
             } else {
 //                verDao.method_修改下载状态(3, i);
                 System.out.println("没有数据");
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
