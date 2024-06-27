@@ -184,7 +184,7 @@ public class DownLoadData {
         }
     }
 
-    public static void method_params(String url, String filePath, int i) {
+    public static boolean method_params(String url, String filePath, int i) {
         try {
             Document mainDoc = null;
             try {
@@ -199,17 +199,21 @@ public class DownLoadData {
                 JSONObject jsonRoot = JSON.parseObject(content);
                 if (jsonRoot.getString("message").equals("成功")) {
                     T_Config_File.method_写文件_根据路径创建文件夹(filePath, i + "_params.txt", content);
-                    DataBaseMethod.updateDownLoadStatus(1, String.valueOf(i), "params");
+//                    DataBaseMethod.updateDownLoadStatus(1, i, "params");
                     System.out.println("params\t成功");
+                    return true;
                 } else {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "出错"), "下载params_new.txt", url + "\n");
                     System.out.println("false");
+                    return false;
                 }
             } else {
                 System.out.println("没有数据");
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -262,7 +266,7 @@ public class DownLoadData {
                 JSONObject jsonRoot = JSON.parseObject(content);
                 if (jsonRoot.getString("message").equals("成功")) {
                     T_Config_File.method_写文件_根据路径创建文件夹(filePath.replace("params", "bag"), i + "_bag.txt", content);
-                    DataBaseMethod.updateDownLoadStatus(1, String.valueOf(i), "bag");
+                    DataBaseMethod.updateDownLoadStatus(1, i, "bag");
                     System.out.println("bag\t成功");
                 } else {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "出错"), "下载bag.txt", url + "\n");

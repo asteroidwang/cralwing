@@ -197,10 +197,10 @@ public class T_Config_AutoHome extends T_Config_Father {
     }
 
     //修改版本表的下载状态 分组
-    public void method_修改下载状态(String ziduan,int status, int id) {
-        String sql = "update " + tableName + " set "+ziduan+"=" + status + " where C_Group=" + id;
-        method_i_d_u(sql);
-    }
+//    public void method_修改下载状态(String ziduan,int status, int id) {
+//        String sql = "update " + tableName + " set "+ziduan+"=" + status + " where C_Group=" + id;
+//        method_i_d_u(sql);
+//    }
     public void method_修改车型页面下载状态(String ziduan,int status, String modelID) {
         String sql = "update " + tableName + " set "+ziduan+"=" + status + " where C_ModelID=" + modelID;
         method_i_d_u(sql);

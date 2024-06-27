@@ -77,9 +77,9 @@ public class DataBaseMethod {
     }
 
     // 修改数据下载状态
-    public static void updateDownLoadStatus(int status, String condition, String type) {
+    public static void updateDownLoadStatus(int status, int group, String ziduan) {
         try {
-            verDao.method_修改下载状态(type, status, Integer.parseInt(condition));
+            verDao.method_修改下载状态(ziduan, status, group);
         } catch (Exception e) {
             e.printStackTrace();
         }

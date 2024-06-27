@@ -232,9 +232,13 @@ public class T_Config_Father {
     }
 
     // 更新数据方法
-    public void Method_UpdateGroup(String groupNum) {
-        //update T_汽车之家_版本表_20240620 set config=1 where C_Group=6754
-        String sql = "update " + tableName + " set config = 1  where C_Group= "+ groupNum;
+//    public void Method_UpdateGroup(String groupNum) {
+//        //update T_汽车之家_版本表_20240620 set config=1 where C_Group=6754
+//        String sql = "update " + tableName + " set config = 1  where C_Group= "+ groupNum;
+//        method_i_d_u(sql);
+//    }
+    public void method_修改下载状态(String ziduan,int status, int id) {
+        String sql = "update " + tableName + " set "+ziduan+"=" + status + " where C_Group=" + id;
         method_i_d_u(sql);
     }
 }
