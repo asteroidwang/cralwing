@@ -104,7 +104,7 @@ public class T_Config_Father {
         ArrayList<Object> result = new ArrayList<>();
         try {
             method_连接数据库();
-            String sql = "select * from " + tableName;
+            String sql = "select * from " + tableName+" order by C_ID";
             ResultSet resultSet = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = resultSet.getMetaData();
             while (resultSet.next()) {

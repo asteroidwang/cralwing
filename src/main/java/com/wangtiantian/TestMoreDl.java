@@ -26,7 +26,7 @@ public class TestMoreDl {
                 .collect(Collectors.toList());
         for (int i = 0; i < paramsUrl.size(); i++) {
             List<Object> groupList = paramsUrl.get(i);
-            Method_MoreThread methodMoreThread = new Method_MoreThread(groupList, "/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240621_2/params/", ((Bean_P_C_B_URL)groupList.get(i)).get_C_Group());
+            Method_MoreThread methodMoreThread = new Method_MoreThread(groupList, "/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240801/params/", ((Bean_P_C_B_URL)groupList.get(i)).get_C_Group());
             Thread thread = new Thread(methodMoreThread);
             thread.start();
         }

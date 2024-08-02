@@ -8,7 +8,7 @@ import java.util.*;
 
 public class DataBaseMethod {
     //选择数据库与
-    private static int chooseDataBase = 10;
+    private static int chooseDataBase = 7;
     //选择要操作的数据库表
     private static T_Config_AutoHome brandDao = new T_Config_AutoHome(0, chooseDataBase, 0);
     private static T_Config_AutoHome fctDao = new T_Config_AutoHome(0, chooseDataBase, 1);
@@ -235,21 +235,19 @@ public class DataBaseMethod {
             b++;
             if (b >= 10) {
                 b = 0;
-                int group = verDao.getVersionGroup(versions.substring(0, versions.length() - 1));
-//                System.out.println(group);
+                int group = i/10+1;
+//                int group = verDao.getVersionGroup(versions.substring(0, versions.length() - 1));
                 Bean_P_C_B_URL beanPCBUrl = new Bean_P_C_B_URL();
-//                beanPCBUrl.set_Url("https://carif.api.autohome.com.cn/Car/v2/Config_ListBySpecIdList.ashx?speclist=" + versions.substring(0, versions.length() - 1) + "&_=1704953414626&_callback=__config3");
                 beanPCBUrl.set_C_VersionIds(versions.substring(0, versions.length() - 1));
                 beanPCBUrl.set_C_Group(group);
                 dataList.add(beanPCBUrl);
-                System.out.println(versions);
                 versions = "";
             }
         }
-        int group = verDao.getVersionGroup(versions.substring(0, versions.length() - 1));
+//        int group = verDao.getVersionGroup(versions.substring(0, versions.length() - 1));
+        int group = allData.size()/10+1;
         Bean_P_C_B_URL beanPCBUrl = new Bean_P_C_B_URL();
         beanPCBUrl.set_C_VersionIds(versions.substring(0, versions.length() - 1));
-//        beanPCBUrl.set_Url("https://carif.api.autohome.com.cn/Car/v2/Config_ListBySpecIdList.ashx?speclist=" + versions.substring(0, versions.length() - 1) + "&_=1704953414626&_callback=__config3");
         beanPCBUrl.set_C_Group(group);
         dataList.add(beanPCBUrl);
         return dataList;

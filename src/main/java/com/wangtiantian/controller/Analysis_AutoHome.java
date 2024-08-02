@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Analysis_AutoHome {
-    private static int chooseDataBase = 10;
+    private static int chooseDataBase = 5;
 
     private static T_Config_AutoHome brandDao = new T_Config_AutoHome(0, chooseDataBase, 0);
     private static T_Config_AutoHome fctDao = new T_Config_AutoHome(0, chooseDataBase, 1);
@@ -129,13 +129,18 @@ public class Analysis_AutoHome {
             }
             for (int i = 0; i < onLine.size(); i++) {
                 String modID = onLine.get(i);
-                String modURL = "https://car.autohome.com.cn/pic/series/" + modID + ".html";
-                method_车型页面(modURL, filePath + "图片路径在售车型页面/", modID);
+                if (!T_Config_File.method_判断文件是否存在(filePath + "图片路径在售车型页面/" + modID + ".txt")) {
+                    String modURL = "https://car.autohome.com.cn/pic/series/" + modID + ".html";
+                    method_车型页面(modURL, filePath + "图片路径在售车型页面/", modID);
+                }
+
             }
             for (int i = 0; i < noSale.size(); i++) {
                 String modID = ((Bean_Model) result.get(i)).get_C_ModelID();
-                String modURL_stop = "https://car.autohome.com.cn/pic/series-t/" + modID + ".html";
-                method_车型页面(modURL_stop, filePath + "图片路径停售车型页面/", modID + "_t");
+                if (!T_Config_File.method_判断文件是否存在(filePath + "图片路径停售车型页面/" + modID + "_t.txt")) {
+                    String modURL_stop = "https://car.autohome.com.cn/pic/series-t/" + modID + ".html";
+                    method_车型页面(modURL_stop, filePath + "图片路径停售车型页面/", modID + "_t");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,30 +184,34 @@ public class Analysis_AutoHome {
             }
             for (int i = 0; i < onLine.size(); i++) {
                 String modID = onLine.get(i);
-                String modURL = "https://www.autohome.com.cn/" + modID + "/#pvareaid=2042208";
-                Document mainDoc = Jsoup.connect(modURL).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
-                if (mainDoc != null) {
-                    Elements mainItems = mainDoc.select(".name-param");
-                    System.out.println(mainItems.size());
-                    if (mainItems.size() != 0) {
-                        T_Config_File.method_写文件_根据路径创建文件夹(filePath, "在售车型页面/" + modID + ".txt", mainDoc.toString());
+                if (!T_Config_File.method_判断文件是否存在(filePath + "在售车型页面/" + modID + ".txt")) {
+                    String modURL = "https://www.autohome.com.cn/" + modID + "/#pvareaid=2042208";
+                    Document mainDoc = Jsoup.connect(modURL).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
+                    if (mainDoc != null) {
+                        Elements mainItems = mainDoc.select(".name-param");
+                        System.out.println(mainItems.size());
+                        if (mainItems.size() != 0) {
+                            T_Config_File.method_写文件_根据路径创建文件夹(filePath, "在售车型页面/" + modID + ".txt", mainDoc.toString());
+                        }
+                    } else {
+                        System.out.println("null");
                     }
-                } else {
-                    System.out.println("null");
                 }
             }
             for (int i = 0; i < noSale.size(); i++) {
                 String modID = noSale.get(i);
-                String modURL_stop = "https://www.autohome.com.cn/" + modID + "/sale.html#pvareaid=3311673";
-                Document mainDoc_stop = Jsoup.connect(modURL_stop).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
-                if (mainDoc_stop != null) {
-                    Elements mainItems = mainDoc_stop.select(".modtab1");
-                    System.out.println(mainItems.size());
-                    if (mainItems.size() != 0) {
-                        T_Config_File.method_写文件_根据路径创建文件夹(filePath, "停售车型页面/" + modID + "_t.txt", mainDoc_stop.toString());
+                if (!T_Config_File.method_判断文件是否存在(filePath + "停售车型页面/" + modID + "_t.txt")) {
+                    String modURL_stop = "https://www.autohome.com.cn/" + modID + "/sale.html#pvareaid=3311673";
+                    Document mainDoc_stop = Jsoup.connect(modURL_stop).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
+                    if (mainDoc_stop != null) {
+                        Elements mainItems = mainDoc_stop.select(".modtab1");
+                        System.out.println(mainItems.size());
+                        if (mainItems.size() != 0) {
+                            T_Config_File.method_写文件_根据路径创建文件夹(filePath, "停售车型页面/" + modID + "_t.txt", mainDoc_stop.toString());
+                        }
+                    } else {
+                        System.out.println("null");
                     }
-                } else {
-                    System.out.println("null");
                 }
 //                method_车型页面(modURL_stop, filePath + "停售车型页面/", modID + "_t");
             }
@@ -849,7 +858,7 @@ public class Analysis_AutoHome {
         return dataList;
     }
 
-    public static ArrayList<Object>   method_解析bag(String content) {
+    public static ArrayList<Object> method_解析bag(String content) {
         ArrayList<Object> dataList = new ArrayList<>();
         try {
             JSONObject jsonRoot = JSON.parseObject(content);

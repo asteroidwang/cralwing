@@ -8,13 +8,13 @@ public class AutoHome {
         String websiteURL = "https://car.autohome.com.cn";
         String dataPath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/汽车之家_20240218/图片/";
         String koubeiFilePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/口碑数据/20240318/";
-        String saveFilePath = "/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240610/";
+        String saveFilePath = "/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240710/";
         /*汽车之家品牌数据的下载与解析入库*/
         //Analysis_AutoHome.method_下载品牌_厂商_车型数据(saveFilePath);
         //Analysis_AutoHome.method_解析品牌厂商车型(saveFilePath);
         //车型版本页面分两种
-        //Analysis_AutoHome.method_下载版本(saveFilePath+"车型版本页面/");
-        //Analysis_AutoHome.method_不在图片路径的车型页面(saveFilePath+"车型版本页面/");
+        Analysis_AutoHome.method_下载版本(saveFilePath+"车型版本页面/");
+        Analysis_AutoHome.method_不在图片路径的车型页面(saveFilePath+"车型版本页面/");
         //解析版本两个
         //Analysis_AutoHome.method_解析版本(dataPath.replace("图片", "数据"));
         //Analysis_AutoHome.method_版本(dataPath.replace("图片", "数据")+"车型版本_另/");

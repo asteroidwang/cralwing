@@ -13,10 +13,11 @@ public class InsertModelURL {
     public static void main(String[] args) {
         ArrayList<Object> modelList = DataBaseMethod.findDataFromDataBase("model");
         ArrayList<Object> modelDataLits = new ArrayList<>();
-        String zaishoupath="/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240610/车型版本页面/在售车型页面/";
-        String tinghsoupath="/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240610/车型版本页面/停售车型页面/";
-        String piczaishoupath="/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240610/车型版本页面/图片路径在售车型页面/";
-        String pictingshoupath="/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240610/车型版本页面/图片路径停售车型页面/";
+        String filePath="/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240801/车型版本页面/";
+        String zaishoupath=filePath+"在售车型页面/";
+        String tinghsoupath=filePath+"停售车型页面/";
+        String piczaishoupath=filePath+"图片路径在售车型页面/";
+        String pictingshoupath=filePath+"图片路径停售车型页面/";
         for (int i = 0; i < modelList.size(); i++) {
             String modelID = ((Bean_Model)modelList.get(i)).get_C_ModelID();
             String C_zaishou = "https://www.autohome.com.cn/"+modelID;
@@ -34,24 +35,24 @@ public class InsertModelURL {
             bean_modelURL.set_C_UpdateTime(updateTime);
             bean_modelURL.set_C_ModelID(modelID);
             if(T_Config_File.method_判断文件是否存在(tinghsoupath+modelID+"_t.txt")){
-                bean_modelURL.set_C_停售(0);
-            }else {
                 bean_modelURL.set_C_停售(1);
+            }else {
+                bean_modelURL.set_C_停售(0);
             }
             if(T_Config_File.method_判断文件是否存在(pictingshoupath+modelID+"_t.txt")){
-                bean_modelURL.set_C_图片页面停售(0);
-            }else {
                 bean_modelURL.set_C_图片页面停售(1);
+            }else {
+                bean_modelURL.set_C_图片页面停售(0);
             }
             if(T_Config_File.method_判断文件是否存在(zaishoupath+modelID+".txt")){
-                bean_modelURL.set_C_在售(0);
-            }else {
                 bean_modelURL.set_C_在售(1);
+            }else {
+                bean_modelURL.set_C_在售(0);
             }
             if(T_Config_File.method_判断文件是否存在(piczaishoupath+modelID+".txt")){
-                bean_modelURL.set_C_图片页面在售(0);
-            }else {
                 bean_modelURL.set_C_图片页面在售(1);
+            }else {
+                bean_modelURL.set_C_图片页面在售(0);
             }
 //            bean_modelURL.set_C_图片在售(0);
 //            bean_modelURL.set_C_图片停售(0);

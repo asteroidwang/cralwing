@@ -146,6 +146,11 @@ public class AnalysisData {
         return versionDataList;
     }
 
+    public static void insertVersionIds() {
+        ArrayList<Bean_P_C_B_URL> versionIds = DataBaseMethod.getUrlList();
+        DataBaseMethod.dataBase_i_d_u(versionIds);
+    }
+
     public static void method_解析params_config_bag(String filePath) {
         try {
             ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
@@ -157,29 +162,29 @@ public class AnalysisData {
 //                int group = ((Bean_Version) groupList.get(i)).get_C_Group();
                 int group = i;
                 String content_params = T_Config_File.method_读取文件内容(filePath + group + "_params" + ".txt");
-//                String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + group + "_config.txt"));
-//                String content_bag = T_Config_File.method_读取文件内容(filePath.replace("params", "bag/" + group + "_bag.txt"));
+                String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + group + "_config.txt"));
+                String content_bag = T_Config_File.method_读取文件内容(filePath.replace("params", "bag/" + group + "_bag.txt"));
                 ArrayList<Object> paramsList = method_解析params(content_params, filePath);
                 paramsDataList.addAll(paramsList);
-//                ArrayList<Object> configList = method_解析config(content_config, filePath);
-//                configDataList.addAll(configList);
-//                ArrayList<Object> bagList = method_解析bag(content_bag);
-//                bagDataList.addAll(bagList);
+                ArrayList<Object> configList = method_解析config(content_config, filePath);
+                configDataList.addAll(configList);
+                ArrayList<Object> bagList = method_解析bag(content_bag);
+                bagDataList.addAll(bagList);
             }
             HashSet<Object> setParams = new HashSet<>(paramsDataList);
             paramsDataList.clear();
             paramsDataList.addAll(setParams);
 
-//            HashSet<Object> setConfig = new HashSet<>(configDataList);
-//            configDataList.clear();
-//            configDataList.addAll(setConfig);
-//
-//            HashSet<Object> setBag = new HashSet<>(bagDataList);
-//            bagDataList.clear();
-//            bagDataList.addAll(setBag);
+            HashSet<Object> setConfig = new HashSet<>(configDataList);
+            configDataList.clear();
+            configDataList.addAll(setConfig);
+
+            HashSet<Object> setBag = new HashSet<>(bagDataList);
+            bagDataList.clear();
+            bagDataList.addAll(setBag);
             DataBaseMethod.dataBase_i_d_u(paramsDataList, "params");
-//            DataBaseMethod.dataBase_i_d_u(configDataList, "config");
-//            DataBaseMethod.dataBase_i_d_u(bagDataList, "bag");
+            DataBaseMethod.dataBase_i_d_u(configDataList, "config");
+            DataBaseMethod.dataBase_i_d_u(bagDataList, "bag");
             System.out.println(dateFormat.format(new Date()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,6 +210,7 @@ public class AnalysisData {
         try {
             ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
             for (int i = 1; i < groupList.size(); i++) {
+                System.out.println(i);
                 int group = ((Bean_Version) groupList.get(i)).get_C_Group();
                 String content_params = T_Config_File.method_读取文件内容(filePath + group + "_params" + ".txt");
                 String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + group + "_config.txt"));
@@ -215,6 +221,7 @@ public class AnalysisData {
             e.printStackTrace();
         }
     }
+
     public static void method_解析params_config_bag_One(String filePath) {
         try {
             int i = 3888;
@@ -222,15 +229,16 @@ public class AnalysisData {
             String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + i + "_config.txt"));
             String content_bag = T_Config_File.method_读取文件内容(filePath.replace("params", "bag/" + i + "_bag.txt"));
             ArrayList<Object> paramsData = method_解析params_One(content_params, filePath);
-            DataBaseMethod.dataBase_i_少量数据(paramsData,"params");
+            DataBaseMethod.dataBase_i_少量数据(paramsData, "params");
             ArrayList<Object> configData = method_解析config_One(content_config, filePath);
-            DataBaseMethod.dataBase_i_少量数据(configData,"config");
-            ArrayList<Object> bagData =  method_解析bag_One(content_bag);
-            DataBaseMethod.dataBase_i_少量数据(bagData,"bag");
+            DataBaseMethod.dataBase_i_少量数据(configData, "config");
+            ArrayList<Object> bagData = method_解析bag_One(content_bag);
+            DataBaseMethod.dataBase_i_少量数据(bagData, "bag");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     //1
     public static ArrayList<Object> method_停售车型(String content, String modID) {
         ArrayList<Object> versionList = new ArrayList<>();
@@ -433,7 +441,13 @@ public class AnalysisData {
                                 }
                                 if (pidList.get(i).get_C_PID().equals(PID)) {
                                     Class c = pidList.get(i).getClass();
-                                    Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
+                                    Field field = null;
+                                    try {
+                                        field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
+                                    } catch (Exception e) {
+                                        System.out.println(mapList.get(typeName + "__" + columnName) + "\t" + typeName + "__" + columnName);
+                                    }
+
                                     field.setAccessible(true);
                                     field.set(pidList.get(i), value);
                                 }
@@ -500,6 +514,9 @@ public class AnalysisData {
                                     subValue.append("-");
                                 }
                                 value = value + subValue.toString();
+                                if (value.equals("")) {
+                                    value = "-";
+                                }
                                 if (configList.get(i).get_C_PID().equals(PID)) {
                                     Class c = configList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
@@ -624,6 +641,7 @@ public class AnalysisData {
             e.printStackTrace();
         }
     }
+
     public static ArrayList<Object> method_解析params_One(String content, String filePath) {
         ArrayList<Object> dataList = new ArrayList<>();
         try {
@@ -748,6 +766,7 @@ public class AnalysisData {
         }
         return dataList;
     }
+
     public static ArrayList<Object> method_解析bag_One(String content) {
         ArrayList<Object> dataList = new ArrayList<>();
         try {

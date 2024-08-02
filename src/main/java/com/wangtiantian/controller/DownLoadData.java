@@ -109,15 +109,27 @@ public class DownLoadData {
         try {
             ArrayList<Object> onLine = DataBaseMethod.findDataByDownLoadStatus(0, "modelURL图片在售");
             ArrayList<Object> noSale = DataBaseMethod.findDataByDownLoadStatus(0, "modelURL图片停售");
+            System.out.println(onLine.size() + "\t" + noSale.size());
             for (int i = 0; i < onLine.size(); i++) {
                 String modURL = ((Bean_ModelURL) onLine.get(i)).get_C_ModelURL_图片页面在售();
                 String modID = ((Bean_ModelURL) onLine.get(i)).get_C_ModelID();
-                method_车型页面(modURL, filePath + "图片路径在售车型页面/", modID, "C_图片页面在售");
+                Boolean isD = T_Config_File.method_判断文件是否存在(filePath + "图片路径在售车型页面/" + modID + ".txt");
+                if (!isD) {
+                    method_车型页面(modURL, filePath + "图片路径在售车型页面/", modID, "C_图片页面在售");
+                }else {
+                    System.out.println(isD);
+                }
+
             }
             for (int i = 0; i < noSale.size(); i++) {
                 String modURL_stop = ((Bean_ModelURL) noSale.get(i)).get_C_ModelURL_图片页面停售();
                 String modID = ((Bean_ModelURL) noSale.get(i)).get_C_ModelID();
-                method_车型页面(modURL_stop, filePath + "图片路径停售车型页面/", modID + "_t", "C_图片页面停售");
+                Boolean isD = T_Config_File.method_判断文件是否存在(filePath + "图片路径停售车型页面/" + modID + "_t" + ".txt");
+                if (!isD) {
+                    method_车型页面(modURL_stop, filePath + "图片路径停售车型页面/", modID + "_t", "C_图片页面停售");
+                }else {
+                    System.out.println(isD);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,34 +160,44 @@ public class DownLoadData {
         try {
             ArrayList<Object> onLine = DataBaseMethod.findDataByDownLoadStatus(0, "modelURL在售");
             ArrayList<Object> noSale = DataBaseMethod.findDataByDownLoadStatus(0, "modelURL停售");
+            System.out.println(onLine.size() + "\t" + noSale.size());
             for (int i = 0; i < onLine.size(); i++) {
                 String modURL = ((Bean_ModelURL) onLine.get(i)).get_C_ModelURL_在售();
                 String modID = ((Bean_ModelURL) onLine.get(i)).get_C_ModelID();
-//                System.out.println(modURL);
-                Document mainDoc = Jsoup.connect(modURL).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
-                if (mainDoc != null) {
-                    Elements mainItems = mainDoc.select(".name-param");
-                    if (mainItems.size() != 0) {
-                        T_Config_File.method_写文件_根据路径创建文件夹(filePath, "在售车型页面/" + modID + ".txt", mainDoc.toString());
-                        DataBaseMethod.updateModelStatus(1, modID, "C_在售");
+                Boolean isD = T_Config_File.method_判断文件是否存在(filePath + "在售车型页面/" + modID + ".txt");
+                if (!isD) {
+                    Document mainDoc = Jsoup.connect(modURL).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
+                    if (mainDoc != null) {
+                        Elements mainItems = mainDoc.select(".name-param");
+                        if (mainItems.size() != 0) {
+                            T_Config_File.method_写文件_根据路径创建文件夹(filePath, "在售车型页面/" + modID + ".txt", mainDoc.toString());
+                            DataBaseMethod.updateModelStatus(1, modID, "C_在售");
+                        }
+                    } else {
+                        System.out.println("null");
                     }
-                } else {
-                    System.out.println("null");
+                }else {
+                    System.out.println(isD);
                 }
             }
             for (int i = 0; i < noSale.size(); i++) {
 //                String modID = noSale.get(i);
                 String modURL_stop = ((Bean_ModelURL) noSale.get(i)).get_C_ModelURL_停售();
                 String modID = ((Bean_ModelURL) noSale.get(i)).get_C_ModelID();
-                Document mainDoc_stop = Jsoup.connect(modURL_stop).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
-                if (mainDoc_stop != null) {
-                    Elements mainItems = mainDoc_stop.select(".modtab1");
-                    if (mainItems.size() != 0) {
-                        T_Config_File.method_写文件_根据路径创建文件夹(filePath, "停售车型页面/" + modID + "_t.txt", mainDoc_stop.toString());
-                        DataBaseMethod.updateModelStatus(1, modID, "C_停售");
+                Boolean isD = T_Config_File.method_判断文件是否存在(filePath + "停售车型页面/" + modID + "_t.txt");
+                if (!isD) {
+                    Document mainDoc_stop = Jsoup.connect(modURL_stop).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").ignoreContentType(true).get();
+                    if (mainDoc_stop != null) {
+                        Elements mainItems = mainDoc_stop.select(".modtab1");
+                        if (mainItems.size() != 0) {
+                            T_Config_File.method_写文件_根据路径创建文件夹(filePath, "停售车型页面/" + modID + "_t.txt", mainDoc_stop.toString());
+                            DataBaseMethod.updateModelStatus(1, modID, "C_停售");
+                        }
+                    } else {
+                        System.out.println("null");
                     }
-                } else {
-                    System.out.println("null");
+                }else {
+                    System.out.println(isD);
                 }
 //                method_车型页面(modURL_stop, filePath + "停售车型页面/", modID + "_t");
             }
@@ -252,7 +274,7 @@ public class DownLoadData {
     }
 
     //选装包数据
-    public static void method_bag(String url, String filePath, int i) {
+    public static boolean method_bag(String url, String filePath, int i) {
         try {
             Document mainDoc = null;
             try {
@@ -266,18 +288,22 @@ public class DownLoadData {
                 JSONObject jsonRoot = JSON.parseObject(content);
                 if (jsonRoot.getString("message").equals("成功")) {
                     T_Config_File.method_写文件_根据路径创建文件夹(filePath.replace("params", "bag"), i + "_bag.txt", content);
-                    DataBaseMethod.updateDownLoadStatus(1, i, "bag");
+//                    DataBaseMethod.updateDownLoadStatus(1, i, "bag");
                     System.out.println("bag\t成功");
+                    return true;
                 } else {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "出错"), "下载bag.txt", url + "\n");
                     System.out.println("false");
+                    return false;
                 }
             } else {
 //                verDao.method_修改下载状态(4, i);
                 System.out.println("没有数据");
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
