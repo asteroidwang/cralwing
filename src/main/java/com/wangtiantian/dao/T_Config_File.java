@@ -35,7 +35,7 @@ public class T_Config_File {
             writer.flush();
             writer.close();
             fos.close();
-            System.out.println("下载一次");
+            System.out.println("下载一次\t"+filePath+fileName);
         } catch (Exception e) {
             System.out.println(e.toString());
         }

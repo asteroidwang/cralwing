@@ -23,7 +23,7 @@ public class T_Config_Father {
     protected String dbString;
 
     public T_Config_Father(int chooseDataBaseType, int chooseDataBase, int chooseTable) {
-        String content = T_Config_File.method_读取文件内容("/Users/wangtiantian/Downloads/crawlingWebsite/config.json");
+        String content = T_Config_File.method_读取文件内容("config.json");
         JSONArray mainRoot = JSON.parseArray(content);
         JSONObject jsonRoot = mainRoot.getJSONObject(chooseDataBaseType);
         JSONArray mainJson = jsonRoot.getJSONArray("dbItems");
@@ -39,8 +39,11 @@ public class T_Config_Father {
         tableName = tableObject.getString("tableName");
         if (chooseDataBaseType == 0) {
             dbString = dbURL + dbName;
-        } else {
+        } else if (chooseDataBaseType == 1){
             dbString = dbURL + dbName + jsonRoot.getString("charset");
+        } else if (chooseDataBaseType == 2) {
+            dbString = dbURL + dbName;
+            System.out.println("当前正在使用的数据库是 -> "+dbName);
         }
     }
 
@@ -61,7 +64,6 @@ public class T_Config_Father {
     public void method_i_d_u(String sql) {
         try {
             method_连接数据库();
-            System.out.println(sql);
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
@@ -240,5 +242,15 @@ public class T_Config_Father {
     public void method_修改下载状态(String ziduan,int status, int id) {
         String sql = "update " + tableName + " set "+ziduan+"=" + status + " where C_Group=" + id;
         method_i_d_u(sql);
+    }
+
+
+    private static final Object lock = new Object();
+    // 修改未下载的车辆信息的数据的url的状态
+    public void updateNoDealerModelStatus(String dealerID,String modID) {
+        synchronized (lock){
+            String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerID=" + dealerID+" and C_ModelID = "+modID;
+            method_i_d_u(sql);
+        }
     }
 }
