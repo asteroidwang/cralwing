@@ -27,6 +27,7 @@ public class T_Config_Father {
         JSONArray mainRoot = JSON.parseArray(content);
         JSONObject jsonRoot = mainRoot.getJSONObject(chooseDataBaseType);
         JSONArray mainJson = jsonRoot.getJSONArray("dbItems");
+        System.out.println(mainJson.size());
         JSONObject mainDataBase = mainJson.getJSONObject(chooseDataBase);
         JSONArray tableItems = mainDataBase.getJSONArray("db_table");
         JSONObject tableObject = tableItems.getJSONObject(chooseTable);
@@ -155,6 +156,7 @@ public class T_Config_Father {
 
     public ArrayList<Object> method_有条件的查询(String sql) {
         ArrayList<Object> result = new ArrayList<>();
+        System.out.println(sql);
         try {
             method_连接数据库();
             ResultSet resultSet = stmt.executeQuery(sql);

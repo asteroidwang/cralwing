@@ -1,12 +1,8 @@
-package com.wangtiantian;
+package com.wangtiantian.runPrice;
 
-import com.wangtiantian.controller.DownLoadData;
 import com.wangtiantian.dao.T_Config_Father;
-import com.wangtiantian.dao.T_Config_File;
-import com.wangtiantian.dao.T_Config_Price;
-import com.wangtiantian.entity.Bean_P_C_B_URL;
 import com.wangtiantian.entity.price.SaleModData;
-import com.wangtiantian.mapper.PriceDataBase;
+import com.wangtiantian.runPrice.MainPrice;
 
 import java.util.List;
 

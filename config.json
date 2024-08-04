@@ -96,7 +96,8 @@
           {
             "entity": "com.wangtiantian.entity.Bean_ModelURL",
             "tableName": "T_下载含版本的车型页面"
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.Bean_P_C_B_URL",
             "tableName": "T_版本分组id列表"
           }
@@ -143,6 +144,22 @@
           {
             "entity": "com.wangtiantian.entity.price.SaleModData",
             "tableName": "T_SaleModData_20240802"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Model",
+            "tableName": "T_Model_20240802"
+          }
+        ]
+      },
+      {
+        "dbName": "carComments",
+        "userName": "sa",
+        "password": "Abc20010318aa",
+        "primary": "C_ID",
+        "db_table": [
+          {
+            "entity": "com.wangtiantian.entity.koubei.ModelKouBei",
+            "tableName": "T_ModelKouBei_20240804"
           }
         ]
       }
