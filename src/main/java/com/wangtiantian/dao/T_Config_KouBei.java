@@ -10,6 +10,9 @@ public class T_Config_KouBei extends T_Config_Father {
         method_i_d_u("update "+tableName+" set C_IsFinish = 1 where C_ModelKouBeiUrl= '"+url+"'");
     }
     public ArrayList<Object> getUrl未下载(){
-        return method_有条件的查询("select * from  "+tableName+ " where C_IsFinish = 0");
+        return method_有条件的查询("select * from  "+tableName+ " where C_IsFinish = 0 ");
+    }
+    public ArrayList<Object> getUrlPageCount不为0(){
+        return method_有条件的查询("select * from  "+tableName+ " where C_IsFinish = 0 and C_CountPage!=0");
     }
 }

@@ -27,7 +27,6 @@ public class T_Config_Father {
         JSONArray mainRoot = JSON.parseArray(content);
         JSONObject jsonRoot = mainRoot.getJSONObject(chooseDataBaseType);
         JSONArray mainJson = jsonRoot.getJSONArray("dbItems");
-        System.out.println(mainJson.size());
         JSONObject mainDataBase = mainJson.getJSONObject(chooseDataBase);
         JSONArray tableItems = mainDataBase.getJSONArray("db_table");
         JSONObject tableObject = tableItems.getJSONObject(chooseTable);
