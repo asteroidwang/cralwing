@@ -160,6 +160,10 @@
           {
             "entity": "com.wangtiantian.entity.koubei.ModelKouBei",
             "tableName": "T_ModelKouBei_20240804"
+          },
+          {
+            "entity": "com.wangtiantian.entity.koubei.KouBeiInfo",
+            "tableName": "T_KouBeiInfo_20240804"
           }
         ]
       }
