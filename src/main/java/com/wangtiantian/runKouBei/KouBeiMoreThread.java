@@ -1,6 +1,7 @@
 package com.wangtiantian.runKouBei;
 
 import com.wangtiantian.CommonMoreThread;
+import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.dao.T_Config_KouBei;
 
 import java.util.ArrayList;
@@ -21,20 +22,30 @@ public class KouBeiMoreThread {
                 Thread thread = new Thread(commonMoreThread);
                 thread.start();
             }
-//            ArrayList<Object> modUrlList = kouBeiDataBase.getModFirstKouBei();
-//            for (Object o : modUrlList) {
-//                String modFirstUrl = ((ModelKouBei) o).get_C_ModelKouBeiUrl();
-//                Document mainDoc = null;
-//                try {
-//                    mainDoc = Jsoup.parse(new URL(modFirstUrl).openStream(), "UTF-8", modFirstUrl);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                if (mainDoc != null) {
-//                    T_Config_File.method_写文件_根据路径创建文件夹(filePath + ((ModelKouBei) o).get_C_ModelID() + "/", ((ModelKouBei) o).get_C_ModelID() + "_"+((ModelKouBei) o).get_C_Page()+".txt", mainDoc.text());
-//                    kouBeiDataBase.update下载状态(modFirstUrl);
-//                }
-//            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void method_获取上一步入库的未下载的url下载具体口碑页面数据(){
+        try {
+            T_Config_KouBei kouBeiDataBase = new T_Config_KouBei(2, 1, 1);
+            ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath+"口碑具体页面数据/");
+            StringBuffer url =new StringBuffer();
+            for(String showId : fileList){
+                 url.append("'https://k.autohome.com.cn/detail/view_"+showId.replace(".txt","")+".html#pvareaid=2112108',");
+            }
+            kouBeiDataBase.method修改具体口碑页面的下载状态(url.toString().substring(0,url.length()-1));
+            ArrayList<Object> dataList = kouBeiDataBase.getUrl未下载();
+            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < list.size(); i++) {
+//                CommonMoreThread commonMoreThread = new CommonMoreThread(list.get(i), filePath+"口碑具体页面数据/");
+//                Thread thread = new Thread(commonMoreThread);
+//                thread.start();
+                KouBeiMoreThreadRun kouBeiMoreThreadRun = new KouBeiMoreThreadRun(list.get(i),filePath+"口碑具体页面数据/");
+                Thread thread = new Thread(kouBeiMoreThreadRun);
+                thread.start();
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

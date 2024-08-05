@@ -24,10 +24,12 @@ public class MainKouBei {
     public static void main(String[] args) {
         // 1.https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=3170&pageIndex=1&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0
         // new KouBeiMethod().getModelKouBeiFirstFileUrl();
-
-//         new KouBeiMethod().getModelKouBeiFileDataAndUrl();
+        // new KouBeiMethod().getModelKouBeiFileDataAndUrl();
         // new KouBeiMethod().method_获取总页数并拼接url入库();
-        new KouBeiMoreThread().method_获取上一步入库的未下载的url下载口碑页面数据();
+        // new KouBeiMoreThread().method_获取上一步入库的未下载的url下载口碑页面数据();
+        // new KouBeiMethod().parseKouBeiToGetShoeId();
+        // new KouBeiMethod().getKouBeiDescUrl();
+        new KouBeiMoreThread().method_获取上一步入库的未下载的url下载具体口碑页面数据();
     }
 
 

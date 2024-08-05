@@ -39,11 +39,11 @@ public class T_Config_Father {
         tableName = tableObject.getString("tableName");
         if (chooseDataBaseType == 0) {
             dbString = dbURL + dbName;
-        } else if (chooseDataBaseType == 1){
+        } else if (chooseDataBaseType == 1) {
             dbString = dbURL + dbName + jsonRoot.getString("charset");
         } else if (chooseDataBaseType == 2) {
             dbString = dbURL + dbName;
-            System.out.println("当前正在使用的数据库是 -> "+dbName);
+            System.out.println("当前正在使用的数据库是 -> " + dbName);
         }
     }
 
@@ -67,6 +67,8 @@ public class T_Config_Father {
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
+            System.out.println(sql);
+            System.out.println("数据库连接已断开");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,7 +90,7 @@ public class T_Config_Father {
                     if (methods[i].getReturnType().equals(new String().getClass())) {
                         valueList += "'" + value + "',";
                     } else {
-                        valueList +="N" +value + ",";
+                        valueList += "N" + value + ",";
                     }
                 }
             }
@@ -106,7 +108,7 @@ public class T_Config_Father {
         ArrayList<Object> result = new ArrayList<>();
         try {
             method_连接数据库();
-            String sql = "select * from " + tableName+" order by C_ID";
+            String sql = "select * from " + tableName + " order by C_ID";
             ResultSet resultSet = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = resultSet.getMetaData();
             while (resultSet.next()) {
@@ -155,7 +157,6 @@ public class T_Config_Father {
 
     public ArrayList<Object> method_有条件的查询(String sql) {
         ArrayList<Object> result = new ArrayList<>();
-        System.out.println(sql);
         try {
             method_连接数据库();
             ResultSet resultSet = stmt.executeQuery(sql);
@@ -175,6 +176,7 @@ public class T_Config_Father {
             resultSet.close();
             stmt.close();
             conn.close();
+            System.out.println("数据库连接已断开");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,7 +200,7 @@ public class T_Config_Father {
                     if (methods[i].getReturnType().equals(new String().getClass())) {
                         valueList += "N'" + value + "',";
                     } else {
-                        valueList +=""+ value + ",";
+                        valueList += "" + value + ",";
                     }
                 }
             }
@@ -209,6 +211,7 @@ public class T_Config_Father {
         }
         return sql;
     }
+
     public String getColumnList(Object o) {
         String columnList = "";
         try {
@@ -226,10 +229,11 @@ public class T_Config_Father {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "("+columnList+")";
+        return "(" + columnList + ")";
     }
-    public void method_批量插入数据(String values,String columns) {
-        String sql = "insert into " + tableName + columns+" values" + values;
+
+    public void method_批量插入数据(String values, String columns) {
+        String sql = "insert into " + tableName + columns + " values" + values;
 //        System.out.println(sql);
         method_i_d_u(sql);
     }
@@ -240,17 +244,18 @@ public class T_Config_Father {
 //        String sql = "update " + tableName + " set config = 1  where C_Group= "+ groupNum;
 //        method_i_d_u(sql);
 //    }
-    public void method_修改下载状态(String ziduan,int status, int id) {
-        String sql = "update " + tableName + " set "+ziduan+"=" + status + " where C_Group=" + id;
+    public void method_修改下载状态(String ziduan, int status, int id) {
+        String sql = "update " + tableName + " set " + ziduan + "=" + status + " where C_Group=" + id;
         method_i_d_u(sql);
     }
 
 
     private static final Object lock = new Object();
+
     // 修改未下载的车辆信息的数据的url的状态
-    public void updateNoDealerModelStatus(String dealerID,String modID) {
-        synchronized (lock){
-            String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerID=" + dealerID+" and C_ModelID = "+modID;
+    public void updateNoDealerModelStatus(String dealerID, String modID) {
+        synchronized (lock) {
+            String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerID=" + dealerID + " and C_ModelID = " + modID;
             method_i_d_u(sql);
         }
     }
