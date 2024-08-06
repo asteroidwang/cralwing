@@ -67,8 +67,7 @@ public class T_Config_Father {
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
-            System.out.println(sql);
-            System.out.println("数据库连接已断开");
+//            System.out.println("数据库连接已断开");
         } catch (Exception e) {
             e.printStackTrace();
         }

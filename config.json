@@ -135,19 +135,23 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.price.CityData",
-            "tableName": "T_CityData_20240802"
+            "tableName": "T_CityData_20240806"
           },
           {
             "entity": "com.wangtiantian.entity.price.DealerData",
-            "tableName": "T_DealerData_20240802"
+            "tableName": "T_DealerData_20240806"
           },
           {
             "entity": "com.wangtiantian.entity.price.SaleModData",
-            "tableName": "T_SaleModData_20240802"
+            "tableName": "T_SaleModData_20240806"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Model",
-            "tableName": "T_Model_20240802"
+            "tableName": "T_Model_20240806"
+          },
+          {
+            "entity": "com.wangtiantian.entity.price.CarPrice",
+            "tableName": "T_CarPrice_20240806"
           }
         ]
       },
@@ -164,6 +168,10 @@
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiInfo",
             "tableName": "T_KouBeiInfo_20240804"
+          },
+          {
+            "entity": "",
+            "tableName": "T_CarPrice_20240802"
           }
         ]
       }
