@@ -1,26 +1,5 @@
 package com.wangtiantian.runPrice;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
-import com.wangtiantian.dao.T_Config_File;
-import com.wangtiantian.entity.price.CarPrice;
-import com.wangtiantian.entity.price.CityData;
-import com.wangtiantian.entity.price.DealerData;
-import com.wangtiantian.entity.price.SaleModData;
-import com.wangtiantian.mapper.PriceDataBase;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 public class MainPrice {
     //    private String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/经销商数据/20240802/";
     public static void main(String[] args) {

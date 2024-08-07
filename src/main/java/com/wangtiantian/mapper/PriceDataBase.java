@@ -3,10 +3,7 @@ package com.wangtiantian.mapper;
 import com.wangtiantian.dao.T_Config_AutoHome;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.dao.T_Config_Price;
-import com.wangtiantian.entity.price.CarPrice;
-import com.wangtiantian.entity.price.CityData;
-import com.wangtiantian.entity.price.DealerData;
-import com.wangtiantian.entity.price.SaleModData;
+import com.wangtiantian.entity.price.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +139,37 @@ public class PriceDataBase {
             System.out.println("经销商数据入库操作");
         }
 
+    }
+
+
+    // 20240806
+    public ArrayList<Object> getModelData(){
+        return new T_Config_AutoHome(0,1,3).getSaleModelData();
+    }
+    // 车型页面经销商数据入库
+    public void modelDealerDataInsert(ArrayList<ModelDealerData> dataList) {
+        T_Config_Price modelDealerDao = new T_Config_Price(2, chooseDataBase, 3);
+        int batchSize = 100;
+        for (int i = 0; i < dataList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, dataList.size());
+            List<ModelDealerData> batchList = dataList.subList(i, end);
+            StringBuffer valueBuffer = new StringBuffer();
+            String columnList = modelDealerDao.getColumnList(dataList.get(i));
+            for (ModelDealerData bean : batchList) {
+                valueBuffer.append(modelDealerDao.getValueList(bean)).append(",");
+            }
+            String tempString = valueBuffer.toString();
+            modelDealerDao.method_批量插入数据(tempString.substring(0, tempString.length() - 1), columnList);
+            System.out.println("经销商数据入库操作");
+        }
+    }
+    public ArrayList<Object> getNoFinishModelDealerData(){
+        return new T_Config_Price(2,chooseDataBase,3).findDealerCityNotFinish();
+    }
+
+    public void method_车型经销商数据修改下载状态(String dealerID,String modelId) {
+        T_Config_Price saleModDao = new T_Config_Price(2, chooseDataBase, 3);
+        saleModDao.updateNoDealerModelStatus(dealerID,modelId);
     }
 
 }

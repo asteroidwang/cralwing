@@ -299,4 +299,10 @@ public class T_Config_AutoHome extends T_Config_Father {
         int group = ((Bean_Version)data.get(0)).get_C_Group();
         return group;
     }
+
+
+
+    public ArrayList<Object> getSaleModelData(){
+        return method_有条件的查询("select distinct C_ModelID from "+tableName+" where C_VersionStatus != '停售'");
+    }
 }

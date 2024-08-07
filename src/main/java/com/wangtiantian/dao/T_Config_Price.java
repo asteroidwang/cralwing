@@ -15,7 +15,6 @@ public class T_Config_Price extends T_Config_Father {
 
     // 查找未下载的城市数据
     public ArrayList<Object> findDealerCityNotFinish() {
-        System.out.println("select * from "+tableName+" where C_IsFinish=0");
         return method_有条件的查询("select * from "+tableName+" where C_IsFinish=0");
     }
 
@@ -36,7 +35,7 @@ public class T_Config_Price extends T_Config_Father {
 
     // 修改未下载的车辆信息的数据的url的状态
     public void updateNoDealerModelStatus(String dealerID,String modID) {
-        String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerID=" + dealerID+" and C_ModelID = "+modID;
+        String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerId=" + dealerID+" and C_ModelId = "+modID;
         method_i_d_u(sql);
     }
 }

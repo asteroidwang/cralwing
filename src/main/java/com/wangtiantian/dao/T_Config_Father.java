@@ -64,7 +64,12 @@ public class T_Config_Father {
     public void method_i_d_u(String sql) {
         try {
             method_连接数据库();
-            stmt.executeUpdate(sql);
+            try {
+                stmt.executeUpdate(sql);
+            }catch (Exception e){
+                System.out.println(sql);
+            }
+
             stmt.close();
             conn.close();
 //            System.out.println("数据库连接已断开");
