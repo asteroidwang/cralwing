@@ -14,8 +14,6 @@ public class TestMoreDl {
     public static void main(String[] args) {
         TestMoreDl testMoreDl = new TestMoreDl();
         testMoreDl.methodTest();
-
-
 //        DataBaseMethod.dataBase_i_d_u(allparamsUrl);
     }
 
