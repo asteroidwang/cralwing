@@ -27,7 +27,7 @@ public class T_Config_Price extends T_Config_Father {
 
     // 查找无车辆报价页面的经销商
     public ArrayList<Object> findNoCarPriceDealer_20240802(){
-        return method_有条件的查询("select * from T_DealerData_20240802 where C_DealerID not in (select distinct C_DealerID from T_SaleModData_20240802)");
+        return method_有条件的查询("select * from T_DealerData_20240806 where C_DealerID not in (select distinct C_DealerID from T_SaleModData_20240806)");
     }
     // 获取未下载的车辆信息的数据的url
     public ArrayList<Object> findNoDealerModel(){

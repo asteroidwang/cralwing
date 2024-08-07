@@ -24,7 +24,7 @@ public class PriceMoreThread implements Runnable {
         System.out.println("Thread " + currentThread.getName() + " (ID: " + currentThread.getId() + ") is processing group.");
         for (Object bean : list) {
             try {
-                new MainPrice().method_下载车辆信息数据文件(((SaleModData) bean).get_C_PriceDataUrl(), ((SaleModData) bean).get_C_DealerID() + "_" + ((SaleModData) bean).get_C_ModelID() + ".txt");
+                new CarPriceMethod().method_下载车辆信息数据文件(((SaleModData) bean).get_C_PriceDataUrl(), ((SaleModData) bean).get_C_DealerID() + "_" + ((SaleModData) bean).get_C_ModelID() + ".txt",savePath);
                 new T_Config_Father(2, 0, 2).updateNoDealerModelStatus(((SaleModData) bean).get_C_DealerID(), ((SaleModData) bean).get_C_ModelID());
             } catch (Exception e) {
                 e.printStackTrace();
