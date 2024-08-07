@@ -125,7 +125,7 @@
   },
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.0.116:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.108:1433;databaseName=",
     "dbItems": [
       {
         "dbName": "carPrice",

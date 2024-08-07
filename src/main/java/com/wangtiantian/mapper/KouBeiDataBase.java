@@ -70,4 +70,8 @@ public class KouBeiDataBase {
     public ArrayList<Object> findDescKouBeiUrl(){
         return kouBeiInfoDataDao.getUrl未下载();
     }
+
+    public ArrayList<Object> findAllKouBeiShowId(){
+        return kouBeiInfoDataDao.method_查找();
+    }
 }

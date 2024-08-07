@@ -29,7 +29,8 @@ public class MainKouBei {
         // new KouBeiMoreThread().method_获取上一步入库的未下载的url下载口碑页面数据();
         // new KouBeiMethod().parseKouBeiToGetShoeId();
         // new KouBeiMethod().getKouBeiDescUrl();
-        new KouBeiMoreThread().method_获取上一步入库的未下载的url下载具体口碑页面数据();
+        // new KouBeiMoreThread().method_获取上一步入库的未下载的url下载具体口碑页面数据();
+         new KouBeiMethod().getKouBeiDesc();
     }
 
 

@@ -24,7 +24,8 @@ import java.util.stream.IntStream;
 
 public class KouBeiMethod {
     private KouBeiDataBase kouBeiDataBase = new KouBeiDataBase();
-    private String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/口碑评价数据/20240804/";
+    //    private String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/口碑评价数据/20240804/";
+    private String filePath = "E:/汽车之家/口碑评价数据/20240804/";
 
     // 获取每个车型的第一页口碑
     public void getModelKouBeiFirstFileUrl() {
@@ -149,13 +150,20 @@ public class KouBeiMethod {
     }
 
     //获取上一步入库的未下载的所有口碑具体页面的url
-    public void getKouBeiDescUrl(){
+    public void getKouBeiDesc() {
         try {
-            ArrayList<Object> urlDataList = kouBeiDataBase.findDescKouBeiUrl();
-            for (Object o :urlDataList) {
-                String mainUrl = ((KouBeiInfo)o).get_C_KouBeiUrl();
+            ArrayList<Object> dataList = kouBeiDataBase.findAllKouBeiShowId();
+            for (Object o : dataList) {
+                String showId = ((KouBeiInfo) o).get_C_ShowID();
+                try {
+                    String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
+                    System.out.println(content);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

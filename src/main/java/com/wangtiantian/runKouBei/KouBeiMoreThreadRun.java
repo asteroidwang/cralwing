@@ -27,7 +27,6 @@ public class KouBeiMoreThreadRun implements Runnable {
             String mainUrl = ((KouBeiInfo) bean).get_C_KouBeiUrl();
             String fileName = ((KouBeiInfo) bean).get_C_ShowID() + ".txt";
             Document mainDoc = null;
-
             try {
                 mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "UTF-8", mainUrl);
             } catch (Exception e) {
