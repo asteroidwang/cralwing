@@ -13,11 +13,11 @@ public class MainPrice {
         // 解析经销商数据
         // carPriceMethod.parseDealerFile(filePath+"经销商信息/");
         // 下载车型报价页面
-         carPriceMethod.getCarPriceFile(filePath+ "车型报价页面_html/");
-         carPriceMethod.getCarPriceFile2( filePath+ "车型报价页面/");
+        // carPriceMethod.getCarPriceFile(filePath+ "车型报价页面_html/");
+        // carPriceMethod.getCarPriceFile2( filePath+ "车型报价页面/");
         // 解析车型报价页面 获取该店的在售车型Id 拼接下载地址获取 该店在售车型的车辆信息
-        // new MainPrice().parseCarPriceFile();
-        // carPriceMethod.parseCarPriceFile2( filePath+ "车型报价页面/");
+         carPriceMethod.parseCarPriceFile(filePath);
+         carPriceMethod.parseCarPriceFile2( filePath+ "车型报价页面/");
         // 下载车辆信息数据
         // carPriceMethod.getCarDataFile(filePath);
         // 解析数据

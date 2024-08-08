@@ -17,7 +17,8 @@ public class CheckData {
         String filePath_old = "/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240620/params/";
         String config_new = "/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240621/config/";
         String config_old = "/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240621_2/config/";
-        ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
+//        ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
+        ArrayList<Object> groupList = new ArrayList<>();
         for (int i = 1; i < groupList.size()+1; i++) {
             String newContent =  T_Config_File.method_读取文件内容(filePath_new+i+"_params.txt");
             String oldContent = T_Config_File.method_读取文件内容(filePath_old+i+"_params.txt");

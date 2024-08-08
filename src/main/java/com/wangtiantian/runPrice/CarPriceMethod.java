@@ -119,11 +119,9 @@ public class CarPriceMethod {
                     }
                 }
             }
-//            HashSet<DealerData> set = new HashSet<>(dataList);
-//            dataList.clear();
-//            dataList.addAll(set);
-            System.out.println(dataList.size());
-            System.out.println(num);
+            HashSet<DealerData> set = new HashSet<>(dataList);
+            dataList.clear();
+            dataList.addAll(set);
             new PriceDataBase().dealerData(dataList);
         } catch (Exception e) {
             e.printStackTrace();

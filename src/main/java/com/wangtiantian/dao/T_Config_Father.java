@@ -160,6 +160,7 @@ public class T_Config_Father {
     }
 
     public ArrayList<Object> method_有条件的查询(String sql) {
+        System.out.println(sql);
         ArrayList<Object> result = new ArrayList<>();
         try {
             method_连接数据库();
@@ -242,12 +243,7 @@ public class T_Config_Father {
         method_i_d_u(sql);
     }
 
-    // 更新数据方法
-//    public void Method_UpdateGroup(String groupNum) {
-//        //update T_汽车之家_版本表_20240620 set config=1 where C_Group=6754
-//        String sql = "update " + tableName + " set config = 1  where C_Group= "+ groupNum;
-//        method_i_d_u(sql);
-//    }
+
     public void method_修改下载状态(String ziduan, int status, int id) {
         String sql = "update " + tableName + " set " + ziduan + "=" + status + " where C_Group=" + id;
         method_i_d_u(sql);

@@ -1,6 +1,6 @@
 package com.wangtiantian;
 
-import com.wangtiantian.controller.DownLoadData;
+//import com.wangtiantian.controller.DownLoadData;
 import com.wangtiantian.entity.Bean_P_C_B_URL;
 import com.wangtiantian.mapper.DataBaseMethod;
 
@@ -18,9 +18,10 @@ public class TestMoreDl {
     }
 
     public void methodTest() {
-        ArrayList<Object> allparamsUrl = DataBaseMethod.findDataFromDataBase("versionIds");
+//        ArrayList<Object> allparamsUrl = DataBaseMethod.findDataFromDataBase("versionIds");
 //        List<Bean_P_C_B_URL> allparamsUrl = DataBaseMethod.getUrlList();
-        List<List<Object>> paramsUrl = IntStream.range(0, 6).mapToObj(i -> allparamsUrl.subList(i * (allparamsUrl.size() + 5) / 6, Math.min((i + 1) * (allparamsUrl.size() + 5) / 6, allparamsUrl.size())))
+        ArrayList<Object> allparamsUrl =new ArrayList<>();
+                List<List<Object>> paramsUrl = IntStream.range(0, 6).mapToObj(i -> allparamsUrl.subList(i * (allparamsUrl.size() + 5) / 6, Math.min((i + 1) * (allparamsUrl.size() + 5) / 6, allparamsUrl.size())))
                 .collect(Collectors.toList());
         for (int i = 0; i < paramsUrl.size(); i++) {
             List<Object> groupList = paramsUrl.get(i);

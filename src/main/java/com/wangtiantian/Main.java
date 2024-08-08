@@ -23,11 +23,11 @@ public class Main {
         // 2.解析入库 版本数据
         // AnalysisData.method_解析车型入库版本(saveFilePath+"车型版本页面/");
         // 入库版本id集合
-        // AnalysisData.insertVersionIds();
+         AnalysisData.insertVersionIds();
         // 3.下载配置数据
-        // downLoadData.downLoadParams_Config_Bag(saveFilePath+"params/");
+         downLoadData.downLoadParams_Config_Bag(saveFilePath+"params/");
         // 3.取列名
-        // AnalysisData.method_解析params_config_bag_列名(saveFilePath+"params/");
+         AnalysisData.method_解析params_config_bag_列名(saveFilePath+"params/");
         // AnalysisData.method_取列名(saveFilePath+"列名/");
         // 3.解析配置数据
          AnalysisData.method_解析params_config_bag(saveFilePath+"params/");

@@ -1,6 +1,11 @@
 package com.wangtiantian.dao;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -10,8 +15,8 @@ public class T_Config_File {
         String text = "";
         try {
             File file = new File(filePath);
-            if (!file.exists()){
-                T_Config_File.method_重复写文件_根据路径创建文件夹(" E:/汽车之家/口碑评价数据/20240804/","不存在.txt",filePath+"\n");
+            if (!file.exists()) {
+                T_Config_File.method_重复写文件_根据路径创建文件夹(" E:/汽车之家/口碑评价数据/20240804/", "不存在.txt", filePath + "\n");
             }
             BufferedReader br = new BufferedReader(new FileReader(file));
             StringBuffer sb = new StringBuffer();
@@ -25,32 +30,34 @@ public class T_Config_File {
         }
         return text;
     }
+
     //写文件
-    public static void method_写文件_根据路径创建文件夹(String filePath,String fileName,String content) {
+    public static void method_写文件_根据路径创建文件夹(String filePath, String fileName, String content) {
         try {
             File file = new File(filePath);
-            if (!file.exists()){
+            if (!file.exists()) {
                 file.mkdirs();
             }
-            FileOutputStream fos = new FileOutputStream(filePath+fileName);
+            FileOutputStream fos = new FileOutputStream(filePath + fileName);
             Writer writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             writer.write(content);
             writer.flush();
             writer.close();
             fos.close();
-            System.out.println("下载一次\t"+filePath+fileName);
+            System.out.println("下载一次\t" + filePath + fileName);
         } catch (Exception e) {
             System.out.println(e.toString());
         }
     }
+
     //重复写文件
-    public static void method_重复写文件_根据路径创建文件夹(String filePath,String fileName,String content) {
+    public static void method_重复写文件_根据路径创建文件夹(String filePath, String fileName, String content) {
         try {
-            File file  = new File(filePath);
-            if (!file.exists()){
+            File file = new File(filePath);
+            if (!file.exists()) {
                 file.mkdirs();
             }
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(filePath+fileName, true), 331074);//165537
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(filePath + fileName, true), 331074);//165537
             bufferedOutputStream.write(content.getBytes(StandardCharsets.UTF_8));   //StandardCharsets.UTF_8
             bufferedOutputStream.flush();
             bufferedOutputStream.close();
@@ -58,8 +65,9 @@ public class T_Config_File {
             e.printStackTrace();
         }
     }
+
     //获取文件夹下文件名称
-    public static ArrayList<String> method_获取文件名称(String filePath){
+    public static ArrayList<String> method_获取文件名称(String filePath) {
         ArrayList<String> fileNames = new ArrayList<>();
         File file = new File(filePath);
         File[] files = file.listFiles(File::isFile);
@@ -68,15 +76,17 @@ public class T_Config_File {
         }
         return fileNames;
     }
-    public static ArrayList<String> method_获取文件夹名称(String filePath){
-            ArrayList<String> flodersNames = new ArrayList<>();
-            File file = new File(filePath);
-            File[] folders = file.listFiles(File::isDirectory);
-            for (int i = 0; i < folders.length; i++) {
-                flodersNames.add(folders[i].getName());
-            }
-            return flodersNames;
+
+    public static ArrayList<String> method_获取文件夹名称(String filePath) {
+        ArrayList<String> flodersNames = new ArrayList<>();
+        File file = new File(filePath);
+        File[] folders = file.listFiles(File::isDirectory);
+        for (int i = 0; i < folders.length; i++) {
+            flodersNames.add(folders[i].getName());
         }
+        return flodersNames;
+    }
+
     public static ArrayList<String> method_按行读取文件(String filePath) {
         ArrayList<String> data = new ArrayList<>();
         try {
@@ -97,5 +107,37 @@ public class T_Config_File {
 
     public static Boolean method_判断文件是否存在(String file) {
         return new File(file).exists();
+    }
+
+    public static Boolean method_访问url获取网页源码普通版(String url, String encode, String filePath, String fileName) {
+        Document mainDoc = null;
+        try {
+            mainDoc = Jsoup.parse(new URL(url).openStream(), encode, url);
+        } catch (Exception e) {
+            return false;
+        }
+        if (mainDoc != null) {
+            T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.toString());
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public static Boolean method_访问url获取Jsonp普通版(String url, String encode, String filePath, String fileName) {
+        Document mainDoc = null;
+        try {
+            mainDoc = Jsoup.parse(new URL(url).openStream(), encode, url);
+        } catch (Exception e) {
+            return false;
+        }
+        if (mainDoc != null) {
+            T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.text());
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

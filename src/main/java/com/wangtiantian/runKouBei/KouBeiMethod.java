@@ -236,6 +236,7 @@ public class KouBeiMethod {
                 String zuiBuManYi = mainItems.select(".unsatis.kb-item").text();
                 Elements itemSpaceInfo = mainItems.select(".space.kb-item");
                 for (int i = 0; i < itemSpaceInfo.size(); i++) {
+                    System.out.println(itemSpaceInfo.get(i));
                     String c1 = itemSpaceInfo.get(i).select("h1").text();
                     String v1 = itemSpaceInfo.get(i).select(".star-num").text();
                     System.out.println(c1.replace(v1,""));
