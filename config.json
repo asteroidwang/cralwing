@@ -170,8 +170,8 @@
             "tableName": "T_KouBeiInfo_20240804"
           },
           {
-            "entity": "",
-            "tableName": "T_CarPrice_20240802"
+            "entity": "com.wangtiantian.entity.koubei.KouBeiData",
+            "tableName": "T_KouBeiData_20240804"
           }
         ]
       }
