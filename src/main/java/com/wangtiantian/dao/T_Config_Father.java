@@ -64,7 +64,6 @@ public class T_Config_Father {
     public void method_i_d_u(String sql) {
         try {
             method_连接数据库();
-            System.out.println(sql);
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
@@ -236,13 +235,13 @@ public class T_Config_Father {
     }
 
     public int get_获取表中数据数量() {
-       int num = 0;
+        int num = 0;
         try {
             method_连接数据库();
             String sql = "select count(*) from " + tableName;
             ResultSet resultSet = stmt.executeQuery(sql);
             while (resultSet.next()) {
-               num = (int) resultSet.getObject(1);
+                num = (int) resultSet.getObject(1);
             }
             System.out.println("数据库连接已断开");
             resultSet.close();

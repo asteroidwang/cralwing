@@ -37,7 +37,7 @@ public class T_Config_KouBei extends T_Config_Father {
         return method_有条件的查询("SELECT * FROM " + tableName + " where C_IsFinish = 0 and C_KoubeiID !='-' ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 1000 ROWS ONLY");
     }
 
-    public void update修改一级评论的下载状态(String kbId) {
+     public  void update修改一级评论的下载状态(String kbId) {
         method_i_d_u("update " + tableName + " set C_IsFinish = 1 where C_ShowID  ='" + kbId + "'");
     }
 
