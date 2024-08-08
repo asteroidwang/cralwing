@@ -11,7 +11,8 @@ import java.util.Date;
 
 public class InsertModelURL {
     public static void main(String[] args) {
-        ArrayList<Object> modelList = DataBaseMethod.findDataFromDataBase("model");
+//        ArrayList<Object> modelList = DataBaseMethod.findDataFromDataBase("model");
+        ArrayList<Object> modelList =new ArrayList<>();
         ArrayList<Object> modelDataLits = new ArrayList<>();
         String filePath="/Users/wangtiantian/MyDisk/所有文件数据/汽车之家/汽车之家_240801/车型版本页面/";
         String zaishoupath=filePath+"在售车型页面/";
@@ -59,6 +60,6 @@ public class InsertModelURL {
 //            bean_modelURL.set_C_在售(0);
             modelDataLits.add(bean_modelURL);
         }
-        DataBaseMethod.dataBase_i_d_u(modelDataLits,"modelURL");
+//        DataBaseMethod.dataBase_i_d_u(modelDataLits,"modelURL");
     }
 }

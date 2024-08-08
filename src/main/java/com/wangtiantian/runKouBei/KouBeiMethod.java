@@ -298,6 +298,7 @@ public class KouBeiMethod {
                 String waiGuan = "";
                 Elements itemSpaceInfo = mainItems.select(".space.kb-item");
                 for (int i = 0; i < itemSpaceInfo.size(); i++) {
+                    System.out.println(itemSpaceInfo.get(i));
                     String c1 = itemSpaceInfo.get(i).select("h1").text();
                     String v1 = itemSpaceInfo.get(i).select(".star-num").text();
                     String tempC1 = c1.replace(v1, "").replace(" ","").trim();

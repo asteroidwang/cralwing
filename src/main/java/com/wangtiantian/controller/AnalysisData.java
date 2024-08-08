@@ -93,17 +93,17 @@ public class AnalysisData {
             HashSet<Object> setBrand = new HashSet<>(brandDataList);
             brandDataList.clear();
             brandDataList.addAll(setBrand);
-            DataBaseMethod.dataBase_i_d_u(brandDataList, "brand");
+//            DataBaseMethod.dataBase_i_d_u(brandDataList, "brand");
 
             HashSet<Object> setFactory = new HashSet<>(factoryDataList);
             factoryDataList.clear();
             factoryDataList.addAll(setFactory);
-            DataBaseMethod.dataBase_i_d_u(factoryDataList, "factory");
+//            DataBaseMethod.dataBase_i_d_u(factoryDataList, "factory");
 
             HashSet<Object> setModel = new HashSet<>(modelDataList);
             modelDataList.clear();
             modelDataList.addAll(setModel);
-            DataBaseMethod.dataBase_i_d_u(modelDataList, "model");
+//            DataBaseMethod.dataBase_i_d_u(modelDataList, "model");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,7 +139,7 @@ public class AnalysisData {
             HashSet<Object> set = new HashSet<>(versionDataList);
             versionDataList.clear();
             versionDataList.addAll(set);
-            DataBaseMethod.dataBase_i_d_u(versionDataList, "version");
+//            DataBaseMethod.dataBase_i_d_u(versionDataList, "version");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,19 +147,19 @@ public class AnalysisData {
     }
 
     public static void insertVersionIds() {
-        ArrayList<Bean_P_C_B_URL> versionIds = DataBaseMethod.getUrlList();
-        DataBaseMethod.dataBase_i_d_u(versionIds);
+//        ArrayList<Bean_P_C_B_URL> versionIds = DataBaseMethod.getUrlList();
+//        DataBaseMethod.dataBase_i_d_u(versionIds);
     }
 
     public static void method_解析params_config_bag(String filePath) {
         try {
-            ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
+//            ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
+            ArrayList<Object> groupList = new ArrayList<>();
             System.out.println(groupList.size() + "\t" + dateFormat.format(new Date()));
             ArrayList<Object> paramsDataList = new ArrayList<>();
             ArrayList<Object> configDataList = new ArrayList<>();
             ArrayList<Object> bagDataList = new ArrayList<>();
             for (int i = 1; i < groupList.size() + 1; i++) {
-//                int group = ((Bean_Version) groupList.get(i)).get_C_Group();
                 int group = i;
                 String content_params = T_Config_File.method_读取文件内容(filePath + group + "_params" + ".txt");
                 String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + group + "_config.txt"));
@@ -182,9 +182,9 @@ public class AnalysisData {
             HashSet<Object> setBag = new HashSet<>(bagDataList);
             bagDataList.clear();
             bagDataList.addAll(setBag);
-            DataBaseMethod.dataBase_i_d_u(paramsDataList, "params");
-            DataBaseMethod.dataBase_i_d_u(configDataList, "config");
-            DataBaseMethod.dataBase_i_d_u(bagDataList, "bag");
+//            DataBaseMethod.dataBase_i_d_u(paramsDataList, "params");
+//            DataBaseMethod.dataBase_i_d_u(configDataList, "config");
+//            DataBaseMethod.dataBase_i_d_u(bagDataList, "bag");
             System.out.println(dateFormat.format(new Date()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,7 +208,8 @@ public class AnalysisData {
 
     public static void method_解析params_config_bag_列名(String filePath) {
         try {
-            ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
+//            ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
+            ArrayList<Object> groupList = new ArrayList<>();
             for (int i = 1; i < groupList.size(); i++) {
                 System.out.println(i);
                 int group = ((Bean_Version) groupList.get(i)).get_C_Group();
@@ -229,11 +230,11 @@ public class AnalysisData {
             String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + i + "_config.txt"));
             String content_bag = T_Config_File.method_读取文件内容(filePath.replace("params", "bag/" + i + "_bag.txt"));
             ArrayList<Object> paramsData = method_解析params_One(content_params, filePath);
-            DataBaseMethod.dataBase_i_少量数据(paramsData, "params");
+//            DataBaseMethod.dataBase_i_少量数据(paramsData, "params");
             ArrayList<Object> configData = method_解析config_One(content_config, filePath);
-            DataBaseMethod.dataBase_i_少量数据(configData, "config");
+//            DataBaseMethod.dataBase_i_少量数据(configData, "config");
             ArrayList<Object> bagData = method_解析bag_One(content_bag);
-            DataBaseMethod.dataBase_i_少量数据(bagData, "bag");
+//            DataBaseMethod.dataBase_i_少量数据(bagData, "bag");
         } catch (Exception e) {
             e.printStackTrace();
         }

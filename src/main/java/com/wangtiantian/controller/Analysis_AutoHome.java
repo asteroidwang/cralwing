@@ -717,7 +717,7 @@ public class Analysis_AutoHome {
             bagDataList.clear();
             bagDataList.addAll(setBag);
 
-            DataBaseMethod.dataBase_i_d_u(paramsDataList, "params");
+//            DataBaseMethod.dataBase_i_d_u(paramsDataList, "params");
 //            DataBaseMethod.dataBase_i_d_u(configDataList, "config");
 //            DataBaseMethod.dataBase_i_d_u(bagDataList, "bag");
         } catch (Exception e) {

@@ -69,9 +69,7 @@ public class PriceDataBase {
                 valueBuffer.append(dealerDao.getValueList(bean)).append(",");
             }
             String tempString = valueBuffer.toString();
-//            T_Config_File.method_重复写文件_根据路径创建文件夹("/Users/wangtiantian/MyDisk/","aaa.txt",tempString.substring(0, tempString.length() - 1)+"\n");
             dealerDao.method_批量插入数据(tempString.substring(0, tempString.length() - 1), columnList);
-//            System.out.println("经销商数据入库操作");
         }
 
     }
