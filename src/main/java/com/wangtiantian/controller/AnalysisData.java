@@ -209,10 +209,11 @@ public class AnalysisData {
     public static void method_解析params_config_bag_列名(String filePath) {
         try {
 //            ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
-            ArrayList<Object> groupList = new ArrayList<>();
-            for (int i = 1; i < groupList.size(); i++) {
+//            ArrayList<Object> groupList = new ArrayList<>();
+            for (int i = 1; i < 100; i++) {
                 System.out.println(i);
-                int group = ((Bean_Version) groupList.get(i)).get_C_Group();
+                int group = i;
+//                int group = ((Bean_Version) groupList.get(i)).get_C_Group();
                 String content_params = T_Config_File.method_读取文件内容(filePath + group + "_params" + ".txt");
                 String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + group + "_config.txt"));
                 method_解析params_列名(content_params, filePath);

@@ -1,6 +1,5 @@
 package com.wangtiantian.dao;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -125,7 +124,7 @@ public class T_Config_File {
 
     }
 
-    public static Boolean method_访问url获取Jsonp普通版(String url, String encode, String filePath, String fileName) {
+    public static Boolean method_访问url获取Json普通版(String url, String encode, String filePath, String fileName) {
         Document mainDoc = null;
         try {
             mainDoc = Jsoup.parse(new URL(url).openStream(), encode, url);

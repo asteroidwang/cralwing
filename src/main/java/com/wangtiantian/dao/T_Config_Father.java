@@ -97,7 +97,6 @@ public class T_Config_Father {
             columnList = columnList.substring(0, columnList.length() - 1);
             valueList = valueList.substring(0, valueList.length() - 1);
             String sql = "insert into " + tableName + "(" + columnList + ") values(" + valueList + ")";
-//            System.out.println(sql);
             method_i_d_u(sql);
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,7 +194,7 @@ public class T_Config_Father {
                     if (methods[i].getName().equals("get_C_ID")) {
                         continue;
                     }
-                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("")?"-": methods[i].invoke(o).toString().trim();
+                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
                         valueList += "N'" + value + "',";
                     } else {
@@ -233,24 +232,24 @@ public class T_Config_Father {
 
     public void method_批量插入数据(String values, String columns) {
         String sql = "insert into " + tableName + columns + " values" + values;
-//        System.out.println(sql);
         method_i_d_u(sql);
     }
 
-
-    public void method_修改下载状态(String ziduan, int status, int id) {
-        String sql = "update " + tableName + " set " + ziduan + "=" + status + " where C_Group=" + id;
-        method_i_d_u(sql);
-    }
-
-
-    private static final Object lock = new Object();
-
-    // 修改未下载的车辆信息的数据的url的状态
-    public void updateNoDealerModelStatus(String dealerID, String modID) {
-        synchronized (lock) {
-            String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerID=" + dealerID + " and C_ModelID = " + modID;
-            method_i_d_u(sql);
+    public int get_获取表中数据数量() {
+       int num = 0;
+        try {
+            method_连接数据库();
+            String sql = "select count(*) from " + tableName;
+            ResultSet resultSet = stmt.executeQuery(sql);
+            while (resultSet.next()) {
+               num = (int) resultSet.getObject(1);
+            }
+            resultSet.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return num;
     }
 }

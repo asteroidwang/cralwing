@@ -613,7 +613,7 @@ public class Analysis_AutoHome {
                 JSONObject jsonRoot = JSON.parseObject(content);
                 if (jsonRoot.getString("message").equals("成功")) {
                     T_Config_File.method_写文件_根据路径创建文件夹(filePath, i + "_params.txt", content);
-                    verDao.method_修改下载状态("params", 1, i);
+//                    verDao.method_修改下载状态("params", 1, i);
                     System.out.println("成功");
                 } else {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "出错"), "下载params_new.txt", url + "\n");
@@ -642,7 +642,7 @@ public class Analysis_AutoHome {
                 JSONObject jsonRoot = JSON.parseObject(content);
                 if (jsonRoot.getString("message").equals("成功")) {
                     T_Config_File.method_写文件_根据路径创建文件夹(filePath.replace("params", "config"), i + "_config.txt", content);
-                    verDao.method_修改下载状态("config", 1, i);
+//                    verDao.method_修改下载状态("config", 1, i);
                     System.out.println("成功");
                 } else {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "出错"), "下载config.txt", url + "\n");
@@ -672,7 +672,7 @@ public class Analysis_AutoHome {
                 JSONObject jsonRoot = JSON.parseObject(content);
                 if (jsonRoot.getString("message").equals("成功")) {
                     T_Config_File.method_写文件_根据路径创建文件夹(filePath.replace("params", "bag"), i + "_bag.txt", content);
-                    verDao.method_修改下载状态("bag", 1, i);
+//                    verDao.method_修改下载状态("bag", 1, i);
                     System.out.println("成功");
                 } else {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "出错"), "下载bag.txt", url + "\n");

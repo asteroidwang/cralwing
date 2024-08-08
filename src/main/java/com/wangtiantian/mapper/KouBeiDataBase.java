@@ -46,8 +46,9 @@ public class KouBeiDataBase {
         T_Config_KouBei modDataDao = new T_Config_KouBei(2, chooseDataBase, 0);
         return modDataDao.getUrl未下载();
     }
+
     // 修改下载状态
-    public void update下载状态(String url){
+    public void update下载状态(String url) {
         T_Config_KouBei modDataDao = new T_Config_KouBei(2, chooseDataBase, 0);
         modDataDao.method修改车型口碑页面的下载状态(url);
     }
@@ -70,12 +71,12 @@ public class KouBeiDataBase {
 
     }
 
-    public ArrayList<Object> findDescKouBeiUrl(){
+    public ArrayList<Object> findDescKouBeiUrl() {
         T_Config_KouBei kouBeiInfoDataDao = new T_Config_KouBei(2, chooseDataBase, 1);
         return kouBeiInfoDataDao.getUrl未下载();
     }
 
-    public ArrayList<Object> findAllKouBeiShowId(){
+    public ArrayList<Object> findAllKouBeiShowId() {
         T_Config_KouBei kouBeiInfoDataDao = new T_Config_KouBei(2, chooseDataBase, 1);
         return kouBeiInfoDataDao.method_查找();
     }
@@ -97,5 +98,22 @@ public class KouBeiDataBase {
             System.out.println("下载价格数据Url入库操作");
         }
 
+    }
+
+    // 获取未下载口碑帖子回复的口碑id
+    public ArrayList<Object> getReplyKouBei(int begin) {
+        T_Config_KouBei replyDataDao = new T_Config_KouBei(2, chooseDataBase, 2);
+        return replyDataDao.method_查找所有未下载回复的口碑id(begin);
+    }
+
+    // 获取表中数据总数
+    public int getCount(){
+        T_Config_KouBei replyDataDao = new T_Config_KouBei(2, chooseDataBase, 2);
+        return replyDataDao.get_获取表中数据数量();
+    }
+    // 修改一级评论回复文件的下载状态
+    public void update_修改一级评论的文件下载状态(String kbId){
+        T_Config_KouBei replyDataDao = new T_Config_KouBei(2, chooseDataBase, 2);
+        replyDataDao.update修改一级评论的下载状态(kbId);
     }
 }

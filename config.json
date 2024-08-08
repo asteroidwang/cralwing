@@ -39,7 +39,7 @@
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Bag",
-            "tableName": "T_汽车之家_选装表"
+            "tableName": "T_汽车之家_选装包"
           },
           {
             "entity": "entity.BeanColor",
@@ -174,8 +174,8 @@
             "tableName": "T_KouBeiInfo_20240804"
           },
           {
-            "entity": "",
-            "tableName": "T_CarPrice_20240802"
+            "entity": "com.wangtiantian.entity.koubei.KouBeiData",
+            "tableName": "T_KouBeiData_20240804"
           }
         ]
       }

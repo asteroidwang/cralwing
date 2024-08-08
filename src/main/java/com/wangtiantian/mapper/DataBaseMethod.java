@@ -163,7 +163,7 @@ public class DataBaseMethod {
         for (int i = 0; i < dataList.size(); i += batchSize) {
             int end = Math.min(i + batchSize, dataList.size());
             if (type.equals("params")) {
-                T_Config_AutoHome paramsDao = new T_Config_AutoHome(0, chooseDataBase, 4);
+                T_Config_AutoHome paramsDao = new T_Config_AutoHome(0, chooseDataBase, 5);
                 System.out.println("参数表操作");
                 List<Object> batchList = dataList.subList(i, end);
                 StringBuffer valueBuffer = new StringBuffer();
@@ -174,7 +174,7 @@ public class DataBaseMethod {
                 String tempString = valueBuffer.toString();
                 paramsDao.method_批量插入数据(tempString.substring(0, tempString.length() - 1), columnList);
             } else if (type.equals("config")) {
-                T_Config_AutoHome configDao = new T_Config_AutoHome(0, chooseDataBase, 5);
+                T_Config_AutoHome configDao = new T_Config_AutoHome(0, chooseDataBase, 6);
                 System.out.println("配置表操作");
                 List<Object> batchList = dataList.subList(i, end);
                 StringBuffer valueBuffer = new StringBuffer();
@@ -186,7 +186,7 @@ public class DataBaseMethod {
                 configDao.method_批量插入数据(tempString.substring(0, tempString.length() - 1), columnList);
             } else if (type.equals("bag")) {
                 System.out.println("选装包表操作");
-                T_Config_AutoHome bagDao = new T_Config_AutoHome(0, chooseDataBase, 6);
+                T_Config_AutoHome bagDao = new T_Config_AutoHome(0, chooseDataBase, 7);
                 List<Object> batchList = dataList.subList(i, end);
                 StringBuffer valueBuffer = new StringBuffer();
                 String columnList = bagDao.getColumnList(dataList.get(i));

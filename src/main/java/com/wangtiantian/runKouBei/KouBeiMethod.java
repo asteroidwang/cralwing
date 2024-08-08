@@ -1,17 +1,13 @@
 package com.wangtiantian.runKouBei;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.wangtiantian.CommonMoreThread;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.Bean_Model;
 import com.wangtiantian.entity.koubei.KouBeiData;
 import com.wangtiantian.entity.koubei.KouBeiInfo;
 import com.wangtiantian.entity.koubei.ModelKouBei;
-import com.wangtiantian.entity.price.ModelDealerData;
 import com.wangtiantian.mapper.KouBeiDataBase;
-import com.wangtiantian.runPrice.PriceMoreThread;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -162,7 +158,7 @@ public class KouBeiMethod {
                 try {
                     String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
                     dataArrayList.add(parseKouBeiData(content, showId));
-                    if (dataArrayList.size()>1000){
+                    if (dataArrayList.size() > 1000) {
                         HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
                         dataArrayList.clear();
                         dataArrayList.addAll(set);
@@ -188,12 +184,12 @@ public class KouBeiMethod {
     public void getKouBeiDescQueShi() {
         try {
             ArrayList<KouBeiData> dataArrayList = new ArrayList<>();
-            ArrayList<String> dataList =T_Config_File.method_按行读取文件("C:/Users/Administrator/Downloads/补充的下载数据ShowId.txt");
+            ArrayList<String> dataList = T_Config_File.method_按行读取文件("C:/Users/Administrator/Downloads/补充的下载数据ShowId.txt");
             for (String showId : dataList) {
                 try {
                     String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
                     dataArrayList.add(parseKouBeiData(content, showId));
-                    if (dataArrayList.size()>1000){
+                    if (dataArrayList.size() > 1000) {
                         HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
                         dataArrayList.clear();
                         dataArrayList.addAll(set);
@@ -214,6 +210,7 @@ public class KouBeiMethod {
             e.printStackTrace();
         }
     }
+
     public KouBeiData parseKouBeiData(String mainContent, String showId) {
         KouBeiData kouBeiData = new KouBeiData();
         ArrayList<String> info = new ArrayList<>();
@@ -272,7 +269,7 @@ public class KouBeiMethod {
                 String gouMaiShiJian = "";
                 String gouMaiDiDian = "";
                 for (int i = 0; i < itemInfo.size(); i++) {
-                    String columnName = itemInfo.get(i).select(".name").text().replace(" ","").trim();
+                    String columnName = itemInfo.get(i).select(".name").text().replace(" ", "").trim();
                     String value = itemInfo.get(i).select(".key").text();
                     if (columnName.equals("行驶里程")) {
                         xingShiLiCheng = value;
@@ -301,23 +298,23 @@ public class KouBeiMethod {
                     System.out.println(itemSpaceInfo.get(i));
                     String c1 = itemSpaceInfo.get(i).select("h1").text();
                     String v1 = itemSpaceInfo.get(i).select(".star-num").text();
-                    String tempC1 = c1.replace(v1, "").replace(" ","").trim();
+                    String tempC1 = c1.replace(v1, "").replace(" ", "").trim();
                     if (tempC1.equals("驾驶感受")) {
-                        jiaShiGanShou = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        jiaShiGanShou = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     } else if (tempC1.equals("操控")) {
-                        caoKong = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        caoKong = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     } else if (tempC1.equals("舒适性")) {
-                        shuShiXing = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        shuShiXing = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     } else if (tempC1.equals("内饰")) {
-                        neiShi = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        neiShi = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     } else if (tempC1.equals("油耗")) {
-                        youHao = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        youHao = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     } else if (tempC1.equals("性价比")) {
-                        xingJiaBi = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        xingJiaBi = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     } else if (tempC1.equals("空间")) {
-                        kongJian = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        kongJian = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     } else if (tempC1.equals("外观")) {
-                        waiGuan = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                        waiGuan = v1 + "->" + itemSpaceInfo.get(i).select("p").text();
                     }
                 }
                 kouBeiData.set_C_ShowID(showId);
@@ -356,4 +353,35 @@ public class KouBeiMethod {
         }
         return kouBeiData;
     }
+
+    // 获取所有口碑的一级回复数据
+    public void getReplyFile() {
+        try {
+            int getCount = kouBeiDataBase.getCount();
+            for (int kk = 0; kk < getCount; kk++) {
+                ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(kk*1000);
+                if (dataList.size()<=6){
+                    for (Object bean : dataList) {
+                        String kbId = ((KouBeiData) bean).get_C_KoubeiID();
+                        String mainUrl = "https://koubeiipv6.app.autohome.com.cn/autov9.13.0/news/replytoplevellist.ashx?pm=1&koubeiId="+kbId+"&next=0&pagesize=9999999";
+                        T_Config_File.method_访问url获取Json普通版(mainUrl,"UTF-8",filePath,kbId+"_一级评论_0.txt");
+                        kouBeiDataBase.update_修改一级评论的文件下载状态(kbId);
+                    }
+                }else {
+                    List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                            .collect(Collectors.toList());
+                    for (int i = 0; i < list.size(); i++) {
+                        KouBeiReplyThread commonMoreThread = new KouBeiReplyThread(list.get(i), filePath+"评论数据/");
+                        Thread thread = new Thread(commonMoreThread);
+                        thread.start();
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

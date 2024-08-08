@@ -32,8 +32,7 @@ public class MainKouBei {
         // new KouBeiMoreThread().method_获取上一步入库的未下载的url下载具体口碑页面数据();
         // new KouBeiMethod().getKouBeiDesc();
         // new KouBeiMethod().getKouBeiDescQueShi();
-
-
+        new KouBeiMethod().getReplyFile();
     }
 
 

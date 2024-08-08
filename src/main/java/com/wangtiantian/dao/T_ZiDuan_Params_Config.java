@@ -3,7 +3,7 @@ package com.wangtiantian.dao;
 import java.util.HashMap;
 
 public class T_ZiDuan_Params_Config {
-    public static HashMap<String,String> params_字段(){
+    public static HashMap<String, String> params_字段() {
         HashMap<String, String> mapList = new HashMap<>();
         mapList.put("基本参数__最高车速(km/h)", "C_基本参数__最高车速_km_h");
         mapList.put("基本参数__最低荷电状态油耗(L/100km)WLTC", "C_基本参数__最低荷电状态油耗_L_100km_WLTC");
@@ -180,7 +180,7 @@ public class T_ZiDuan_Params_Config {
         return mapList;
     }
 
-    public static  HashMap<String,String> config_字段(){
+    public static HashMap<String, String> config_字段() {
         HashMap<String, String> mapList = new HashMap<>();
         mapList.put("被动安全__被动行人保护", "C_被动安全__被动行人保护");
         mapList.put("被动安全__副驾驶座垫式气囊", "C_被动安全__副驾驶座垫式气囊");
@@ -322,6 +322,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("屏幕/系统__副驾娱乐屏尺寸", "C_屏幕_系统__副驾娱乐屏尺寸");
         mapList.put("屏幕/系统__后排多媒体屏幕数量", "C_屏幕_系统__后排多媒体屏幕数量");
         mapList.put("屏幕/系统__后排控制多媒体", "C_屏幕_系统__后排控制多媒体");
+        mapList.put("屏幕/系统__后排投影系统", "C_屏幕_系统__后排投影系统");
         mapList.put("屏幕/系统__后排液晶屏幕", "C_屏幕_系统__后排液晶屏幕");
         mapList.put("屏幕/系统__后排液晶屏幕尺寸", "C_屏幕_系统__后排液晶屏幕尺寸");
         mapList.put("屏幕/系统__后排液晶屏幕分辨率", "C_屏幕_系统__后排液晶屏幕分辨率");

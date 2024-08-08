@@ -35,6 +35,7 @@ public class KouBeiData {
     private String  C_KongJian; public void set_C_KongJian(String C_KongJian){this.C_KongJian=C_KongJian.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_KongJian(){return C_KongJian;}
     private String  C_WaiGuan; public void set_C_WaiGuan(String C_WaiGuan){this.C_WaiGuan=C_WaiGuan.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_WaiGuan(){return C_WaiGuan;}
     private String  C_JiaShiGanShou; public void set_C_JiaShiGanShou(String C_JiaShiGanShou){this.C_JiaShiGanShou=C_JiaShiGanShou.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_JiaShiGanShou(){return C_JiaShiGanShou;}
+    private int C_IsFinish;public void set_C_IsFinish(int C_IsFinish){this.C_IsFinish = C_IsFinish;}public int C_IsFinish(){return C_IsFinish;}
    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
