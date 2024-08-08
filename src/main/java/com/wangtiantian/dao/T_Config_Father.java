@@ -244,6 +244,7 @@ public class T_Config_Father {
             while (resultSet.next()) {
                num = (int) resultSet.getObject(1);
             }
+            System.out.println("数据库连接已断开");
             resultSet.close();
             stmt.close();
             conn.close();
