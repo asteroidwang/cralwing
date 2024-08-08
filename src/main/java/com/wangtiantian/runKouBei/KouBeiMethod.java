@@ -155,30 +155,74 @@ public class KouBeiMethod {
     // 读取已下载的所有口碑具体页面
     public void getKouBeiDesc() {
         try {
-            ArrayList<Object> dataArrayList = new ArrayList<>();
-//            ArrayList<Object> dataList = kouBeiDataBase.findAllKouBeiShowId();
-//            for (Object o : dataList) {
-//                String showId = ((KouBeiInfo) o).get_C_ShowID();
-//                try {
-//                    String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-            dataArrayList.add(parseKouBeiData(T_Config_File.method_读取文件内容("/Users/asteroid/Downloads/0177232yn764r30csg00000000.txt"), "0177232yn764r30csg00000000"));
+            ArrayList<KouBeiData> dataArrayList = new ArrayList<>();
+            ArrayList<Object> dataList = kouBeiDataBase.findAllKouBeiShowId();
+            for (Object o : dataList) {
+                String showId = ((KouBeiInfo) o).get_C_ShowID();
+                try {
+                    String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
+                    dataArrayList.add(parseKouBeiData(content, showId));
+                    if (dataArrayList.size()>1000){
+                        HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+                        dataArrayList.clear();
+                        dataArrayList.addAll(set);
+                        kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
+                        dataArrayList.clear();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+            dataArrayList.clear();
+            dataArrayList.addAll(set);
+            kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
+//            dataArrayList.add(parseKouBeiData(T_Config_File.method_读取文件内容("/Users/asteroid/Downloads/0177232yn764r30csg00000000.txt"), "0177232yn764r30csg00000000"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // 补充缺失的下载的数据
+    public void getKouBeiDescQueShi() {
+        try {
+            ArrayList<KouBeiData> dataArrayList = new ArrayList<>();
+            ArrayList<String> dataList =T_Config_File.method_按行读取文件("C:/Users/Administrator/Downloads/补充的下载数据ShowId.txt");
+            for (String showId : dataList) {
+                try {
+                    String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
+                    dataArrayList.add(parseKouBeiData(content, showId));
+                    if (dataArrayList.size()>1000){
+                        HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+                        dataArrayList.clear();
+                        dataArrayList.addAll(set);
+                        kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
+                        dataArrayList.clear();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+            dataArrayList.clear();
+            dataArrayList.addAll(set);
+            kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
+//            dataArrayList.add(parseKouBeiData(T_Config_File.method_读取文件内容("/Users/asteroid/Downloads/0177232yn764r30csg00000000.txt"), "0177232yn764r30csg00000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public KouBeiData parseKouBeiData(String mainContent, String showId) {
         KouBeiData kouBeiData = new KouBeiData();
+        ArrayList<String> info = new ArrayList<>();
         try {
             if (mainContent.contains("您访问的口碑存在异常被隐藏")) {
-                kouBeiData.set_C_ShowID("");
+                kouBeiData.set_C_ShowID(showId);
+                kouBeiData.set_C_DealerID("");
+                kouBeiData.set_C_DealerName("");
                 kouBeiData.set_C_KouBeiContent("您访问的口碑存在异常被隐藏");
-                kouBeiData.set_C_UpdateTime("");
                 kouBeiData.set_C_UserName("");
                 kouBeiData.set_C_UserID("");
                 kouBeiData.set_C_VersionID("");
@@ -195,13 +239,21 @@ public class KouBeiMethod {
                 kouBeiData.set_C_ShowID(showId);
                 kouBeiData.set_C_ZuiManYi("");
                 kouBeiData.set_C_ZuiBuManyi("");
-
+                kouBeiData.set_C_JiaShiGanShou("");
+                kouBeiData.set_C_CaoKong("");
+                kouBeiData.set_C_ShuShiXing("");
+                kouBeiData.set_C_NeiShi("");
+                kouBeiData.set_C_YouHao("");
+                kouBeiData.set_C_XingJiaBi("");
+                kouBeiData.set_C_KongJian("");
+                kouBeiData.set_C_WaiGuan("");
+                kouBeiData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             } else {
                 Document mainDoc = Jsoup.parse(mainContent);
                 Elements mainItems = mainDoc.select(".con-left.fl");
-                System.out.println(mainItems);
+//                System.out.println(mainItems);
                 String title = mainItems.select(".title").text();
-                String dealerId = mainItems.select(".grey.car-dealer").select("a").attr("href").split("/")[3].split("#")[0];
+                String dealerId = mainItems.select(".grey.car-dealer").select("a").toString().equals("") ? "" : mainItems.select(".grey.car-dealer").select("a").attr("href").split("/")[3].split("#")[0];
                 String dealerName = mainItems.select(".grey.car-dealer").select("a").text();
                 String kouBeiContent = mainItems.toString();
                 String userName = mainItems.select(".msg.fl").select("p").select("a").text();
@@ -210,7 +262,9 @@ public class KouBeiMethod {
                 String versionId = mainItems.select(".car-msg").select(".main-blue").select("a").get(1).attr("href").split("/")[4];
                 String modelId = mainItems.select(".car-msg").select(".main-blue").select("a").get(0).attr("href").split("/")[3];
                 String upTime = mainItems.select(".timeline-con").select("span").get(0).text();
-                String kouBeiId = mainItems.select("script").get(6).toString().split("var")[1].replace("koubeiid =", "").replace(";", "").trim();
+                String tempString1 = mainItems.select("script").toString().substring(mainItems.select("script").toString().indexOf("koubeiid"));
+                String tempString2 = tempString1.substring(tempString1.indexOf(";"));
+                String kouBeiId = tempString1.replace(tempString2, "").replace("koubeiid = ", "");
                 Elements itemInfo = mainItems.select(".kb-con").select("li");
                 String xingShiLiCheng = "";
                 String baiGongLiYouHao = "";
@@ -218,8 +272,8 @@ public class KouBeiMethod {
                 String gouMaiShiJian = "";
                 String gouMaiDiDian = "";
                 for (int i = 0; i < itemInfo.size(); i++) {
-                    String columnName = itemInfo.get(i).select(".name").text();
-                    String value = itemInfo.get(i).select("key").text();
+                    String columnName = itemInfo.get(i).select(".name").text().replace(" ","").trim();
+                    String value = itemInfo.get(i).select(".key").text();
                     if (columnName.equals("行驶里程")) {
                         xingShiLiCheng = value;
                     } else if (columnName.equals("百公里油耗")) {
@@ -234,14 +288,67 @@ public class KouBeiMethod {
                 }
                 String zuiManYi = mainItems.select(".satisfied.kb-item").text();
                 String zuiBuManYi = mainItems.select(".unsatis.kb-item").text();
+                String jiaShiGanShou = "";
+                String caoKong = "";
+                String shuShiXing = "";
+                String neiShi = "";
+                String youHao = "";
+                String xingJiaBi = "";
+                String kongJian = "";
+                String waiGuan = "";
                 Elements itemSpaceInfo = mainItems.select(".space.kb-item");
                 for (int i = 0; i < itemSpaceInfo.size(); i++) {
                     System.out.println(itemSpaceInfo.get(i));
                     String c1 = itemSpaceInfo.get(i).select("h1").text();
                     String v1 = itemSpaceInfo.get(i).select(".star-num").text();
-                    System.out.println(c1.replace(v1,""));
-
+                    String tempC1 = c1.replace(v1, "").replace(" ","").trim();
+                    if (tempC1.equals("驾驶感受")) {
+                        jiaShiGanShou = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    } else if (tempC1.equals("操控")) {
+                        caoKong = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    } else if (tempC1.equals("舒适性")) {
+                        shuShiXing = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    } else if (tempC1.equals("内饰")) {
+                        neiShi = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    } else if (tempC1.equals("油耗")) {
+                        youHao = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    } else if (tempC1.equals("性价比")) {
+                        xingJiaBi = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    } else if (tempC1.equals("空间")) {
+                        kongJian = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    } else if (tempC1.equals("外观")) {
+                        waiGuan = v1+"->"+ itemSpaceInfo.get(i).select("p").text();
+                    }
                 }
+                kouBeiData.set_C_ShowID(showId);
+                kouBeiData.set_C_DealerID(dealerId);
+                kouBeiData.set_C_DealerName(dealerName);
+                kouBeiData.set_C_KouBeiContent(kouBeiContent);
+                kouBeiData.set_C_UserName(userName);
+                kouBeiData.set_C_UserID(userId);
+                kouBeiData.set_C_VersionID(versionId);
+                kouBeiData.set_C_VersionName(versionName);
+                kouBeiData.set_C_ModelID(modelId);
+                kouBeiData.set_C_UpTime(upTime);
+                kouBeiData.set_C_KoubeiID(kouBeiId);
+                kouBeiData.set_C_Title(title);
+                kouBeiData.set_C_XingShiLiCheng(xingShiLiCheng);
+                kouBeiData.set_C_BaiGongLiYouHao(baiGongLiYouHao);
+                kouBeiData.set_C_LuoCheGouMaiJia(luoCheGouMaiJia);
+                kouBeiData.set_C_GouMaiShiJian(gouMaiShiJian);
+                kouBeiData.set_C_GouMaiDiDian(gouMaiDiDian);
+                kouBeiData.set_C_ShowID(showId);
+                kouBeiData.set_C_ZuiManYi(zuiManYi);
+                kouBeiData.set_C_ZuiBuManyi(zuiBuManYi);
+                kouBeiData.set_C_JiaShiGanShou(jiaShiGanShou);
+                kouBeiData.set_C_CaoKong(caoKong);
+                kouBeiData.set_C_ShuShiXing(shuShiXing);
+                kouBeiData.set_C_NeiShi(neiShi);
+                kouBeiData.set_C_YouHao(youHao);
+                kouBeiData.set_C_XingJiaBi(xingJiaBi);
+                kouBeiData.set_C_KongJian(kongJian);
+                kouBeiData.set_C_WaiGuan(waiGuan);
+                kouBeiData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             }
 
         } catch (Exception e) {
