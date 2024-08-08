@@ -30,7 +30,10 @@ public class MainKouBei {
         // new KouBeiMethod().parseKouBeiToGetShoeId();
         // new KouBeiMethod().getKouBeiDescUrl();
         // new KouBeiMoreThread().method_获取上一步入库的未下载的url下载具体口碑页面数据();
-         new KouBeiMethod().getKouBeiDesc();
+        // new KouBeiMethod().getKouBeiDesc();
+        // new KouBeiMethod().getKouBeiDescQueShi();
+
+
     }
 
 

@@ -64,15 +64,11 @@ public class T_Config_Father {
     public void method_i_d_u(String sql) {
         try {
             method_连接数据库();
-            try {
-                stmt.executeUpdate(sql);
-            }catch (Exception e){
-                System.out.println(sql);
-            }
-
+//            System.out.println(sql);
+            stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
-//            System.out.println("数据库连接已断开");
+            System.out.println("数据库连接已断开");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,15 +188,13 @@ public class T_Config_Father {
         try {
             Class c = o.getClass();
             Method[] methods = c.getDeclaredMethods();
-            String columnList = "";
             String valueList = "";
             for (int i = 0; i < methods.length; i++) {
                 if (methods[i].getName().startsWith("get_")) {
                     if (methods[i].getName().equals("get_C_ID")) {
                         continue;
                     }
-                    columnList += methods[i].getName().replace("get_", "") + ",";
-                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).toString().trim();
+                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("")?"-": methods[i].invoke(o).toString().trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
                         valueList += "N'" + value + "',";
                     } else {
