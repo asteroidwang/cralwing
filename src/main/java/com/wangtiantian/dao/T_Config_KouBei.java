@@ -34,11 +34,11 @@ public class T_Config_KouBei extends T_Config_Father {
 
 
     public ArrayList<Object> method_查找所有未下载回复的口碑id(int begin) {
-        return method_有条件的查询("SELECT * FROM " + tableName + " where C_IsFinish = 0 ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 1000 ROWS ONLY");
+        return method_有条件的查询("SELECT * FROM " + tableName + " where C_IsFinish = 0 and C_KoubeiID !='-' ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 1000 ROWS ONLY");
     }
 
     public void update修改一级评论的下载状态(String kbId) {
-        method_i_d_u("update " + tableName + " set C_IsFinish = 1 where C_KoubeiID  ='" + kbId + "'");
+        method_i_d_u("update " + tableName + " set C_IsFinish = 1 where C_ShowID  ='" + kbId + "'");
     }
 
 }
