@@ -358,20 +358,20 @@ public class KouBeiMethod {
     public void getReplyFile() {
         try {
             int getCount = kouBeiDataBase.getCount();
-            for (int kk = 0; kk < getCount; kk++) {
-                ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(kk*1000);
-                if (dataList.size()<=6){
+            for (int kk = 0; kk < getCount / 1000; kk++) {
+                ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(kk * 1000);
+                if (dataList.size() <= 6) {
                     for (Object bean : dataList) {
                         String kbId = ((KouBeiData) bean).get_C_KoubeiID();
-                        String mainUrl = "https://koubeiipv6.app.autohome.com.cn/autov9.13.0/news/replytoplevellist.ashx?pm=1&koubeiId="+kbId+"&next=0&pagesize=9999999";
-                        T_Config_File.method_访问url获取Json普通版(mainUrl,"UTF-8",filePath,kbId+"_一级评论_0.txt");
+                        String mainUrl = "https://koubeiipv6.app.autohome.com.cn/autov9.13.0/news/replytoplevellist.ashx?pm=1&koubeiId=" + kbId + "&next=0&pagesize=9999999";
+                        T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", filePath, kbId + "_一级评论_0.txt");
                         kouBeiDataBase.update_修改一级评论的文件下载状态(kbId);
                     }
-                }else {
+                } else {
                     List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
                             .collect(Collectors.toList());
                     for (int i = 0; i < list.size(); i++) {
-                        KouBeiReplyThread commonMoreThread = new KouBeiReplyThread(list.get(i), filePath+"评论数据/");
+                        KouBeiReplyThread commonMoreThread = new KouBeiReplyThread(list.get(i), filePath + "评论数据/");
                         Thread thread = new Thread(commonMoreThread);
                         thread.start();
                     }
@@ -383,5 +383,26 @@ public class KouBeiMethod {
         }
     }
 
+    // 修改口碑的一级回复数据的下载状态
+    public void update_修改口碑的一级回复数据的下载状态() {
+        try {
+            ArrayList<String> result = T_Config_File.method_获取文件名称(filePath + "评论数据/");
+            ArrayList<String> dataList = new ArrayList<>();
+            for (String fileName : result) {
+                String tempString = "";
+                dataList.add(fileName.replace("_一级评论_0.txt", ""));
+                if (dataList.size() >= 100) {
+                    tempString = dataList.toString().replace("[", "").replace("]", "");
+                    kouBeiDataBase.update_修改一级评论的文件下载状态(tempString);
+                    dataList.clear();
+                }
+            }
+            if (dataList.size()>0){
+                kouBeiDataBase.update_修改一级评论的文件下载状态(dataList.toString().replace("[", "").replace("]", ""));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

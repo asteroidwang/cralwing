@@ -64,6 +64,7 @@ public class T_Config_Father {
     public void method_i_d_u(String sql) {
         try {
             method_连接数据库();
+            System.out.println(sql);
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();

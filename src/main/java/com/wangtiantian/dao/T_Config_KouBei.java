@@ -38,7 +38,7 @@ public class T_Config_KouBei extends T_Config_Father {
     }
 
      public  void update修改一级评论的下载状态(String kbId) {
-        method_i_d_u("update " + tableName + " set C_IsFinish = 1 where C_ShowID  ='" + kbId + "'");
+        method_i_d_u("update " + tableName + " set C_IsFinish = 1 where C_KoubeiID  in (" + kbId + ")");
     }
 
 }
