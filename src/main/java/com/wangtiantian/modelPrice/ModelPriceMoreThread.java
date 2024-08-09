@@ -17,12 +17,10 @@ public class ModelPriceMoreThread implements Runnable {
 
     private List<Object> list;
     private String savePath;
-    private int group;
 
     public ModelPriceMoreThread(List<Object> list, String savePath) {
         this.list = list;
         this.savePath = savePath;
-//        this.group = group;
     }
 
     @Override
