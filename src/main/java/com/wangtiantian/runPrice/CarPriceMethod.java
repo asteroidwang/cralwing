@@ -2,7 +2,9 @@ package com.wangtiantian.runPrice;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.wangtiantian.dao.T_Config_Father;
 import com.wangtiantian.dao.T_Config_File;
+import com.wangtiantian.dao.T_Config_Price;
 import com.wangtiantian.entity.price.CarPrice;
 import com.wangtiantian.entity.price.CityData;
 import com.wangtiantian.entity.price.DealerData;
@@ -62,11 +64,11 @@ public class CarPriceMethod {
         ArrayList<Object> dataList = new PriceDataBase().findDealerCityNotFinish();
         try {
             for (Object o : dataList) {
-                for (int i = 1; i < ((CityData)o).get_C_CityCount()/15+2; i++) {
+                for (int i = 1; i < ((CityData) o).get_C_CityCount() / 15 + 2; i++) {
                     String mainUrl = "https://dealer.autohome.com.cn/" + ((CityData) o).get_C_CityPinYin() + "/0/0/0/0/" + i + "/1/0/0.html";
                     Document mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "gb2312", mainUrl);
                     Elements mainItems = mainDoc.select(".dealer-list-wrap").select(".list-box").select(".list-item");
-                    T_Config_File.method_重复写文件_根据路径创建文件夹(filePath + "经销商信息/" , "aaa.txt",  ((CityData) o).get_C_CityName() +"\t"+mainItems.size()+"\t"+mainUrl+"\n");
+                    T_Config_File.method_重复写文件_根据路径创建文件夹(filePath + "经销商信息/", "aaa.txt", ((CityData) o).get_C_CityName() + "\t" + mainItems.size() + "\t" + mainUrl + "\n");
                     if (mainItems.size() == 0) {
                         System.out.println("没有数据了");
                         break;
@@ -119,9 +121,11 @@ public class CarPriceMethod {
                     }
                 }
             }
-            HashSet<DealerData> set = new HashSet<>(dataList);
-            dataList.clear();
-            dataList.addAll(set);
+//            HashSet<DealerData> set = new HashSet<>(dataList);
+//            dataList.clear();
+//            dataList.addAll(set);
+            System.out.println(dataList.size());
+            System.out.println(num);
             new PriceDataBase().dealerData(dataList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +192,7 @@ public class CarPriceMethod {
                     }
                 }
             }
+            dataArrayList.addAll(parseCarPriceFile2(filePath.replace("车型报价页面_html", "车型报价页面")));
             HashSet<SaleModData> set = new HashSet<>(dataArrayList);
             dataArrayList.clear();
             dataArrayList.addAll(set);
@@ -197,45 +202,43 @@ public class CarPriceMethod {
         }
     }
 
-    //
     //解析车型报价页面 获取该店的在售车型Id 拼接下载地址获取 该店在售车型的车辆信息_2
-    public void parseCarPriceFile2(String filePath) {
-        try {
-            ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
-            ArrayList<SaleModData> dataArrayList = new ArrayList<>();
-            for (String fileName : fileList) {
-                String content = T_Config_File.method_读取文件内容(filePath + fileName);
-                JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
-                JSONArray jsonArray = jsonRoot.getJSONArray("list");
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    JSONArray modArray = ((JSONObject) jsonArray.get(i)).getJSONArray("SeriesList");
-                    for (int j = 0; j < modArray.size(); j++) {
-                        String dealerId = fileName.split("_")[1].replace(".txt", "");
-                        SaleModData saleModData = new SaleModData();
-                        saleModData.set_C_DealerID(dealerId);
-                        saleModData.set_C_FactoryID(((JSONObject) jsonArray.get(i)).getString("FactoryId"));
-                        saleModData.set_C_ModelID(((JSONObject) modArray.get(j)).getString("SeriesId"));
-                        saleModData.set_C_PriceDataUrl("https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + saleModData.get_C_DealerID() + "&seriesId=" + saleModData.get_C_ModelID() + "&show0Price=1");
-                        saleModData.set_C_IsFinish(0);
-                        saleModData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                        dataArrayList.add(saleModData);
-                    }
+    public ArrayList<SaleModData> parseCarPriceFile2(String filePath) {
+        ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
+        ArrayList<SaleModData> dataArrayList = new ArrayList<>();
+        for (String fileName : fileList) {
+            String content = T_Config_File.method_读取文件内容(filePath + fileName);
+            JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
+            JSONArray jsonArray = jsonRoot.getJSONArray("list");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONArray modArray = ((JSONObject) jsonArray.get(i)).getJSONArray("SeriesList");
+                for (int j = 0; j < modArray.size(); j++) {
+                    String dealerId = fileName.split("_")[1].replace(".txt", "");
+                    SaleModData saleModData = new SaleModData();
+                    saleModData.set_C_DealerID(dealerId);
+                    saleModData.set_C_FactoryID(((JSONObject) jsonArray.get(i)).getString("FactoryId"));
+                    saleModData.set_C_ModelID(((JSONObject) modArray.get(j)).getString("SeriesId"));
+                    saleModData.set_C_PriceDataUrl("https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + saleModData.get_C_DealerID() + "&seriesId=" + saleModData.get_C_ModelID() + "&show0Price=1");
+                    saleModData.set_C_IsFinish(0);
+                    saleModData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    dataArrayList.add(saleModData);
                 }
             }
-            HashSet<SaleModData> set = new HashSet<>(dataArrayList);
-            dataArrayList.clear();
-            dataArrayList.addAll(set);
-            new PriceDataBase().saleModData(dataArrayList);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        HashSet<SaleModData> set = new HashSet<>(dataArrayList);
+        dataArrayList.clear();
+        dataArrayList.addAll(set);
+        //new PriceDataBase().saleModData(dataArrayList);
+        return dataArrayList;
     }
 
     //
 //    //下载车辆信息数据
     public void getCarDataFile(String filePath) {
         try {
-            ArrayList<Object> dataList = new PriceDataBase().findNoDealerModel();
+            T_Config_Price price = new T_Config_Price(2, 0, 2);
+            ArrayList<Object> dataList = price.method_查找();
+            System.out.println(dataList.size());
             List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
                     .collect(Collectors.toList());
             for (int i = 0; i < list.size(); i++) {
@@ -249,11 +252,16 @@ public class CarPriceMethod {
     }
 
     public void method_下载车辆信息数据文件(String url, String fileName, String filePath) {
+        Document mainDoc = null;
         try {
-            Document mainDoc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
-            T_Config_File.method_写文件_根据路径创建文件夹(filePath + "车辆价格信息/", fileName, mainDoc.text());
+            mainDoc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
+
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (mainDoc != null) {
+            T_Config_File.method_写文件_根据路径创建文件夹(filePath + "车辆价格信息/", fileName, mainDoc.text());
+//            new T_Config_Father(2, 0, 2).updateNoDealerModelStatus(fileName.split("_")[0], fileName.split("_")[1].replace(".txt", ""));
         }
     }
 

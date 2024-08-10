@@ -156,11 +156,6 @@ public class ModelPriceMethod {
                 Thread thread = new Thread(modelPriceMoreThread);
                 thread.start();
             }
-//            for (int i = 0; i < dealerList.size(); i++) {
-//                String dealerId = ((ModelDealerData)dealerList.get(i)).get_C_DealerId();
-//                String modId = ((ModelDealerData)dealerList.get(i)).get_C_ModelId();
-//                String mainUrl ="https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId="+dealerId+"&seriesId="+modId+"&show0Price=1";
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

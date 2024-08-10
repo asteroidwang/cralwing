@@ -43,7 +43,7 @@ public class T_Config_Father {
             dbString = dbURL + dbName + jsonRoot.getString("charset");
         } else if (chooseDataBaseType == 2) {
             dbString = dbURL + dbName;
-            System.out.println("当前正在使用的数据库是 -> " + dbName);
+            System.out.println("当前正在使用的数据库是 -> " + dbName+"\n当前使用的数据库表是 -> "+tableName);
         }
     }
 
