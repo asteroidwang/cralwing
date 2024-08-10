@@ -176,6 +176,10 @@
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiData",
             "tableName": "T_KouBeiData_20240804"
+          },
+           {
+            "entity": "com.wangtiantian.entity.koubei.KouBeiTest",
+            "tableName": "T_Test"
           }
         ]
       }
