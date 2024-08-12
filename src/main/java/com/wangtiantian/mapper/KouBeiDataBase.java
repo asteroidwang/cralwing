@@ -3,10 +3,7 @@ package com.wangtiantian.mapper;
 import com.wangtiantian.dao.T_Config_AutoHome;
 import com.wangtiantian.dao.T_Config_KouBei;
 import com.wangtiantian.dao.T_Config_Price;
-import com.wangtiantian.entity.koubei.KouBeiData;
-import com.wangtiantian.entity.koubei.KouBeiInfo;
-import com.wangtiantian.entity.koubei.KouBeiTest;
-import com.wangtiantian.entity.koubei.ModelKouBei;
+import com.wangtiantian.entity.koubei.*;
 import com.wangtiantian.entity.price.SaleModData;
 
 import java.util.ArrayList;
@@ -134,5 +131,30 @@ public class KouBeiDataBase {
             System.out.println("下载koubeiid入库操作");
         }
 
+    }
+
+
+    public void insetForeachKouBeiReplyData(ArrayList<ReplyKouBei> dataList) {
+        int batchSize = 100;
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(2, chooseDataBase, 4);
+        for (int i = 0; i < dataList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, dataList.size());
+            List<ReplyKouBei> batchList = dataList.subList(i, end);
+            StringBuffer valueBuffer = new StringBuffer();
+            String columnList = kouBeiDataDao.getColumnList(dataList.get(i));
+            for (ReplyKouBei bean : batchList) {
+                valueBuffer.append(kouBeiDataDao.getValueList(bean)).append(",");
+            }
+            String tempString = valueBuffer.toString();
+            kouBeiDataDao.method_批量插入数据(tempString.substring(0, tempString.length() - 1), columnList);
+            System.out.println("一级评论数据入库操作");
+        }
+
+    }
+
+    // 查询还未解析的一级评论的口碑id
+    public ArrayList<Object> getNotParseFirstPingLunKouBeiId(int begin) {
+        T_Config_KouBei modDataDao = new T_Config_KouBei(2, chooseDataBase, 2);
+        return modDataDao.method_查找所有未下载回复的口碑id(begin);
     }
 }
