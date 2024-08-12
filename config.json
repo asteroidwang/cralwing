@@ -2,6 +2,8 @@
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
     "dbURL": "jdbc:sqlserver://127.0.0.1:1433;databaseName=",
+    "userName": "sa",
+    "password": "Abc20010318aa",
     "dbItems": [
       {
         "dbName": "autoHome",
@@ -64,46 +66,48 @@
         ]
       },
       {
-        "dbName": "autohome_240801",
+        "dbName": "carPrice",
         "userName": "sa",
         "password": "Abc20010318aa",
         "primary": "C_ID",
         "db_table": [
           {
-            "entity": "com.wangtiantian.entity.Bean_Brand",
-            "tableName": "T_汽车之家_品牌表_20240801"
+            "entity": "com.wangtiantian.entity.price.CityData",
+            "tableName": "T_CityData_20240806"
           },
           {
-            "entity": "com.wangtiantian.entity.Bean_Factory",
-            "tableName": "T_汽车之家_厂商表_20240801"
+            "entity": "com.wangtiantian.entity.price.DealerData",
+            "tableName": "T_DealerData_20240806"
           },
           {
-            "entity": "com.wangtiantian.entity.Bean_Model",
-            "tableName": "T_汽车之家_车型表_20240801"
+            "entity": "com.wangtiantian.entity.price.SaleModData",
+            "tableName": "T_SaleModData_20240806"
           },
           {
-            "entity": "com.wangtiantian.entity.Bean_Version",
-            "tableName": "T_汽车之家_版本表_20240801"
+            "entity": "com.wangtiantian.entity.price.ModelDealerData",
+            "tableName": "T_ModelDealerData_20240806"
           },
           {
-            "entity": "com.wangtiantian.entity.Bean_Params",
-            "tableName": "T_汽车之家_参数表_20240801"
+            "entity": "com.wangtiantian.entity.price.CarPrice",
+            "tableName": "T_CarPrice_20240806"
+          }
+        ]
+      },
+      {
+        "dbName": "carComments",
+        "primary": "C_ID",
+        "db_table": [
+          {
+            "entity": "com.wangtiantian.entity.koubei.ModelKouBei",
+            "tableName": "T_ModelKouBei_20240804"
           },
           {
-            "entity": "com.wangtiantian.entity.Bean_Config",
-            "tableName": "T_汽车之家_配置表_20240801"
+            "entity": "com.wangtiantian.entity.koubei.KouBeiInfo",
+            "tableName": "T_KouBeiInfo_20240804"
           },
           {
-            "entity": "com.wangtiantian.entity.Bean_Bag",
-            "tableName": "T_汽车之家_选装包_20240801"
-          },
-          {
-            "entity": "com.wangtiantian.entity.Bean_ModelURL",
-            "tableName": "T_下载含版本的车型页面"
-          },
-          {
-            "entity": "com.wangtiantian.entity.Bean_P_C_B_URL",
-            "tableName": "T_版本分组id列表"
+            "entity": "com.wangtiantian.entity.koubei.KouBeiData",
+            "tableName": "T_KouBeiData_20240804"
           }
         ]
       }
@@ -129,8 +133,70 @@
   },
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.0.108:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.124:1433;databaseName=",
+    "userName": "sa",
+    "password": "7777",
     "dbItems": [
+      {
+        "dbName": "autoHome",
+        "userName": "sa",
+        "password": "Abc20010318aa",
+        "primary": "C_ID",
+        "db_table": [
+          {
+            "entity": "com.wangtiantian.entity.Bean_Brand",
+            "tableName": "T_汽车之家_品牌表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Factory",
+            "tableName": "T_汽车之家_厂商表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Model",
+            "tableName": "T_汽车之家_车型表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Version",
+            "tableName": "T_汽车之家_版本表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.configData.Bean_VersionIds",
+            "tableName": "T_汽车之家_版本id表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Params",
+            "tableName": "T_汽车之家_参数表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Config",
+            "tableName": "T_汽车之家_配置表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Bag",
+            "tableName": "T_汽车之家_选装包"
+          },
+          {
+            "entity": "entity.BeanColor",
+            "tableName": "T_外观颜色"
+          },
+          {
+            "entity": "entity.BeanColor",
+            "tableName": "T_内饰颜色"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_Model",
+            "tableName": "T_车系"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_VersionPic",
+            "tableName": "T_图片下载表"
+          },
+          {
+            "entity": "com.wangtiantian.entity.Bean_PicURL",
+            "tableName": "T_车型版本图片URL表"
+          }
+        ]
+      },
       {
         "dbName": "carPrice",
         "userName": "sa",
@@ -161,10 +227,12 @@
       },
       {
         "dbName": "carComments",
-        "userName": "sa",
-        "password": "Abc20010318aa",
         "primary": "C_ID",
         "db_table": [
+          {
+            "entity": "com.wangtiantian.entity.koubei.ModelInfo",
+            "tableName": "T_Model"
+          },
           {
             "entity": "com.wangtiantian.entity.koubei.ModelKouBei",
             "tableName": "T_ModelKouBei_20240804"

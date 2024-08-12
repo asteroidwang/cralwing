@@ -23,11 +23,8 @@ import java.util.stream.IntStream;
 
 public class KouBeiMethod {
     private KouBeiDataBase kouBeiDataBase = new KouBeiDataBase();
-    //    private String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/口碑评价数据/20240804/";
-    private String filePath = "E:/汽车之家/口碑评价数据/20240804/";
-
     // 获取每个车型的第一页口碑
-    public void getModelKouBeiFirstFileUrl() {
+    public void getModelKouBeiFirstFileUrl(String filePath) {
         try {
             ArrayList<Object> modList = kouBeiDataBase.getModIDList();
             ArrayList<ModelKouBei> dataList = new ArrayList<>();
@@ -51,7 +48,7 @@ public class KouBeiMethod {
     }
 
     // 下载各个车型的第一页口碑页面
-    public void getModelKouBeiFileDataAndUrl() {
+    public void getModelKouBeiFileDataAndUrl(String filePath) {
         try {
             ArrayList<Object> modUrlList = kouBeiDataBase.getModFirstKouBei();
             for (Object o : modUrlList) {
@@ -74,7 +71,7 @@ public class KouBeiMethod {
     }
 
     // 获取总页数，并拼接相应url入库
-    public void method_获取总页数并拼接url入库() {
+    public void method_获取总页数并拼接url入库(String filePath) {
         try {
             ArrayList<String> folderList = T_Config_File.method_获取文件夹名称(filePath);
             ArrayList<ModelKouBei> dataList = new ArrayList<>();
@@ -103,7 +100,7 @@ public class KouBeiMethod {
     }
 
     // 获取上一步入库的未下载的url下载口碑页面数据
-    public void parseKouBeiToGetShoeId() {
+    public void parseKouBeiToGetShoeId(String filePath) {
         try {
             ArrayList<String> folderList = T_Config_File.method_获取文件夹名称(filePath);
             ArrayList<KouBeiInfo> dataList = new ArrayList<>();
@@ -149,7 +146,7 @@ public class KouBeiMethod {
     }
 
     // 读取已下载的所有口碑具体页面
-    public void getKouBeiDesc() {
+    public void getKouBeiDesc(String filePath) {
         try {
             ArrayList<KouBeiData> dataArrayList = new ArrayList<>();
             ArrayList<Object> dataList = kouBeiDataBase.findAllKouBeiShowId();
@@ -181,7 +178,7 @@ public class KouBeiMethod {
     }
 
     // 补充缺失的下载的数据
-    public void getKouBeiDescQueShi() {
+    public void getKouBeiDescQueShi(String filePath) {
         try {
             ArrayList<KouBeiData> dataArrayList = new ArrayList<>();
             ArrayList<String> dataList = T_Config_File.method_按行读取文件("C:/Users/Administrator/Downloads/补充的下载数据ShowId.txt");
@@ -205,7 +202,6 @@ public class KouBeiMethod {
             dataArrayList.clear();
             dataArrayList.addAll(set);
             kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
-//            dataArrayList.add(parseKouBeiData(T_Config_File.method_读取文件内容("/Users/asteroid/Downloads/0177232yn764r30csg00000000.txt"), "0177232yn764r30csg00000000"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -355,7 +351,7 @@ public class KouBeiMethod {
     }
 
     // 获取所有口碑的一级回复数据
-    public void getReplyFile() {
+    public void getReplyFile(String filePath) {
         try {
             int getCount = kouBeiDataBase.getCount();
             for (int kk = 0; kk < getCount / 1000; kk++) {
@@ -384,7 +380,7 @@ public class KouBeiMethod {
     }
 
     // 修改口碑的一级回复数据的下载状态
-    public void update_修改口碑的一级回复数据的下载状态() {
+    public void update_修改口碑的一级回复数据的下载状态(String filePath) {
         try {
             ArrayList<String> result = T_Config_File.method_获取文件名称(filePath + "评论数据/");
             ArrayList<String> dataList = new ArrayList<>();

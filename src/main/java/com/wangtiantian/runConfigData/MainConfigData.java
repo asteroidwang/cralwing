@@ -25,15 +25,16 @@ public class MainConfigData {
 
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/20240807/";
-        // mainConfigData.method_下载品牌厂商车型数据(filePath+"初始数据/);
-        // mainConfigData.parse_品牌厂商车型数据(filePath+"初始数据/);
+        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/20240810/";
+
+        // mainConfigData.method_下载品牌厂商车型数据(filePath+"初始数据/");
+        // mainConfigData.parse_品牌厂商车型数据(filePath+"初始数据/");
         // mainConfigData.method_下载含有版本数据的文件(filePath+"含版本数据的文件");
         // mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-        // mainConfigData.method_下载配置数据(filePath + "params_1/");
-        // mainConfigData.method_解析列名(filePath);
-        // mainConfigData.method_取列名(filePath);
-        mainConfigData.method_解析配置数据(filePath);
+        // mainConfigData.method_下载配置数据(filePath + "params/");
+        // mainConfigData.method_解析列名(filePath+"列名/");
+        // mainConfigData.method_取列名(filePath+"列名/");
+         mainConfigData.method_解析配置数据(filePath);
     }
 
     // 1.下载品牌厂商车型数据
@@ -378,7 +379,7 @@ public class MainConfigData {
     // 5.版本ids入库 下载配置数据
     public void method_下载配置数据(String filePath) {
         try {
-            // dataBaseMethod.insert_批量插入版本ids();
+            dataBaseMethod.insert_批量插入版本ids();
             ArrayList<Object> paramsList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 0);
             ArrayList<Object> configList = dataBaseMethod.method_根据数据类型获取未下载的数据("config", 0);
             ArrayList<Object> bagList = dataBaseMethod.method_根据数据类型获取未下载的数据("bag", 0);
@@ -444,7 +445,6 @@ public class MainConfigData {
     // 解析配置数据获取列名
     public void method_解析列名(String filePath) {
         ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
-
         for (int i = 1; i < groupList.size() + 1; i++) {
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
@@ -461,9 +461,9 @@ public class MainConfigData {
             LinkedHashSet<String> hashSet_config = new LinkedHashSet<>(columnNames_config);
             ArrayList<String> lost_params = new ArrayList<>(hashSet_params);
             ArrayList<String> lost_config = new ArrayList<>(hashSet_config);
-            System.out.println(lost_params.toString().substring(1,lost_params.toString().length()-1).replace(", ","\n"));
+            System.out.println(lost_params.toString().substring(1, lost_params.toString().length() - 1).replace(", ", "\n"));
             System.out.println("=============");
-            System.out.println(lost_config.toString().substring(1,lost_config.toString().length()-1).replace(", ","\n"));
+            System.out.println(lost_config.toString().substring(1, lost_config.toString().length() - 1).replace(", ", "\n"));
         } catch (Exception e) {
 
         }
@@ -474,14 +474,15 @@ public class MainConfigData {
         ArrayList<Object> params = new ArrayList<>();
         ArrayList<Object> config = new ArrayList<>();
         ArrayList<Object> bag = new ArrayList<>();
+
         ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
         for (int i = 1; i < groupList.size() + 1; i++) {
-            String paramsContent= T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
+            String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             String bagContent = T_Config_File.method_读取文件内容(filePath + "bag/" + i + "_bag.txt");
-            params.addAll(method_解析params(paramsContent.substring(9,paramsContent.length()-1)));
-            config.addAll(method_解析config(configContent.substring(10,configContent.length()-1)));
-            bag.addAll(method_解析bag(bagContent.substring(7,bagContent.length()-1)));
+            params.addAll(method_解析params(paramsContent.substring(9, paramsContent.length() - 1)));
+            config.addAll(method_解析config(configContent.substring(10, configContent.length() - 1)));
+            bag.addAll(method_解析bag(bagContent.substring(7, bagContent.length() - 1)));
         }
         HashSet<Object> setParams = new HashSet<>(params);
         params.clear();

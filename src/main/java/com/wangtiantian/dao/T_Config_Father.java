@@ -26,24 +26,23 @@ public class T_Config_Father {
         String content = T_Config_File.method_读取文件内容("config.json");
         JSONArray mainRoot = JSON.parseArray(content);
         JSONObject jsonRoot = mainRoot.getJSONObject(chooseDataBaseType);
+        dbDriver = jsonRoot.getString("driver");
+        dbURL = jsonRoot.getString("dbURL");
+        userName = jsonRoot.getString("userName");
+        password = jsonRoot.getString("password");
         JSONArray mainJson = jsonRoot.getJSONArray("dbItems");
         JSONObject mainDataBase = mainJson.getJSONObject(chooseDataBase);
         JSONArray tableItems = mainDataBase.getJSONArray("db_table");
         JSONObject tableObject = tableItems.getJSONObject(chooseTable);
-        dbDriver = jsonRoot.getString("driver");
-        dbURL = jsonRoot.getString("dbURL");
-        userName = mainDataBase.getString("userName");
-        password = mainDataBase.getString("password");
         dbName = mainDataBase.getString("dbName");
         packBag = tableObject.getString("entity");
         tableName = tableObject.getString("tableName");
-        if (chooseDataBaseType == 0) {
-            dbString = dbURL + dbName;
-        } else if (chooseDataBaseType == 1) {
+        if (dbDriver.contains("mysql")) {
             dbString = dbURL + dbName + jsonRoot.getString("charset");
-        } else if (chooseDataBaseType == 2) {
+            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
+        } else {
             dbString = dbURL + dbName;
-            System.out.println("当前正在使用的数据库是 -> " + dbName+"\n当前使用的数据库表是 -> "+tableName);
+            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
         }
     }
 

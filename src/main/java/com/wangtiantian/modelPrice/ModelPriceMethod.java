@@ -148,14 +148,16 @@ public class ModelPriceMethod {
 
     public void method_根据经销商id获取下载车辆价格信息文件(String filePath) {
         try {
-            ArrayList<Object> dealerList = new PriceDataBase().getNoFinishModelDealerData();
-            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dealerList.subList(i * (dealerList.size() + 5) / 6, Math.min((i + 1) * (dealerList.size() + 5) / 6, dealerList.size())))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < list.size(); i++) {
-                ModelPriceMoreThread modelPriceMoreThread = new ModelPriceMoreThread(list.get(i), filePath);
-                Thread thread = new Thread(modelPriceMoreThread);
-                thread.start();
-            }
+            ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
+            System.out.println(fileList.size());
+//            ArrayList<Object> dealerList = new PriceDataBase().getNoFinishModelDealerData();
+//            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dealerList.subList(i * (dealerList.size() + 5) / 6, Math.min((i + 1) * (dealerList.size() + 5) / 6, dealerList.size())))
+//                    .collect(Collectors.toList());
+//            for (int i = 0; i < list.size(); i++) {
+//                ModelPriceMoreThread modelPriceMoreThread = new ModelPriceMoreThread(list.get(i), filePath);
+//                Thread thread = new Thread(modelPriceMoreThread);
+//                thread.start();
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
