@@ -7,8 +7,6 @@
     "dbItems": [
       {
         "dbName": "autoHome",
-        "userName": "sa",
-        "password": "Abc20010318aa",
         "primary": "C_ID",
         "db_table": [
           {
@@ -222,6 +220,10 @@
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
             "tableName": "T_CarPrice_20240806"
+          },
+          {
+            "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFile",
+            "tableName": "T_ConfirmCarPriceFile_20240806"
           }
         ]
       },
@@ -244,6 +246,10 @@
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiData",
             "tableName": "T_KouBeiData_20240804"
+          },
+           {
+            "entity": "com.wangtiantian.entity.koubei.KouBeiTest",
+            "tableName": "T_Test"
           }
         ]
       }

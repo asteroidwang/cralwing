@@ -5,6 +5,7 @@ import com.wangtiantian.dao.T_Config_KouBei;
 import com.wangtiantian.dao.T_Config_Price;
 import com.wangtiantian.entity.koubei.KouBeiData;
 import com.wangtiantian.entity.koubei.KouBeiInfo;
+import com.wangtiantian.entity.koubei.KouBeiTest;
 import com.wangtiantian.entity.koubei.ModelKouBei;
 import com.wangtiantian.entity.price.SaleModData;
 
@@ -115,5 +116,23 @@ public class KouBeiDataBase {
     public void update_修改一级评论的文件下载状态(String kbId){
         T_Config_KouBei replyDataDao = new T_Config_KouBei(chooseDataBaseType,chooseDataBase, 2);
         replyDataDao.update修改一级评论的下载状态(kbId);
+    }
+
+    public void insetForeachKouBeiTest(ArrayList<KouBeiTest> dataList) {
+        int batchSize = 100;
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(2, chooseDataBase, 3);
+        for (int i = 0; i < dataList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, dataList.size());
+            List<KouBeiTest> batchList = dataList.subList(i, end);
+            StringBuffer valueBuffer = new StringBuffer();
+            String columnList = kouBeiDataDao.getColumnList(dataList.get(i));
+            for (KouBeiTest bean : batchList) {
+                valueBuffer.append(kouBeiDataDao.getValueList(bean)).append(",");
+            }
+            String tempString = valueBuffer.toString();
+            kouBeiDataDao.method_批量插入数据(tempString.substring(0, tempString.length() - 1), columnList);
+            System.out.println("下载koubeiid入库操作");
+        }
+
     }
 }

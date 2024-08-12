@@ -3,9 +3,11 @@ package com.wangtiantian.runKouBei;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
+import com.wangtiantian.dao.T_Config_KouBei;
 import com.wangtiantian.entity.Bean_Model;
 import com.wangtiantian.entity.koubei.KouBeiData;
 import com.wangtiantian.entity.koubei.KouBeiInfo;
+import com.wangtiantian.entity.koubei.KouBeiTest;
 import com.wangtiantian.entity.koubei.ModelKouBei;
 import com.wangtiantian.mapper.KouBeiDataBase;
 import org.jsoup.Jsoup;
@@ -382,21 +384,37 @@ public class KouBeiMethod {
     // 修改口碑的一级回复数据的下载状态
     public void update_修改口碑的一级回复数据的下载状态(String filePath) {
         try {
-            ArrayList<String> result = T_Config_File.method_获取文件名称(filePath + "评论数据/");
-            ArrayList<String> dataList = new ArrayList<>();
-            for (String fileName : result) {
-                String tempString = "";
-                dataList.add(fileName.replace("_一级评论_0.txt", ""));
-                if (dataList.size() >= 100) {
-                    tempString = dataList.toString().replace("[", "").replace("]", "");
-                    kouBeiDataBase.update_修改一级评论的文件下载状态(tempString);
-                    dataList.clear();
-                }
+            ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "评论数据/");
+            ArrayList<KouBeiTest> result = new ArrayList<>();
+            for (int i = 0; i < dataList.size(); i++) {
+                KouBeiTest kouBeiTest = new KouBeiTest();
+                kouBeiTest.set_C_KoubeiID(dataList.get(i).replace("_一级评论_0.txt", ""));
+                result.add(kouBeiTest);
             }
-            if (dataList.size()>0){
-                kouBeiDataBase.update_修改一级评论的文件下载状态(dataList.toString().replace("[", "").replace("]", ""));
-            }
+            kouBeiDataBase.insetForeachKouBeiTest(result);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 解析口碑的一级回复数据
+    public void method_一级评论数据(){
+         ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "一级评论数据/");
+         for(String fileName:dataList){
+             parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/"+fileName));
+         }
+    }
+    public void parse_解析一级评论数据(String content){
+        try {
+            JSONObject jsonRoot = JSONObject.parse(content).getJSONObject("result");
+            JSONArray jsonArray = jsonRoot.getJSONArray("list");
+            System.out.println(jsonArray);
+            String nextString = jsonRoot.getString("next");
+            System.out.println(nextString);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                System.out.println(jsonArray.get(i));
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

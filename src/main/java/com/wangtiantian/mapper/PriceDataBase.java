@@ -172,4 +172,22 @@ public class PriceDataBase {
         saleModDao.updateNoDealerModelStatus(dealerID,modelId);
     }
 
+
+    public void insertConfirmCarPriceFile(ArrayList<ConfirmCarPriceFile> dataList) {
+        T_Config_Price modelDealerDao = new T_Config_Price(2, chooseDataBase, 5);
+        int batchSize = 100;
+        for (int i = 0; i < dataList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, dataList.size());
+            List<ConfirmCarPriceFile> batchList = dataList.subList(i, end);
+            StringBuffer valueBuffer = new StringBuffer();
+            String columnList = modelDealerDao.getColumnList(dataList.get(i));
+            for (ConfirmCarPriceFile bean : batchList) {
+                valueBuffer.append(modelDealerDao.getValueList(bean)).append(",");
+            }
+            String tempString = valueBuffer.toString();
+            modelDealerDao.method_批量插入数据(tempString.substring(0, tempString.length() - 1), columnList);
+            System.out.println("确认车辆价格信息文件数据入库操作");
+        }
+    }
+
 }

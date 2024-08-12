@@ -19,8 +19,6 @@ import java.util.Date;
 import java.util.HashSet;
 
 public class MainKouBei {
-
-
     public static void main(String[] args) {
         // 第一版流程 20240804
         // 1.https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=3170&pageIndex=1&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0
@@ -51,11 +49,10 @@ public class MainKouBei {
             currentFilePath = winFilePath;
         }
         // 数据准备 汽车之家最新的车型数据
-        new MainConfigData().method_下载品牌厂商车型数据(currentFilePath+"车型数据/");
+        new MainConfigData().method_下载品牌厂商车型数据(currentFilePath + "车型数据/");
         // kouBeiMethod.getModelKouBeiFirstFileUrl(currentFilePath);
 
-
+        // new KouBeiMethod().update_修改口碑的一级回复数据的下载状态();
+        new KouBeiMethod().method_一级评论数据();
     }
-
-
 }
