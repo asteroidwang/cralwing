@@ -11,7 +11,7 @@ import java.util.List;
 
 public class KouBeiDataBase {
     //选择数据库和连接的数据类型
-    private static int chooseDataBase = 1;
+    private static int chooseDataBase = 2;
     private static int chooseDataBaseType = 0;
 
     // 获取车型id列表
@@ -136,7 +136,7 @@ public class KouBeiDataBase {
 
     public void insetForeachKouBeiReplyData(ArrayList<ReplyKouBei> dataList) {
         int batchSize = 100;
-        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(2, chooseDataBase, 4);
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 4);
         for (int i = 0; i < dataList.size(); i += batchSize) {
             int end = Math.min(i + batchSize, dataList.size());
             List<ReplyKouBei> batchList = dataList.subList(i, end);
