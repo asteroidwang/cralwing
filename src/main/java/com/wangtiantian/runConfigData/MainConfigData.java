@@ -25,7 +25,8 @@ public class MainConfigData {
 
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/20240807/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/202408010/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/汽车之家_240801/";
         // mainConfigData.method_下载品牌厂商车型数据(filePath+"初始数据/);
         // mainConfigData.parse_品牌厂商车型数据(filePath+"初始数据/);
         // mainConfigData.method_下载含有版本数据的文件(filePath+"含版本数据的文件");
@@ -474,14 +475,17 @@ public class MainConfigData {
         ArrayList<Object> params = new ArrayList<>();
         ArrayList<Object> config = new ArrayList<>();
         ArrayList<Object> bag = new ArrayList<>();
-        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
-        for (int i = 1; i < groupList.size() + 1; i++) {
+//        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
+        for (int i = 1; i < 8152; i++) {
             String paramsContent= T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             String bagContent = T_Config_File.method_读取文件内容(filePath + "bag/" + i + "_bag.txt");
-            params.addAll(method_解析params(paramsContent.substring(9,paramsContent.length()-1)));
-            config.addAll(method_解析config(configContent.substring(10,configContent.length()-1)));
-            bag.addAll(method_解析bag(bagContent.substring(7,bagContent.length()-1)));
+//            params.addAll(method_解析params(paramsContent.substring(9,paramsContent.length()-1)));
+//            config.addAll(method_解析config(configContent.substring(10,configContent.length()-1)));
+//            bag.addAll(method_解析bag(bagContent.substring(7,bagContent.length()-1)));
+            params.addAll(method_解析params(paramsContent));
+            config.addAll(method_解析config(configContent));
+            bag.addAll(method_解析bag(bagContent));
         }
         HashSet<Object> setParams = new HashSet<>(params);
         params.clear();
@@ -495,9 +499,9 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-        dataBaseMethod.method_批量插入配置数据(params, "params");
+        //dataBaseMethod.method_批量插入配置数据(params, "params");
         dataBaseMethod.method_批量插入配置数据(config, "config");
-        dataBaseMethod.method_批量插入配置数据(bag, "bag");
+        //dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
 

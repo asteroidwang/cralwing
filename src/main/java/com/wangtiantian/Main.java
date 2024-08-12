@@ -13,7 +13,8 @@ public class Main {
     public static void main(String[] args) {
         DownLoadData downLoadData = new DownLoadData();
         String websiteURL = "https://car.autohome.com.cn";
-        String saveFilePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/20240807/";
+//        String saveFilePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/202408010/";
+        String saveFilePath =  "/Users/wangtiantian/MyDisk/汽车之家/配置数据/汽车之家_240801/";
         // 1.下载品牌厂商车型数据
         // downLoadData.downLoadBrandFactoryModel(saveFilePath);
         // 1.解析入库 品牌厂商车型
@@ -28,9 +29,9 @@ public class Main {
         // downLoadData.downLoadParams_Config_Bag(saveFilePath+"params/");
         // 3.取列名
         // AnalysisData.method_解析params_config_bag_列名(saveFilePath+"params/");
-         AnalysisData.method_取列名(saveFilePath+"列名/");
+        // AnalysisData.method_取列名(saveFilePath+"列名/");
         // 3.解析配置数据
-        // AnalysisData.method_解析params_config_bag(saveFilePath+"params/");
+         AnalysisData.method_解析params_config_bag(saveFilePath+"params/");
         // 3.解析单个版本id配置
         // AnalysisData.method_解析params_config_bag_One(saveFilePath+"params/");
 

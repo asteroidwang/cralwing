@@ -18,9 +18,6 @@ import java.util.Date;
 import java.util.HashSet;
 
 public class MainKouBei {
-
-
-
     public static void main(String[] args) {
         // 1.https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=3170&pageIndex=1&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0
         // new KouBeiMethod().getModelKouBeiFirstFileUrl();

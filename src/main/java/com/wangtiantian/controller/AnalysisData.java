@@ -159,7 +159,7 @@ public class AnalysisData {
             ArrayList<Object> paramsDataList = new ArrayList<>();
             ArrayList<Object> configDataList = new ArrayList<>();
             ArrayList<Object> bagDataList = new ArrayList<>();
-            for (int i = 1; i < groupList.size() + 1; i++) {
+            for (int i = 1; i <8152; i++) {
                 int group = i;
                 String content_params = T_Config_File.method_读取文件内容(filePath + group + "_params" + ".txt");
                 String content_config = T_Config_File.method_读取文件内容(filePath.replace("params", "config/" + group + "_config.txt"));
@@ -210,8 +210,7 @@ public class AnalysisData {
         try {
 //            ArrayList<Object> groupList = DataBaseMethod.findAllGroup();
 //            ArrayList<Object> groupList = new ArrayList<>();
-            for (int i = 1; i < 100; i++) {
-                System.out.println(i);
+            for (int i = 1; i < 8152; i++) {
                 int group = i;
 //                int group = ((Bean_Version) groupList.get(i)).get_C_Group();
                 String content_params = T_Config_File.method_读取文件内容(filePath + group + "_params" + ".txt");
@@ -521,7 +520,14 @@ public class AnalysisData {
                                 }
                                 if (configList.get(i).get_C_PID().equals(PID)) {
                                     Class c = configList.get(i).getClass();
-                                    Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
+                                    Field field =null;
+                                    try {
+                                       field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
+                                    }catch (Exception e){
+                                        System.out.println(typeName + "__" + columnName);
+                                        System.out.println(mapList.get(typeName + "__" + columnName));
+                                    }
+
                                     field.setAccessible(true);
                                     field.set(configList.get(i), value);
                                 }

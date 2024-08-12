@@ -1,12 +1,12 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://127.0.0.1:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.253:1433;databaseName=",
     "dbItems": [
       {
-        "dbName": "autoHome",
+        "dbName": "afterMarket",
         "userName": "sa",
-        "password": "Abc20010318aa",
+        "password": "Zeda#Server#2022@123",
         "primary": "C_ID",
         "db_table": [
           {
@@ -31,15 +31,15 @@
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Params",
-            "tableName": "T_汽车之家_参数表"
+            "tableName": "T_汽车之家_参数表_20240801"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Config",
-            "tableName": "T_汽车之家_配置表"
+            "tableName": "T_汽车之家_配置表_20240801"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Bag",
-            "tableName": "T_汽车之家_选装包"
+            "tableName": "T_汽车之家_选装包_20240801"
           },
           {
             "entity": "entity.BeanColor",
@@ -129,7 +129,7 @@
   },
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.0.108:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.109:1433;databaseName=",
     "dbItems": [
       {
         "dbName": "carPrice",
@@ -156,6 +156,10 @@
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
             "tableName": "T_CarPrice_20240806"
+          },
+          {
+            "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFile",
+            "tableName": "T_ConfirmCarPriceFile_20240806"
           }
         ]
       },

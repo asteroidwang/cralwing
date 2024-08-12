@@ -5,10 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.wangtiantian.dao.T_Config_Father;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.dao.T_Config_Price;
-import com.wangtiantian.entity.price.CarPrice;
-import com.wangtiantian.entity.price.CityData;
-import com.wangtiantian.entity.price.DealerData;
-import com.wangtiantian.entity.price.SaleModData;
+import com.wangtiantian.entity.price.*;
 import com.wangtiantian.mapper.PriceDataBase;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -237,15 +234,18 @@ public class CarPriceMethod {
     public void getCarDataFile(String filePath) {
         try {
             T_Config_Price price = new T_Config_Price(2, 0, 2);
-            ArrayList<Object> dataList = price.method_查找();
+            ArrayList<Object> dataList = price.findDealerCityNotFinish();
             System.out.println(dataList.size());
-            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < list.size(); i++) {
-                PriceMoreThread priceMoreThread = new PriceMoreThread(list.get(i), filePath);
-                Thread thread = new Thread(priceMoreThread);
-                thread.start();
+            for (Object bean : dataList) {
+                method_下载车辆信息数据文件(((SaleModData) bean).get_C_PriceDataUrl(), ((SaleModData) bean).get_C_DealerID() + "_" + ((SaleModData) bean).get_C_ModelID() + ".txt", filePath);
             }
+//            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+//                    .collect(Collectors.toList());
+//            for (int i = 0; i < list.size(); i++) {
+//                PriceMoreThread priceMoreThread = new PriceMoreThread(list.get(i), filePath);
+//                Thread thread = new Thread(priceMoreThread);
+//                thread.start();
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,47 +265,78 @@ public class CarPriceMethod {
         }
     }
 
-//    public void parseCarPriceData() {
-//        try {
-//            ArrayList<String> fileNameList = T_Config_File.method_获取文件名称(filePath + "车辆价格信息/");
-//            ArrayList<CarPrice> dataList = new ArrayList<>();
-//            for (String fileName : fileNameList) {
-//                String content = T_Config_File.method_读取文件内容(filePath + "车辆价格信息/" + fileName);
-//                JSONArray jsonRoot = JSONObject.parseObject(content).getJSONArray("result");
-//                for (int i = 0; i < jsonRoot.size(); i++) {
-//                    String groupName = ((JSONObject) jsonRoot.get(i)).getString("groupName");
-//                    JSONArray dataArray = ((JSONObject) jsonRoot.get(i)).getJSONArray("list");
-//                    for (int j = 0; j < dataArray.size(); j++) {
-//                        JSONObject jsonObject = ((JSONObject) dataArray.get(j));
-//                        CarPrice carPrice = new CarPrice();
-//                        carPrice.set_C_DealerMaxPrice(jsonObject.getString("dealerMaxPrice"));
-//                        carPrice.set_C_DealerMinPrice(jsonObject.getString("dealerMinPrice"));
-//                        carPrice.set_C_FctMaxPrice(jsonObject.getString("fctMaxPrice"));
-//                        carPrice.set_C_FctMinPrice(jsonObject.getString("fctMinPrice"));
-//                        carPrice.set_C_NewsPrice(jsonObject.getString("newsPrice"));
-//                        carPrice.set_C_GroupName(groupName);
-//                        carPrice.set_C_NewsID(jsonObject.getString("newsId"));
-//                        carPrice.set_C_PriceTime(jsonObject.getString("priceTime"));
-//                        carPrice.set_C_DealerID(jsonObject.getString("dealerId"));
-//                        carPrice.set_C_ImageUrl(jsonObject.getString("imageUrl"));
-//                        carPrice.set_C_PromotionType(jsonObject.getString("promotionType"));
-//                        carPrice.set_C_SaleState(jsonObject.getString("saleState"));
-//                        carPrice.set_C_ModelName(jsonObject.getString("seriesName"));
-//                        carPrice.set_C_ModelID(jsonObject.getString("seriesId"));
-//                        carPrice.set_C_VersionID(jsonObject.getString("specId"));
-//                        carPrice.set_C_VersionName(jsonObject.getString("specName"));
-//                        carPrice.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//                        dataList.add(carPrice);
-//                    }
-//                }
-//            }
-//            HashSet<CarPrice> set = new HashSet<>(dataList);
-//            dataList.clear();
-//            dataList.addAll(set);
-//            new PriceDataBase().carPriceData(dataList);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    // 补充未下载的车辆价格信息页面
+    public void method_补充未下载的车辆价格信息页面(String filePath) {
+        try {
+            ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
+            ArrayList<ConfirmCarPriceFile> dataList = new ArrayList<>();
+            for (String fileName : fileList) {
+                ConfirmCarPriceFile confirmCarPriceFile = new ConfirmCarPriceFile();
+                confirmCarPriceFile.set_C_DealerId(fileName.replace(".txt", "").split("_")[0]);
+                confirmCarPriceFile.set_C_ModelId(fileName.replace(".txt", "").split("_")[1]);
+                confirmCarPriceFile.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                dataList.add(confirmCarPriceFile);
+            }
+            HashSet<ConfirmCarPriceFile> set2 = new HashSet<>(dataList);
+            dataList.clear();
+            dataList.addAll(set2);
+            new PriceDataBase().insertConfirmCarPriceFile(dataList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void parseCarPriceData(String filePath) {
+        try {
+            ArrayList<String> fileNameList = T_Config_File.method_获取文件名称(filePath );
+            ArrayList<CarPrice> dataList = new ArrayList<>();
+            for (String fileName : fileNameList) {
+                String content = T_Config_File.method_读取文件内容(filePath + fileName);
+                System.out.println(filePath+fileName);
+                JSONArray jsonRoot =null;
+                try {
+                    jsonRoot = JSONObject.parseObject(content).getJSONArray("result");
+                }catch (Exception e){
+                    T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("车辆价格信息/",""),"解析失败.txt",filePath+fileName+"\n");
+                    e.printStackTrace();
+                }
+                if (jsonRoot!=null){
+                    for (int i = 0; i < jsonRoot.size(); i++) {
+                        String groupName = ((JSONObject) jsonRoot.get(i)).getString("groupName");
+                        JSONArray dataArray = ((JSONObject) jsonRoot.get(i)).getJSONArray("list");
+                        for (int j = 0; j < dataArray.size(); j++) {
+                            JSONObject jsonObject = ((JSONObject) dataArray.get(j));
+                            CarPrice carPrice = new CarPrice();
+                            carPrice.set_C_DealerMaxPrice(jsonObject.getString("dealerMaxPrice"));
+                            carPrice.set_C_DealerMinPrice(jsonObject.getString("dealerMinPrice"));
+                            carPrice.set_C_FctMaxPrice(jsonObject.getString("fctMaxPrice"));
+                            carPrice.set_C_FctMinPrice(jsonObject.getString("fctMinPrice"));
+                            carPrice.set_C_NewsPrice(jsonObject.getString("newsPrice"));
+                            carPrice.set_C_GroupName(groupName);
+                            carPrice.set_C_NewsID(jsonObject.getString("newsId"));
+                            carPrice.set_C_PriceTime(jsonObject.getString("priceTime"));
+                            carPrice.set_C_DealerID(jsonObject.getString("dealerId"));
+                            carPrice.set_C_ImageUrl(jsonObject.getString("imageUrl"));
+                            carPrice.set_C_PromotionType(jsonObject.getString("promotionType"));
+                            carPrice.set_C_SaleState(jsonObject.getString("saleState"));
+                            carPrice.set_C_ModelName(jsonObject.getString("seriesName"));
+                            carPrice.set_C_ModelID(jsonObject.getString("seriesId"));
+                            carPrice.set_C_VersionID(jsonObject.getString("specId"));
+                            carPrice.set_C_VersionName(jsonObject.getString("specName"));
+                            carPrice.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                            dataList.add(carPrice);
+                        }
+                    }
+                }
+
+            }
+            HashSet<CarPrice> set = new HashSet<>(dataList);
+            dataList.clear();
+            dataList.addAll(set);
+            new PriceDataBase().carPriceData(dataList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
