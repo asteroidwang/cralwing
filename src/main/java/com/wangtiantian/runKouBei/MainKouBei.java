@@ -49,7 +49,7 @@ public class MainKouBei {
             currentFilePath = winFilePath;
         }
         // 数据准备 汽车之家最新的车型数据
-        new MainConfigData().method_下载品牌厂商车型数据(currentFilePath + "车型数据/");
+        // new MainConfigData().method_下载品牌厂商车型数据(currentFilePath + "车型数据/");
         // kouBeiMethod.getModelKouBeiFirstFileUrl(currentFilePath);
 
         // new KouBeiMethod().update_修改口碑的一级回复数据的下载状态();
