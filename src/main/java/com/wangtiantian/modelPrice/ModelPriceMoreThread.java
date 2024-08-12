@@ -40,7 +40,6 @@ public class ModelPriceMoreThread implements Runnable {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
