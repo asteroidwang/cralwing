@@ -30,7 +30,8 @@ public class MainKouBei {
         // new KouBeiMethod().getKouBeiDesc();
         // new KouBeiMethod().getKouBeiDescQueShi();
         // new KouBeiMethod().getReplyFile();
-        new KouBeiMethod().update_修改口碑的一级回复数据的下载状态();
+        // new KouBeiMethod().update_修改口碑的一级回复数据的下载状态();
+        new KouBeiMethod().method_一级评论数据();
     }
 
 
