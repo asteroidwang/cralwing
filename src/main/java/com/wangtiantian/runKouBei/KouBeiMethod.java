@@ -31,7 +31,7 @@ public class KouBeiMethod {
     public void getModelKouBeiFirstFileUrl() {
         try {
             ArrayList<Object> modList = kouBeiDataBase.getModIDList();
-            ArrayList<ModelKouBei> dataList = new ArrayList<>();
+            ArrayList<Object> dataList = new ArrayList<>();
             for (Object o : modList) {
                 String mainUrl = "https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=" + ((Bean_Model) o).get_C_ModelID() + "&pageIndex=" + 1 + "&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0";
                 ModelKouBei modelKouBei = new ModelKouBei();
@@ -42,7 +42,7 @@ public class KouBeiMethod {
                 modelKouBei.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 dataList.add(modelKouBei);
             }
-            HashSet<ModelKouBei> set = new HashSet<>(dataList);
+            HashSet<Object> set = new HashSet<>(dataList);
             dataList.clear();
             dataList.addAll(set);
             kouBeiDataBase.modelUrlList(dataList);
@@ -78,7 +78,7 @@ public class KouBeiMethod {
     public void method_获取总页数并拼接url入库() {
         try {
             ArrayList<String> folderList = T_Config_File.method_获取文件夹名称(filePath);
-            ArrayList<ModelKouBei> dataList = new ArrayList<>();
+            ArrayList<Object> dataList = new ArrayList<>();
             for (String folderName : folderList) {
                 String content = T_Config_File.method_读取文件内容(filePath + folderName + "/" + folderName + "_1.txt");
                 int pageCount = JSONObject.parse(content).getJSONObject("result").getInteger("pagecount");
@@ -94,7 +94,7 @@ public class KouBeiMethod {
                     dataList.add(modelKouBei);
                 }
             }
-            HashSet<ModelKouBei> set = new HashSet<>(dataList);
+            HashSet<Object> set = new HashSet<>(dataList);
             dataList.clear();
             dataList.addAll(set);
             kouBeiDataBase.modelUrlList(dataList);
@@ -107,7 +107,7 @@ public class KouBeiMethod {
     public void parseKouBeiToGetShoeId() {
         try {
             ArrayList<String> folderList = T_Config_File.method_获取文件夹名称(filePath);
-            ArrayList<KouBeiInfo> dataList = new ArrayList<>();
+            ArrayList<Object> dataList = new ArrayList<>();
             int num = 0;
             for (String folderName : folderList) {
                 ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath + folderName + "/");
@@ -140,7 +140,7 @@ public class KouBeiMethod {
 
                 }
             }
-            HashSet<KouBeiInfo> set = new HashSet<>(dataList);
+            HashSet<Object> set = new HashSet<>(dataList);
             dataList.clear();
             dataList.addAll(set);
             kouBeiDataBase.insetForeachKouBeiInfo(dataList);
@@ -152,7 +152,7 @@ public class KouBeiMethod {
     // 读取已下载的所有口碑具体页面
     public void getKouBeiDesc() {
         try {
-            ArrayList<KouBeiData> dataArrayList = new ArrayList<>();
+            ArrayList<Object> dataArrayList = new ArrayList<>();
             ArrayList<Object> dataList = kouBeiDataBase.findAllKouBeiShowId();
             for (Object o : dataList) {
                 String showId = ((KouBeiInfo) o).get_C_ShowID();
@@ -160,7 +160,7 @@ public class KouBeiMethod {
                     String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
                     dataArrayList.add(parseKouBeiData(content, showId));
                     if (dataArrayList.size() > 1000) {
-                        HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+                        HashSet<Object> set = new HashSet<>(dataArrayList);
                         dataArrayList.clear();
                         dataArrayList.addAll(set);
                         kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
@@ -171,7 +171,7 @@ public class KouBeiMethod {
                 }
 
             }
-            HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+            HashSet<Object> set = new HashSet<>(dataArrayList);
             dataArrayList.clear();
             dataArrayList.addAll(set);
             kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
@@ -184,14 +184,14 @@ public class KouBeiMethod {
     // 补充缺失的下载的数据
     public void getKouBeiDescQueShi() {
         try {
-            ArrayList<KouBeiData> dataArrayList = new ArrayList<>();
+            ArrayList<Object> dataArrayList = new ArrayList<>();
             ArrayList<String> dataList = T_Config_File.method_按行读取文件("C:/Users/Administrator/Downloads/补充的下载数据ShowId.txt");
             for (String showId : dataList) {
                 try {
                     String content = T_Config_File.method_读取文件内容(filePath + "口碑具体页面数据/" + showId + ".txt");
                     dataArrayList.add(parseKouBeiData(content, showId));
                     if (dataArrayList.size() > 1000) {
-                        HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+                        HashSet<Object> set = new HashSet<>(dataArrayList);
                         dataArrayList.clear();
                         dataArrayList.addAll(set);
                         kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
@@ -202,7 +202,7 @@ public class KouBeiMethod {
                 }
 
             }
-            HashSet<KouBeiData> set = new HashSet<>(dataArrayList);
+            HashSet<Object> set = new HashSet<>(dataArrayList);
             dataArrayList.clear();
             dataArrayList.addAll(set);
             kouBeiDataBase.insetForeachKouBeiData(dataArrayList);
@@ -388,7 +388,7 @@ public class KouBeiMethod {
     public void update_修改口碑的一级回复数据的下载状态() {
         try {
             ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "评论数据/");
-            ArrayList<KouBeiTest> result = new ArrayList<>();
+            ArrayList<Object> result = new ArrayList<>();
             for (int i = 0; i < dataList.size(); i++) {
                 KouBeiTest kouBeiTest = new KouBeiTest();
                 kouBeiTest.set_C_KoubeiID(dataList.get(i).replace("_一级评论_0.txt", ""));
@@ -403,7 +403,7 @@ public class KouBeiMethod {
     // 解析口碑的一级回复数据
     public void method_一级评论数据() {
 //        ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "一级评论数据/");
-        ArrayList<ReplyKouBei> replyData = new ArrayList<>();
+        ArrayList<Object> replyData = new ArrayList<>();
 //        int getCount = kouBeiDataBase.getCount();
         int getCount = 1320272;
         for (int kk = 0; kk < getCount / 1000; kk++) {
@@ -413,13 +413,13 @@ public class KouBeiMethod {
                 replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + fileName+"_一级评论_0.txt"), filePath, fileName));
                 System.out.println(replyData.size());
                 if (replyData.size() > 1000) {
-                    HashSet<ReplyKouBei> set = new HashSet<>(replyData);
+                    HashSet<Object> set = new HashSet<>(replyData);
                     replyData.clear();
                     replyData.addAll(set);
                     kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
                     replyData.clear();
                 }
-                HashSet<ReplyKouBei> set2 = new HashSet<>(replyData);
+                HashSet<Object> set2 = new HashSet<>(replyData);
                 replyData.clear();
                 replyData.addAll(set2);
                 kouBeiDataBase.update_修改一级评论的文件下载状态(fileName);
