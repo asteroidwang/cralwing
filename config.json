@@ -72,6 +72,10 @@
             "tableName": "T_CityData_20240813"
           },
           {
+            "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
+            "tableName": "T_DealerFenYeUrl_20240813"
+          },
+          {
             "entity": "com.wangtiantian.entity.price.DealerData",
             "tableName": "T_DealerData_20240806"
           },
@@ -80,8 +84,8 @@
             "tableName": "T_SaleModData_20240806"
           },
           {
-            "entity": "com.wangtiantian.entity.price.ModelDealerData",
-            "tableName": "T_ModelDealerData_20240806"
+            "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
+            "tableName": "T_DealerFenYeUrl_20240813"
           },
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",

@@ -38,5 +38,15 @@ public class T_Config_Price extends T_Config_Father {
         String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerId=" + dealerID+" and C_ModelId = "+modID;
         method_i_d_u(sql);
     }
+
+
+    /**
+     * 以下为新增方法
+     */
+    public void update_修改所有经销商分页url表的数据的下载状态(String fenyeUrl) {
+        String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerFenYeUrl='" + fenyeUrl+"'";
+        method_i_d_u(sql);
+    }
+
 }
 

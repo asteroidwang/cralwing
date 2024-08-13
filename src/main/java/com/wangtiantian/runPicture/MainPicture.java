@@ -100,16 +100,23 @@ public class MainPicture {
     public void parse_解析分页数据入库图片具体页面的url并下载未下载的漏网之鱼(String filePath) {
         ArrayList<Object> dataList = pictureDataBase.get_图片分页表中的所有数据();
         ArrayList<Object> result = new ArrayList<>();
+        int count = 0;
         for (Object o : dataList) {
             String mainUrl = ((Picture_FenYeUrl) o).get_C_FenYeUrl();
             int page = Integer.parseInt(mainUrl.split("/")[6].replace("p", ""));
             String content = T_Config_File.method_读取文件内容(filePath + ((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + ".txt");
-            result.addAll(parse_解析分页数据入库图片具体页面的url(content,filePath + ((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + ".txt"));
+            Document mainDoc = Jsoup.parse(content);
+            Elements mainItems = mainDoc.select("#imgList").select("li");
+            System.out.println(((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + "\t" + mainItems.size());
+            T_Config_File.method_重复写文件_根据路径创建文件夹("/Users/asteroid/所有文件数据/","111.txt",((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + "\t" + mainItems.size()+"\n");
+//            count += mainItems.size();
+//            result.addAll(parse_解析分页数据入库图片具体页面的url(content,filePath + ((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + ".txt"));
         }
-        HashSet<Object> set = new HashSet<>(result);
-        result.clear();
-        result.addAll(set);
-        pictureDataBase.insert_图片具体页面的文件下载相关数据(result);
+//        System.out.println(count);
+//        HashSet<Object> set = new HashSet<>(result);
+//        result.clear();
+//        result.addAll(set);
+//        pictureDataBase.insert_图片具体页面的文件下载相关数据(result);
 
 //        ArrayList<Object> dataList2 = new ArrayList<>();
 //        for (Object o : dataList) {
@@ -130,7 +137,7 @@ public class MainPicture {
 //        }
     }
 
-    public ArrayList<Object> parse_解析分页数据入库图片具体页面的url(String content,String fileName) {
+    public ArrayList<Object> parse_解析分页数据入库图片具体页面的url(String content, String fileName) {
         ArrayList<Object> dataList = new ArrayList<>();
         Document mainDoc = Jsoup.parse(content);
         Elements mainItems = mainDoc.select("#imgList").select("li");
@@ -143,7 +150,7 @@ public class MainPicture {
             String imgUrl = "https://car.autohome.com.cn" + tempUrl;
             String verId = tempUrl.split("/")[2];
             String imgType = tempUrl.split("/")[3];
-            PictureHtmlUrl pictureHtmlUrl= new PictureHtmlUrl();
+            PictureHtmlUrl pictureHtmlUrl = new PictureHtmlUrl();
             pictureHtmlUrl.set_C_BrandId(brandId);
             pictureHtmlUrl.set_C_PictureHtmlUrl(imgUrl);
             pictureHtmlUrl.set_C_FileName(fileName);

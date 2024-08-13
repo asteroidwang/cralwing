@@ -1,5 +1,6 @@
 package com.wangtiantian.mapper;
 
+import com.sun.corba.se.spi.ior.ObjectKey;
 import com.wangtiantian.dao.T_Config_AutoHome;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.dao.T_Config_Price;
@@ -18,7 +19,6 @@ public class PriceDataBase {
     public void price_cityData(ArrayList<Object> dataList) {
         T_Config_Price cityDataDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 0);
         cityDataDao.insertForeach(dataList);
-
     }
 
     // 查询城市数据
@@ -34,6 +34,29 @@ public class PriceDataBase {
         }
         return dataList;
     }
+
+    // 入库所有的经销商分页url
+    public void insert_入库经销商的分页url数据(ArrayList<Object> dataList) {
+        T_Config_Price dealerFenYeDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 1);
+        dealerFenYeDao.insertForeach(dataList);
+    }
+
+    // 查询所有经销商分页url表的数据
+    public ArrayList<Object> get_所有未下载的经销商分页url数据() {
+        T_Config_Price dealerFenYeDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 1);
+        return dealerFenYeDao.get_查找未下载的数据();
+    }
+
+    // 修改所有经销商分页url表的数据的下载状态
+    public void update_修改所有经销商分页url表的数据的下载状态(String fenyeUrl) {
+        T_Config_Price dealerFenYeDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 1);
+        dealerFenYeDao.update_修改所有经销商分页url表的数据的下载状态(fenyeUrl);
+    }
+
+    /***
+     *自此以上代码为修改过的可以直接用 20240813，以下不可以
+     */
+
 
     // 查询 还有 哪些城市的经销商列表数据没下载完成
     public ArrayList<Object> findDealerCityNotFinish() {
@@ -128,7 +151,8 @@ public class PriceDataBase {
         T_Config_Price modelDealerDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 6);
         modelDealerDao.insertForeach(dataList);
     }
-    public ArrayList<Object> dataListDealer(){
+
+    public ArrayList<Object> dataListDealer() {
         T_Config_Price modelDealerDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 3);
         return modelDealerDao.method_查找();
     }
@@ -137,7 +161,6 @@ public class PriceDataBase {
         T_Config_Price carPriceDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 7);
         carPriceDao.insertForeach(dataList);
     }
-
 
 
 }

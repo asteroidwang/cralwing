@@ -9,7 +9,8 @@ public class MainPrice {
         // 数据准备->入库城市数据
         // carPriceMethod.cityData(filePath+cityDataName);
         // 数据准备-> 下载各省市的经销商列表数据 https://dealer.autohome.com.cn/beijing/0/0/0/0/4/1/0/0.html
-         carPriceMethod.getDealerFile(filePath);
+        // carPriceMethod.parse_获取经销商分页数据的url();
+         carPriceMethod.downLoad_下载经销商分页数据(filePath+"经销商分页数据/");
         // 解析经销商数据
         // carPriceMethod.parseDealerFile(filePath+"经销商信息/");
         // 下载车型报价页面
