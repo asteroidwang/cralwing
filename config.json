@@ -65,8 +65,6 @@
       },
       {
         "dbName": "carPrice",
-        "userName": "sa",
-        "password": "Abc20010318aa",
         "primary": "C_ID",
         "db_table": [
           {
@@ -88,6 +86,14 @@
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
             "tableName": "T_CarPrice_20240806"
+          },
+          {
+            "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFile",
+            "tableName": "T_ConfirmCarPriceFile_20240806"
+          },
+          {
+            "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFileModel",
+            "tableName": "T_ConfirmCarPriceFileModel_20240806"
           }
         ]
       },
@@ -114,6 +120,20 @@
           {
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
             "tableName": "T_ReplyKouBei"
+          }
+        ]
+      },
+      {
+        "dbName": "carPicture",
+        "primary": "C_ID",
+        "db_table": [
+          {
+            "entity": "com.wangtiantian.entity.picture.PictureVersion",
+            "tableName": "T_Picture_Version"
+          },
+          {
+            "entity": "com.wangtiantian.entity.picture.Picture_Url",
+            "tableName": "T_Picture_FenYe"
           }
         ]
       }
