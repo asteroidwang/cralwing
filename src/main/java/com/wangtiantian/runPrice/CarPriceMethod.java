@@ -28,7 +28,7 @@ public class CarPriceMethod {
             String cityData = T_Config_File.method_读取文件内容(filePath);
             JSONObject jsonRoot = JSONObject.parseObject(cityData);
             JSONArray jsonArray = jsonRoot.getJSONArray("AreaInfoGroups");
-            ArrayList<CityData> cityDataArrayList = new ArrayList<>();
+            ArrayList<Object> cityDataArrayList = new ArrayList<>();
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONArray proValues = ((JSONObject) jsonArray.get(i)).getJSONArray("Values");
                 for (int j = 0; j < proValues.size(); j++) {
@@ -89,7 +89,7 @@ public class CarPriceMethod {
         try {
             int num = 0;
             ArrayList<String> provinceList = T_Config_File.method_获取文件夹名称(filePath);
-            ArrayList<DealerData> dataList = new ArrayList<>();
+            ArrayList<Object> dataList = new ArrayList<>();
             for (String provinceName : provinceList) {
                 ArrayList<String> cityList = T_Config_File.method_获取文件夹名称(filePath + provinceName);
                 for (String cityName : cityList) {
@@ -118,11 +118,9 @@ public class CarPriceMethod {
                     }
                 }
             }
-//            HashSet<DealerData> set = new HashSet<>(dataList);
-//            dataList.clear();
-//            dataList.addAll(set);
-            System.out.println(dataList.size());
-            System.out.println(num);
+            HashSet<Object> set = new HashSet<>(dataList);
+            dataList.clear();
+            dataList.addAll(set);
             new PriceDataBase().dealerData(dataList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +166,7 @@ public class CarPriceMethod {
     public void parseCarPriceFile(String filePath) {
         try {
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
-            ArrayList<SaleModData> dataArrayList = new ArrayList<>();
+            ArrayList<Object> dataArrayList = new ArrayList<>();
             for (String fileName : fileList) {
                 String content = T_Config_File.method_读取文件内容(filePath + fileName);
                 Document mainDoc = Jsoup.parse(content);
@@ -190,7 +188,7 @@ public class CarPriceMethod {
                 }
             }
             dataArrayList.addAll(parseCarPriceFile2(filePath.replace("车型报价页面_html", "车型报价页面")));
-            HashSet<SaleModData> set = new HashSet<>(dataArrayList);
+            HashSet<Object> set = new HashSet<>(dataArrayList);
             dataArrayList.clear();
             dataArrayList.addAll(set);
             new PriceDataBase().saleModData(dataArrayList);
@@ -269,7 +267,7 @@ public class CarPriceMethod {
     public void method_补充未下载的车辆价格信息页面(String filePath) {
         try {
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
-            ArrayList<ConfirmCarPriceFile> dataList = new ArrayList<>();
+            ArrayList<Object> dataList = new ArrayList<>();
             for (String fileName : fileList) {
                 ConfirmCarPriceFile confirmCarPriceFile = new ConfirmCarPriceFile();
                 confirmCarPriceFile.set_C_DealerId(fileName.replace(".txt", "").split("_")[0]);
@@ -277,7 +275,7 @@ public class CarPriceMethod {
                 confirmCarPriceFile.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 dataList.add(confirmCarPriceFile);
             }
-            HashSet<ConfirmCarPriceFile> set2 = new HashSet<>(dataList);
+            HashSet<Object> set2 = new HashSet<>(dataList);
             dataList.clear();
             dataList.addAll(set2);
             new PriceDataBase().insertConfirmCarPriceFile(dataList);
@@ -289,7 +287,7 @@ public class CarPriceMethod {
     public void parseCarPriceData(String filePath) {
         try {
             ArrayList<String> fileNameList = T_Config_File.method_获取文件名称(filePath );
-            ArrayList<CarPrice> dataList = new ArrayList<>();
+            ArrayList<Object> dataList = new ArrayList<>();
             for (String fileName : fileNameList) {
                 String content = T_Config_File.method_读取文件内容(filePath + fileName);
                 System.out.println(filePath+fileName);
@@ -330,7 +328,7 @@ public class CarPriceMethod {
                 }
 
             }
-            HashSet<CarPrice> set = new HashSet<>(dataList);
+            HashSet<Object> set = new HashSet<>(dataList);
             dataList.clear();
             dataList.addAll(set);
             new PriceDataBase().carPriceData(dataList);
