@@ -69,7 +69,7 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.price.CityData",
-            "tableName": "T_CityData_20240806"
+            "tableName": "T_CityData_20240813"
           },
           {
             "entity": "com.wangtiantian.entity.price.DealerData",

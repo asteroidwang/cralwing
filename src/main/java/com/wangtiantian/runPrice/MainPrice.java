@@ -3,13 +3,13 @@ package com.wangtiantian.runPrice;
 public class MainPrice {
     //    private String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/经销商数据/20240802/";
     public static void main(String[] args) {
-        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/经销商数据/20240806/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/经销商数据/20240813/";
         String cityDataName = "cityData.json";
         CarPriceMethod carPriceMethod = new CarPriceMethod();
         // 数据准备->入库城市数据
         // carPriceMethod.cityData(filePath+cityDataName);
         // 数据准备-> 下载各省市的经销商列表数据 https://dealer.autohome.com.cn/beijing/0/0/0/0/4/1/0/0.html
-        // carPriceMethod.getDealerFile(filePath);
+         carPriceMethod.getDealerFile(filePath);
         // 解析经销商数据
         // carPriceMethod.parseDealerFile(filePath+"经销商信息/");
         // 下载车型报价页面
@@ -19,11 +19,11 @@ public class MainPrice {
         // carPriceMethod.parseCarPriceFile(filePath);
         // carPriceMethod.parseCarPriceFile2( filePath+ "车型报价页面/");
         // 下载车辆信息数据
-         carPriceMethod.getCarDataFile(filePath);
+        // carPriceMethod.getCarDataFile(filePath);
         // 补充未下载的价格信息页面
-         carPriceMethod.method_补充未下载的车辆价格信息页面(filePath+"车辆价格信息/");
+        // carPriceMethod.method_补充未下载的车辆价格信息页面(filePath+"车辆价格信息/");
         // 解析数据
-         new CarPriceMethod().parseCarPriceData(filePath+"车辆价格信息/");
+        // new CarPriceMethod().parseCarPriceData(filePath+"车辆价格信息/");
     }
 
 
