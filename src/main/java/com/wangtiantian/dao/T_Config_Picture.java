@@ -9,4 +9,9 @@ public class T_Config_Picture extends T_Config_Father{
         method_i_d_u(sql);
     }
 
+    public void update_修改已下载分页数据的版本状态(String fenYeUrl) {
+        String sql ="update "+tableName+" set C_IsFinish =1 where C_FenYeUrl = '"+fenYeUrl+"'";
+        method_i_d_u(sql);
+    }
+
 }

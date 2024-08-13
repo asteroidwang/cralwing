@@ -69,7 +69,11 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.price.CityData",
-            "tableName": "T_CityData_20240806"
+            "tableName": "T_CityData_20240813"
+          },
+          {
+            "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
+            "tableName": "T_DealerFenYeUrl_20240813"
           },
           {
             "entity": "com.wangtiantian.entity.price.DealerData",
@@ -80,8 +84,8 @@
             "tableName": "T_SaleModData_20240806"
           },
           {
-            "entity": "com.wangtiantian.entity.price.ModelDealerData",
-            "tableName": "T_ModelDealerData_20240806"
+            "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
+            "tableName": "T_DealerFenYeUrl_20240813"
           },
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
@@ -94,6 +98,9 @@
           {
             "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFileModel",
             "tableName": "T_ConfirmCarPriceFileModel_20240806"
+          }, {
+            "entity": "com.wangtiantian.entity.price.CarPrice",
+            "tableName": "T_CarPrice_Model_20240806"
           }
         ]
       },
@@ -132,8 +139,12 @@
             "tableName": "T_Picture_Version"
           },
           {
-            "entity": "com.wangtiantian.entity.picture.Picture_Url",
+            "entity": "com.wangtiantian.entity.picture.Picture_FenYeUrl",
             "tableName": "T_Picture_FenYe"
+          },
+          {
+            "entity": "com.wangtiantian.entity.picture.PictureHtmlUrl",
+            "tableName": "T_Picture_Html"
           }
         ]
       }

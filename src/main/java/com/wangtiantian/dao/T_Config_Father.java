@@ -51,7 +51,6 @@ public class T_Config_Father {
     public void method_连接数据库() {
         try {
             Class.forName(dbDriver);
-            System.out.println(userName + "\t" + password);
             if (null == conn || conn.isClosed()) {
                 conn = DriverManager.getConnection(dbString, userName, password);
             }

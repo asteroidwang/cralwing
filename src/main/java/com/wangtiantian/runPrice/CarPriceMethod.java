@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
 
 public class CarPriceMethod {
 
+    private PriceDataBase priceDataBase = new PriceDataBase();
     // 入库城市数据
     public void cityData(String filePath) {
         try {
@@ -57,33 +58,54 @@ public class CarPriceMethod {
     }
 
     // 下载各省市的经销商列表数据
-    public void getDealerFile(String filePath) {
+    public void parse_获取经销商分页数据的url() {
         ArrayList<Object> dataList = new PriceDataBase().findDealerCityNotFinish();
+        ArrayList<Object> result = new ArrayList<>();
         try {
             for (Object o : dataList) {
                 for (int i = 1; i < ((CityData) o).get_C_CityCount() / 15 + 2; i++) {
                     String mainUrl = "https://dealer.autohome.com.cn/" + ((CityData) o).get_C_CityPinYin() + "/0/0/0/0/" + i + "/1/0/0.html";
-                    Document mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "gb2312", mainUrl);
-                    Elements mainItems = mainDoc.select(".dealer-list-wrap").select(".list-box").select(".list-item");
-                    T_Config_File.method_重复写文件_根据路径创建文件夹(filePath + "经销商信息/", "aaa.txt", ((CityData) o).get_C_CityName() + "\t" + mainItems.size() + "\t" + mainUrl + "\n");
-                    if (mainItems.size() == 0) {
-                        System.out.println("没有数据了");
-                        break;
-                    } else {
-                        try {
-                            T_Config_File.method_写文件_根据路径创建文件夹(filePath + "经销商信息/" + ((CityData) o).get_C_ProvinceName() + "/" + ((CityData) o).get_C_CityName() + "/", ((CityData) o).get_C_CityName() + "_" + i + ".txt", mainDoc.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    System.out.println(mainUrl);
+                    Bean_DealerFenYeUrl bean_dealerFenYeUrl = new Bean_DealerFenYeUrl();
+                    bean_dealerFenYeUrl.set_C_DealerFenYeUrl(mainUrl);
+                    bean_dealerFenYeUrl.set_C_IsFinish(0);
+                    bean_dealerFenYeUrl.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    result.add(bean_dealerFenYeUrl);
+//                    Document mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "gb2312", mainUrl);
+//                    Elements mainItems = mainDoc.select(".dealer-list-wrap").select(".list-box").select(".list-item");
+//                    T_Config_File.method_重复写文件_根据路径创建文件夹(filePath + "经销商信息/", "aaa.txt", ((CityData) o).get_C_CityName() + "\t" + mainItems.size() + "\t" + mainUrl + "\n");
+//                    if (mainItems.size() == 0) {
+//                        System.out.println("没有数据了");
+//                        break;
+//                    } else {
+//                        try {
+//                            T_Config_File.method_写文件_根据路径创建文件夹(filePath + "经销商信息/" + ((CityData) o).get_C_ProvinceName() + "/" + ((CityData) o).get_C_CityName() + "/", ((CityData) o).get_C_CityName() + "_" + i + ".txt", mainDoc.toString());
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
                 }
 //                new PriceDataBase().updateDealerCityStatus(((CityData) o).get_C_CityID());
             }
+            HashSet<Object> set = new HashSet<>(result);
+            result.clear();
+            result.addAll(set);
+            priceDataBase.insert_入库经销商的分页url数据(result);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void downLoad_下载经销商分页数据(String filePath){
+        ArrayList<Object> dataList = priceDataBase.get_所有未下载的经销商分页url数据();
+        List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                .collect(Collectors.toList());
+        for (int i = 0; i < list.size(); i++) {
+            DealerFenYeThread moreThread = new DealerFenYeThread(list.get(i), filePath);
+            Thread thread = new Thread(moreThread);
+            thread.start();
+        }
+    }
     // 解析经销商数据
     public void parseDealerFile(String filePath) {
         try {
