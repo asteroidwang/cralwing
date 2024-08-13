@@ -406,40 +406,33 @@ public class KouBeiMethod {
         ArrayList<Object> replyData = new ArrayList<>();
 //        int getCount = kouBeiDataBase.getCount();
         int getCount = 1320272;
-        for (int kk = 0; kk < getCount / 1000; kk++) {
-            ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(kk * 1000);
+//        for (int kk = 0; kk < getCount / 1000; kk++) {
+            ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(0 * 1000);
             for (Object o : dataList) {
                 String fileName = ((KouBeiData) o).get_C_KoubeiID();
                 replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + fileName+"_一级评论_0.txt"), filePath, fileName));
                 System.out.println(replyData.size());
-                if (replyData.size() > 1000) {
+                if (replyData.size()>100000){
                     HashSet<Object> set = new HashSet<>(replyData);
                     replyData.clear();
                     replyData.addAll(set);
-                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+//                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
                     replyData.clear();
                 }
-                HashSet<Object> set2 = new HashSet<>(replyData);
-                replyData.clear();
-                replyData.addAll(set2);
-                kouBeiDataBase.update_修改一级评论的文件下载状态(fileName);
-            }
+//            }
         }
-        if (replyData.size() > 0) {
-            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
-        }
+//            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
     }
 
     public ArrayList<ReplyKouBei> parse_解析一级评论数据(String content, String filePath, String fileName) {
-        System.out.println("解析一个文件");
         ArrayList<ReplyKouBei> dataList = new ArrayList<>();
         try {
             JSONObject jsonRoot = null;
             try {
                 jsonRoot = JSONObject.parse(content);
             } catch (Exception e) {
-                System.out.println(filePath);
-                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("一级评论数据/",""), "一级评论解析失败的.txt", filePath + "一级评论数据/" + fileName + "\n");
+                System.out.println(filePath+fileName);
+//                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("一级评论数据/",""), "一级评论解析失败的.txt", filePath + "一级评论数据/" + fileName + "\n");
             }
             if (jsonRoot != null) {
                 JSONArray jsonArray = jsonRoot.getJSONObject("result").getJSONArray("list");
