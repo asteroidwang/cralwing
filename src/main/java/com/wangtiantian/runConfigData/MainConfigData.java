@@ -53,9 +53,9 @@ public class MainConfigData {
     public void parse_品牌厂商车型数据(String filePath) {
         try {
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
-            ArrayList<Bean_Brand> brandData = new ArrayList<>();
-            ArrayList<Bean_Factory> fctData = new ArrayList<>();
-            ArrayList<Bean_Model> modData = new ArrayList<>();
+            ArrayList<Object> brandData = new ArrayList<>();
+            ArrayList<Object> fctData = new ArrayList<>();
+            ArrayList<Object> modData = new ArrayList<>();
             for (String fileName : fileList) {
                 String content = T_Config_File.method_读取文件内容(filePath + fileName);
                 Document mainDoc = Jsoup.parse(content);
@@ -119,15 +119,15 @@ public class MainConfigData {
                     }
                 }
             }
-            HashSet<Bean_Brand> brandSet = new HashSet<>(brandData);
+            HashSet<Object> brandSet = new HashSet<>(brandData);
             brandData.clear();
             brandData.addAll(brandSet);
 
-            HashSet<Bean_Factory> factorySet = new HashSet<>(fctData);
+            HashSet<Object> factorySet = new HashSet<>(fctData);
             fctData.clear();
             fctData.addAll(factorySet);
 
-            HashSet<Bean_Model> modelSet = new HashSet<>(modData);
+            HashSet<Object> modelSet = new HashSet<>(modData);
             modData.clear();
             modData.addAll(modelSet);
 
@@ -206,7 +206,7 @@ public class MainConfigData {
     // 4.解析版本数据并入库
     public void parse_解析含有版本数据的文件(String filePath) {
         try {
-            ArrayList<Bean_Version> versionData = new ArrayList<>();
+            ArrayList<Object> versionData = new ArrayList<>();
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath + "_非图片路径/");
             for (String fileName : fileList) {
                 String content = T_Config_File.method_读取文件内容(filePath + "_非图片路径/" + fileName);
@@ -223,7 +223,7 @@ public class MainConfigData {
                 versionData.addAll(method_解析图片路径(content, fileName.replace("_图片页面停售.txt", "").replace("_图片页面在售.txt", "")));
             }
 
-            HashSet<Bean_Version> set = new HashSet<>(versionData);
+            HashSet<Object> set = new HashSet<>(versionData);
             versionData.clear();
             versionData.addAll(set);
             dataBaseMethod.method_入库版本数据(versionData);

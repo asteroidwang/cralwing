@@ -24,7 +24,8 @@ public class MainPicture {
         String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/图片数据/";
         MainPicture mainPicture = new MainPicture();
         // mainPicture.downLoad_下载所有版本的第一页全图文件(filePath+"版本图片分页数据/");
-        mainPicture.parse_解析所有版本的第一页图片文件获取分页总页数并将分页url入库(filePath + "版本图片分页数据/");
+        // mainPicture.parse_解析所有版本的第一页图片文件获取分页总页数并将分页url入库(filePath + "版本图片分页数据/");
+        mainPicture.downLoad_所有分页();
     }
 
     // 1.下载所有版本的第一页
@@ -67,24 +68,19 @@ public class MainPicture {
                         picture_url.set_C_IsFinish(0);
                         picture_url.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                         dataList.add(picture_url);
-                        if (dataList.size() > 1000) {
-                            HashSet<Object> set = new HashSet<>(dataList);
-                            dataList.clear();
-                            dataList.addAll(set);
-                            pictureDataBase.insertConfirmCarPriceFileModel(dataList);
-                            dataList.clear();
-                        }
                     }
                 }
             }
-            if (dataList.size() > 0) {
-                HashSet<Object> set = new HashSet<>(dataList);
-                dataList.clear();
-                dataList.addAll(set);
-                pictureDataBase.insertConfirmCarPriceFileModel(dataList);
-            }
+            HashSet<Object> set = new HashSet<>(dataList);
+            dataList.clear();
+            dataList.addAll(set);
+            pictureDataBase.insertConfirmCarPriceFileModel(dataList);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
+
+    // 3.下载所有分页数据
+    public void downLoad_所有分页(){
+        System.out.println(111);
+    }}
