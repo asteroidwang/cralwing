@@ -57,7 +57,7 @@ public class ModelPriceMethod {
     public void method_解析上一步的车型得到的经销商数据(String filePath) {
         try {
             ArrayList<String> fileNameList = T_Config_File.method_获取文件名称(filePath);
-            ArrayList<ModelDealerData> dataArrayList = new ArrayList<>();
+            ArrayList<Object> dataArrayList = new ArrayList<>();
             for (String fileName : fileNameList) {
                 String content = T_Config_File.method_读取文件内容(filePath + fileName);
                 JSONArray jsonRoot = JSONObject.parseObject(content).getJSONObject("result").getJSONArray("list");
@@ -138,7 +138,7 @@ public class ModelPriceMethod {
                     dataArrayList.add(modelDealerData);
                 }
             }
-            HashSet<ModelDealerData> set = new HashSet<>(dataArrayList);
+            HashSet<Object> set = new HashSet<>(dataArrayList);
             dataArrayList.clear();
             dataArrayList.addAll(set);
             new PriceDataBase().modelDealerDataInsert(dataArrayList);
@@ -164,7 +164,7 @@ public class ModelPriceMethod {
     public void method_补充未下载的车辆价格信息页面(String filePath) {
         try {
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
-            ArrayList<ConfirmCarPriceFile> dataList = new ArrayList<>();
+            ArrayList<Object> dataList = new ArrayList<>();
             for (String fileName : fileList) {
                 ConfirmCarPriceFile confirmCarPriceFile = new ConfirmCarPriceFile();
                 confirmCarPriceFile.set_C_DealerId(fileName.replace(".txt", "").split("_")[0]);
@@ -172,7 +172,7 @@ public class ModelPriceMethod {
                 confirmCarPriceFile.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 dataList.add(confirmCarPriceFile);
             }
-            HashSet<ConfirmCarPriceFile> set2 = new HashSet<>(dataList);
+            HashSet<Object> set2 = new HashSet<>(dataList);
             dataList.clear();
             dataList.addAll(set2);
             new PriceDataBase().insertConfirmCarPriceFileModel(dataList);
