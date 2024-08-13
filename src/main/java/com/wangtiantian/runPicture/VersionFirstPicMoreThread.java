@@ -25,7 +25,6 @@ public class VersionFirstPicMoreThread implements Runnable {
         System.out.println("Thread " + currentThread.getName() + " (ID: " + currentThread.getId() + ") is processing group.");
         PictureDataBase pictureDataBase = new PictureDataBase();
         for (Object bean : list) {
-
             try {
                 String mainUrl = "https://car.autohome.com.cn/photolist/spec/" + ((PictureVersion) bean).get_C_VersionID() + "/p1/#pvareaid=3454554";
                 if (T_Config_File.method_访问url获取网页源码普通版(mainUrl, "GBK", savePath, ((PictureVersion) bean).get_C_VersionID() + "_1.txt")) {

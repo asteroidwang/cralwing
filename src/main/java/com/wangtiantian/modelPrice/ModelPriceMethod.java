@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.Bean_Model;
 import com.wangtiantian.entity.Bean_Version;
+import com.wangtiantian.entity.price.CarPrice;
 import com.wangtiantian.entity.price.ConfirmCarPriceFile;
 import com.wangtiantian.entity.price.ModelDealerData;
 import com.wangtiantian.entity.price.SaleModData;
@@ -180,5 +181,65 @@ public class ModelPriceMethod {
             e.printStackTrace();
         }
     }
-
+    public void method_确认数量(String filePath){
+        ArrayList<Object> dealerList = new PriceDataBase().dataListDealer();
+        ArrayList<Object> dataList = new ArrayList<>();
+        for (Object o:dealerList){
+            String dealerId = ((ModelDealerData)o).get_C_DealerId();
+            String modId = ((ModelDealerData)o).get_C_ModelId();
+            String content = T_Config_File.method_读取文件内容(filePath+dealerId+"_"+modId+".txt");
+            JSONObject mainJson =null;
+            try {
+                mainJson = JSONObject.parseObject(content);
+            }catch (Exception e){
+                System.out.println(filePath+dealerId+"_"+modId+".txt");
+                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("车辆价格信息/",""),"解析失败.txt",filePath+dealerId+"_"+modId+"\n");
+                e.printStackTrace();
+            }
+            if (mainJson!=null){
+                JSONArray jsonRoot = mainJson.getJSONArray("result");
+                for (int i = 0; i < jsonRoot.size(); i++) {
+                    String groupName = ((JSONObject) jsonRoot.get(i)).getString("groupName");
+                    JSONArray dataArray = ((JSONObject) jsonRoot.get(i)).getJSONArray("list");
+                    for (int j = 0; j < dataArray.size(); j++) {
+                        JSONObject jsonObject = ((JSONObject) dataArray.get(j));
+                        CarPrice carPrice = new CarPrice();
+                        carPrice.set_C_DealerMaxPrice(jsonObject.getString("dealerMaxPrice"));
+                        carPrice.set_C_DealerMinPrice(jsonObject.getString("dealerMinPrice"));
+                        carPrice.set_C_FctMaxPrice(jsonObject.getString("fctMaxPrice"));
+                        carPrice.set_C_FctMinPrice(jsonObject.getString("fctMinPrice"));
+                        carPrice.set_C_NewsPrice(jsonObject.getString("newsPrice"));
+                        carPrice.set_C_GroupName(groupName);
+                        carPrice.set_C_NewsID(jsonObject.getString("newsId"));
+                        carPrice.set_C_PriceTime(jsonObject.getString("priceTime"));
+                        carPrice.set_C_DealerID(jsonObject.getString("dealerId"));
+                        carPrice.set_C_ImageUrl(jsonObject.getString("imageUrl"));
+                        carPrice.set_C_PromotionType(jsonObject.getString("promotionType"));
+                        carPrice.set_C_SaleState(jsonObject.getString("saleState"));
+                        carPrice.set_C_ModelName(jsonObject.getString("seriesName"));
+                        carPrice.set_C_ModelID(jsonObject.getString("seriesId"));
+                        carPrice.set_C_VersionID(jsonObject.getString("specId"));
+                        carPrice.set_C_VersionName(jsonObject.getString("specName"));
+                        carPrice.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                        dataList.add(carPrice);
+                    }
+                }
+            }
+//            if (!T_Config_File.method_判断文件是否存在(filePath+dealerId+"_"+modId+".txt")){
+//                System.out.println(dealerId+"\t"+modId);
+//                String mainUrl = "https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + dealerId + "&seriesId=" + modId + "&show0Price=1";
+//                Document mainDoc =null;
+//                try {
+//                    mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "UTF-8", mainUrl);
+//                    T_Config_File.method_写文件_根据路径创建文件夹(filePath, dealerId + "_" + modId + ".txt", mainDoc.text());
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+        }
+        HashSet<Object> set = new HashSet<>(dataList);
+        dataList.clear();
+        dataList.addAll(set);
+        new PriceDataBase().carPriceDataModel(dataList);
+    }
 }

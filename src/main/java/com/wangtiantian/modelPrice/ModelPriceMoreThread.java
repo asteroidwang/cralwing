@@ -36,7 +36,7 @@ public class ModelPriceMoreThread implements Runnable {
                 try {
                     mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "UTF-8", mainUrl);
                     T_Config_File.method_写文件_根据路径创建文件夹(savePath, dealerId + "_" + modId + ".txt", mainDoc.text());
-                    new PriceDataBase().method_车型经销商数据修改下载状态(dealerId, modId);
+//                    new PriceDataBase().method_车型经销商数据修改下载状态(dealerId, modId);
                 }catch (Exception e){
                     e.printStackTrace();
                 }

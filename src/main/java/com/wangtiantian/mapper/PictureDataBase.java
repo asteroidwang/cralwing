@@ -24,4 +24,21 @@ public class PictureDataBase {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
         tConfigPicture.insertForeach(dataList);
     }
+    public ArrayList<Object> get_所有未下载的分页url(){
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
+        return tConfigPicture.get_查找未下载的数据();
+    }
+    public void update_修改下载分页数据的版本状态(String fenYeUrl) {
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
+        tConfigPicture.update_修改已下载分页数据的版本状态(fenYeUrl);
+    }
+
+    public ArrayList<Object> get_图片分页表中的所有数据(){
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
+        return tConfigPicture.method_查找();
+    }
+    public void insert_图片具体页面的文件下载相关数据(ArrayList<Object> dataList) {
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
+        tConfigPicture.insertForeach(dataList);
+    }
 }

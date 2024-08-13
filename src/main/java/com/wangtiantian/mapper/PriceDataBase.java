@@ -37,7 +37,6 @@ public class PriceDataBase {
 
     // 查询 还有 哪些城市的经销商列表数据没下载完成
     public ArrayList<Object> findDealerCityNotFinish() {
-
         T_Config_Price cityDataDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 0);
         return cityDataDao.findDealerCityNotFinish();
     }
@@ -96,7 +95,6 @@ public class PriceDataBase {
     public void carPriceData(ArrayList<Object> dataList) {
         T_Config_Price carPriceDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 4);
         carPriceDao.insertForeach(dataList);
-
     }
 
 
@@ -130,5 +128,16 @@ public class PriceDataBase {
         T_Config_Price modelDealerDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 6);
         modelDealerDao.insertForeach(dataList);
     }
+    public ArrayList<Object> dataListDealer(){
+        T_Config_Price modelDealerDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 3);
+        return modelDealerDao.method_查找();
+    }
+
+    public void carPriceDataModel(ArrayList<Object> dataList) {
+        T_Config_Price carPriceDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 7);
+        carPriceDao.insertForeach(dataList);
+    }
+
+
 
 }
