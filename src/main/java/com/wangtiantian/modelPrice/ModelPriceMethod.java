@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.Bean_Model;
 import com.wangtiantian.entity.Bean_Version;
+import com.wangtiantian.entity.price.ConfirmCarPriceFile;
 import com.wangtiantian.entity.price.ModelDealerData;
 import com.wangtiantian.entity.price.SaleModData;
 import com.wangtiantian.mapper.PriceDataBase;
@@ -148,16 +149,33 @@ public class ModelPriceMethod {
 
     public void method_根据经销商id获取下载车辆价格信息文件(String filePath) {
         try {
+            ArrayList<Object> dealerList = new PriceDataBase().getNoFinishModelDealerData();
+            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dealerList.subList(i * (dealerList.size() + 5) / 6, Math.min((i + 1) * (dealerList.size() + 5) / 6, dealerList.size())))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < list.size(); i++) {
+                ModelPriceMoreThread modelPriceMoreThread = new ModelPriceMoreThread(list.get(i), filePath);
+                Thread thread = new Thread(modelPriceMoreThread);
+                thread.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void method_补充未下载的车辆价格信息页面(String filePath) {
+        try {
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
-            System.out.println(fileList.size());
-//            ArrayList<Object> dealerList = new PriceDataBase().getNoFinishModelDealerData();
-//            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dealerList.subList(i * (dealerList.size() + 5) / 6, Math.min((i + 1) * (dealerList.size() + 5) / 6, dealerList.size())))
-//                    .collect(Collectors.toList());
-//            for (int i = 0; i < list.size(); i++) {
-//                ModelPriceMoreThread modelPriceMoreThread = new ModelPriceMoreThread(list.get(i), filePath);
-//                Thread thread = new Thread(modelPriceMoreThread);
-//                thread.start();
-//            }
+            ArrayList<ConfirmCarPriceFile> dataList = new ArrayList<>();
+            for (String fileName : fileList) {
+                ConfirmCarPriceFile confirmCarPriceFile = new ConfirmCarPriceFile();
+                confirmCarPriceFile.set_C_DealerId(fileName.replace(".txt", "").split("_")[0]);
+                confirmCarPriceFile.set_C_ModelId(fileName.replace(".txt", "").split("_")[1]);
+                confirmCarPriceFile.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                dataList.add(confirmCarPriceFile);
+            }
+            HashSet<ConfirmCarPriceFile> set2 = new HashSet<>(dataList);
+            dataList.clear();
+            dataList.addAll(set2);
+            new PriceDataBase().insertConfirmCarPriceFileModel(dataList);
         } catch (Exception e) {
             e.printStackTrace();
         }

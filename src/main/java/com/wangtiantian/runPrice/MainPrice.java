@@ -19,9 +19,9 @@ public class MainPrice {
         // carPriceMethod.parseCarPriceFile(filePath);
         // carPriceMethod.parseCarPriceFile2( filePath+ "车型报价页面/");
         // 下载车辆信息数据
-        // carPriceMethod.getCarDataFile(filePath);
+         carPriceMethod.getCarDataFile(filePath);
         // 补充未下载的价格信息页面
-        // carPriceMethod.method_补充未下载的车辆价格信息页面(filePath+"车辆价格信息/");
+         carPriceMethod.method_补充未下载的车辆价格信息页面(filePath+"车辆价格信息/");
         // 解析数据
          new CarPriceMethod().parseCarPriceData(filePath+"车辆价格信息/");
     }

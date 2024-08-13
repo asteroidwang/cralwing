@@ -239,13 +239,13 @@ public class CarPriceMethod {
             for (Object bean : dataList) {
                 method_下载车辆信息数据文件(((SaleModData) bean).get_C_PriceDataUrl(), ((SaleModData) bean).get_C_DealerID() + "_" + ((SaleModData) bean).get_C_ModelID() + ".txt", filePath);
             }
-//            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
-//                    .collect(Collectors.toList());
-//            for (int i = 0; i < list.size(); i++) {
-//                PriceMoreThread priceMoreThread = new PriceMoreThread(list.get(i), filePath);
-//                Thread thread = new Thread(priceMoreThread);
-//                thread.start();
-//            }
+            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < list.size(); i++) {
+                PriceMoreThread priceMoreThread = new PriceMoreThread(list.get(i), filePath);
+                Thread thread = new Thread(priceMoreThread);
+                thread.start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

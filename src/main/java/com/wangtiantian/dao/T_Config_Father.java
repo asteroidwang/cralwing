@@ -3,11 +3,13 @@ package com.wangtiantian.dao;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.wangtiantian.entity.price.ConfirmCarPriceFile;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class T_Config_Father {
     protected String dbName;
@@ -49,6 +51,7 @@ public class T_Config_Father {
     public void method_连接数据库() {
         try {
             Class.forName(dbDriver);
+            System.out.println(userName + "\t" + password);
             if (null == conn || conn.isClosed()) {
                 conn = DriverManager.getConnection(dbString, userName, password);
             }
@@ -194,9 +197,9 @@ public class T_Config_Father {
                     }
                     String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
-                        valueList += "N'" + value.replace("'","''") + "',";
+                        valueList += "N'" + value.replace("'", "''") + "',";
                     } else {
-                        valueList += "" + value.replace("'","''") + ",";
+                        valueList += "" + value.replace("'", "''") + ",";
                     }
                 }
             }
@@ -228,11 +231,6 @@ public class T_Config_Father {
         return "(" + columnList + ")";
     }
 
-    public void method_批量插入数据(String values, String columns) {
-        String sql = "insert into " + tableName + columns + " values" + values;
-        method_i_d_u(sql);
-    }
-
     public int get_获取表中数据数量() {
         int num = 0;
         try {
@@ -251,4 +249,26 @@ public class T_Config_Father {
         }
         return num;
     }
+
+    public ArrayList<Object> get_查找未下载的数据() {
+        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 ");
+    }
+
+    public void insertForeach(ArrayList<Object> dataList) {
+        int batchSize = 100;
+        for (int i = 0; i < dataList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, dataList.size());
+            List<Object> batchList = dataList.subList(i, end);
+            StringBuffer valueBuffer = new StringBuffer();
+            String columnList = getColumnList(dataList.get(i));
+            for (Object bean : batchList) {
+                valueBuffer.append(getValueList(bean)).append(",");
+            }
+            String tempString = valueBuffer.toString();
+            String sql = "insert into " + tableName + columnList + " values" + tempString.substring(0, tempString.length() - 1);
+            method_i_d_u(sql);
+            System.out.println("分批入库一次");
+        }
+    }
+
 }
