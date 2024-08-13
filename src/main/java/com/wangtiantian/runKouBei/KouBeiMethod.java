@@ -419,13 +419,13 @@ public class KouBeiMethod {
                     kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
                     replyData.clear();
                 }
-                HashSet<ReplyKouBei> set2 = new HashSet<>(replyData);
-                replyData.clear();
-                replyData.addAll(set2);
                 kouBeiDataBase.update_修改一级评论的文件下载状态(fileName);
             }
         }
         if (replyData.size() > 0) {
+            HashSet<ReplyKouBei> set2 = new HashSet<>(replyData);
+            replyData.clear();
+            replyData.addAll(set2);
             kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
         }
     }
