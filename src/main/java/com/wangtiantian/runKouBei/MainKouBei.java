@@ -53,6 +53,7 @@ public class MainKouBei {
         // kouBeiMethod.getModelKouBeiFirstFileUrl(currentFilePath);
 
         // new KouBeiMethod().update_修改口碑的一级回复数据的下载状态();
-         new KouBeiMethod().method_一级评论数据();
+        // new KouBeiMethod().method_一级评论数据();
+        new KouBeiMethod().parse_一级评论无法解析("/Users/asteroid/所有文件数据/一级评论/");
     }
 }

@@ -1,7 +1,9 @@
 package com.wangtiantian.runPicture;
 
 import com.wangtiantian.dao.T_Config_File;
+import com.wangtiantian.entity.picture.PictureHtmlFileData;
 import com.wangtiantian.entity.picture.PictureHtmlUrl;
+import com.wangtiantian.entity.picture.PictureUrl;
 import com.wangtiantian.entity.picture.Picture_FenYeUrl;
 import com.wangtiantian.mapper.PictureDataBase;
 import org.jsoup.Jsoup;
@@ -25,7 +27,11 @@ public class MainPicture {
         // mainPicture.downLoad_下载所有版本的第一页全图文件(filePath+"版本图片分页数据/");
         // mainPicture.parse_解析所有版本的第一页图片文件获取分页总页数并将分页url入库(filePath + "版本图片分页数据/");
         // mainPicture.downLoad_所有分页(filePath + "版本图片分页数据/");
-        mainPicture.parse_解析分页数据入库图片具体页面的url并下载未下载的漏网之鱼(filePath + "版本图片分页数据/");
+        // mainPicture.parse_解析分页数据入库图片具体页面的url并下载未下载的漏网之鱼(filePath + "版本图片分页数据/");
+        // mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
+        // mainPicture.method_修改已下载的图片具体页面的下载状态("/Users/asteroid/所有文件数据/图片具体页面url.txt");
+        // mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url("/Users/asteroid/所有文件数据/图片/");
+        mainPicture.downLoad_下载图片(filePath + "图片/");
     }
 
     // 1.下载所有版本的第一页
@@ -93,7 +99,6 @@ public class MainPicture {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     // 4.解析分页数据入库图片具体页面的url并下载未下载的漏网之鱼
@@ -107,16 +112,16 @@ public class MainPicture {
             String content = T_Config_File.method_读取文件内容(filePath + ((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + ".txt");
             Document mainDoc = Jsoup.parse(content);
             Elements mainItems = mainDoc.select("#imgList").select("li");
-            System.out.println(((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + "\t" + mainItems.size());
-            T_Config_File.method_重复写文件_根据路径创建文件夹("/Users/asteroid/所有文件数据/","111.txt",((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + "\t" + mainItems.size()+"\n");
-//            count += mainItems.size();
-//            result.addAll(parse_解析分页数据入库图片具体页面的url(content,filePath + ((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + ".txt"));
+            count += mainItems.size();
+            result.addAll(parse_解析分页数据入库图片具体页面的url(content, filePath + ((Picture_FenYeUrl) o).get_C_VersionId() + "_" + page + ".txt"));
         }
-//        System.out.println(count);
+        System.out.println(count);
+        System.out.println(result.size());
 //        HashSet<Object> set = new HashSet<>(result);
 //        result.clear();
 //        result.addAll(set);
-//        pictureDataBase.insert_图片具体页面的文件下载相关数据(result);
+        System.out.println(result.size());
+        pictureDataBase.insert_图片具体页面的文件下载相关数据(result);
 
 //        ArrayList<Object> dataList2 = new ArrayList<>();
 //        for (Object o : dataList) {
@@ -165,4 +170,127 @@ public class MainPicture {
         return dataList;
     }
 
+    // 5.下载图片具体页面的数据文件
+    public void downLoad_下载图片的具体页面获取下载高清图的Url地址(String filePath) {
+        int countData = pictureDataBase.get_图片具体页面表中的数据总数();
+        System.out.println(countData);
+        for (int k = 0; k < countData / 10000 + 1; k++) {
+            ArrayList<Object> dataList = pictureDataBase.get_分页查询所有未下载的图片具体页面的url(k * 10000);
+            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                    .collect(Collectors.toList());
+            for (int ii = 0; ii < list.size(); ii++) {
+                PictureHtmlUrlThread moreThread = new PictureHtmlUrlThread(list.get(ii), filePath);
+                Thread thread = new Thread(moreThread);
+                thread.start();
+            }
+        }
+    }
+
+    // 6.修改已下载的图片具体页面的下载状态
+    public void method_修改已下载的图片具体页面的下载状态(String filePath) {
+        try {
+            ArrayList<String> dataList = T_Config_File.method_按行读取文件(filePath);
+            ArrayList<Object> result = new ArrayList<>();
+            for (String url : dataList) {
+                PictureHtmlFileData pictureHtmlFileData = new PictureHtmlFileData();
+                pictureHtmlFileData.set_C_PictureHtmlUrl(url);
+                result.add(pictureHtmlFileData);
+            }
+            pictureDataBase.insert_图片具体页面已下载的文件数据(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 7.解析下载图片的具体页面获取下载图片的url或者高清图的url
+    public void parse_解析下载图片的具体页面获取下载图片的url或者高清图的url(String filePath) {
+        ArrayList<Object> result = new ArrayList<>();
+        try {
+            ArrayList<Object> dataList = pictureDataBase.get_已经下载的图片具体页面的数据();
+            for (Object o : dataList) {
+                String versionId = ((PictureHtmlUrl) o).get_C_VersionId();
+                String modId = ((PictureHtmlUrl) o).get_C_ModelId();
+                String brandId = ((PictureHtmlUrl) o).get_C_BrandId();
+                String imgId = ((PictureHtmlUrl) o).get_C_ImgId();
+                String imgType = ((PictureHtmlUrl) o).get_C_ImgType();
+                String fileName = brandId + "_" + modId + "_" + versionId + "_" + imgId + "_" + imgType + ".txt";
+                String content = T_Config_File.method_读取文件内容(filePath + fileName);
+                Document mainDoc = Jsoup.parse(content);
+                Elements mainItems = mainDoc.select("#img");
+                String imgUrl = "https:" + mainItems.attr("src");
+                String bigImg = mainDoc.select("#btnBigphoto").attr("href").equals("") ? "无高清图" : "https:" + mainDoc.select("#btnBigphoto").attr("href");
+                PictureUrl pictureUrl = new PictureUrl();
+                pictureUrl.set_C_GaoQingImgUrl(bigImg);
+                pictureUrl.set_C_ImgUrl(imgUrl);
+                pictureUrl.set_C_BrandId(brandId);
+                pictureUrl.set_C_ModelId(modId);
+                pictureUrl.set_C_VersionId(versionId);
+                pictureUrl.set_C_ImgId(imgId);
+                pictureUrl.set_C_FactoryId("");
+                pictureUrl.set_C_ImgType(imgType);
+                pictureUrl.set_C_IsFinish(0);
+                pictureUrl.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                result.add(pictureUrl);
+            }
+//            ArrayList<String> fileList =T_Config_File.method_获取文件名称(filePath);
+//            for(String fileName:fileList){
+//                String content = T_Config_File.method_读取文件内容(filePath+fileName);
+//                Document mainDoc= Jsoup.parse(content);
+//                String versionId = fileName.split("_")[2];
+//                String modId =fileName.split("_")[1];
+//                String brandId =fileName.split("_")[0];
+//                String imgId = fileName.split("_")[3];
+//                String imgType=fileName.split("_")[4].replace(".txt","");
+//                Elements mainItems = mainDoc.select("#img");
+//                String imgUrl ="https:"+ mainItems.attr("src");
+//                String bigImg = mainDoc.select("#btnBigphoto").attr("href").equals("")?"无高清图":"https:"+mainDoc.select("#btnBigphoto").attr("href");
+//                PictureUrl pictureUrl = new PictureUrl();
+//                pictureUrl.set_C_GaoQingImgUrl(bigImg);
+//                pictureUrl.set_C_ImgUrl(imgUrl);
+//                pictureUrl.set_C_BrandId(brandId);
+//                pictureUrl.set_C_ModelId(modId);
+//                pictureUrl.set_C_VersionId(versionId);
+//                pictureUrl.set_C_ImgId(imgId);
+//                pictureUrl.set_C_FactoryId("");
+//                pictureUrl.set_C_ImgType(imgType);
+//                pictureUrl.set_C_IsFinish(0);
+//                pictureUrl.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//                result.add(pictureUrl);
+//            }
+            HashSet<Object> set = new HashSet<>(result);
+            result.clear();
+            result.addAll(set);
+            pictureDataBase.insert_下载图片的url数据入库(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 8.下载图片
+    public void downLoad_下载图片(String filePath) {
+        try {
+            ArrayList<Object> dataList = pictureDataBase.get_未下载的图片的url();
+//            for (Object bean : dataList) {
+//                try {
+//                    String mainUrl = ((PictureUrl) bean).get_C_GaoQingImgUrl().equals("无高清图") ? ((PictureUrl) bean).get_C_ImgUrl() : ((PictureUrl) bean).get_C_GaoQingImgUrl();
+//                    String tempFilePath = ((PictureUrl) bean).get_C_BrandId() + "/" + ((PictureUrl) bean).get_C_ModelId() + "/" + ((PictureUrl) bean).get_C_VersionId() + "/" + ((PictureUrl) bean).get_C_ImgType() + "/";
+//                    String fileName = ((PictureUrl) bean).get_C_ImgId();
+//                    if (T_Config_File.downloadImage(mainUrl, filePath + tempFilePath, fileName+".jpg")) {
+//                        T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("图片/", ""), "已下载的图片Url.txt", mainUrl + "\n");
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                    .collect(Collectors.toList());
+            for (int ii = 0; ii < list.size(); ii++) {
+                PictureUrlThread moreThread = new PictureUrlThread(list.get(ii), filePath);
+                Thread thread = new Thread(moreThread);
+                thread.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

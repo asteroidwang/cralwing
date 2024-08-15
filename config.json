@@ -145,6 +145,14 @@
           {
             "entity": "com.wangtiantian.entity.picture.PictureHtmlUrl",
             "tableName": "T_Picture_Html"
+          },
+          {
+            "entity": "com.wangtiantian.entity.picture.PictureHtmlFileData",
+            "tableName": "T_PictureHtmlFileData"
+          },
+          {
+            "entity": "com.wangtiantian.entity.picture.PictureUrl",
+            "tableName": "T_PictureUrl"
           }
         ]
       }

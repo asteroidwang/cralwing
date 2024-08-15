@@ -1,11 +1,10 @@
 package com.wangtiantian.runKouBei;
 
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
-import com.wangtiantian.dao.T_Config_KouBei;
+
 import com.wangtiantian.entity.Bean_Model;
 import com.wangtiantian.entity.koubei.*;
 import com.wangtiantian.mapper.KouBeiDataBase;
@@ -19,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import java.util.stream.IntStream;
 
 public class KouBeiMethod {
@@ -81,7 +83,7 @@ public class KouBeiMethod {
             ArrayList<Object> dataList = new ArrayList<>();
             for (String folderName : folderList) {
                 String content = T_Config_File.method_读取文件内容(filePath + folderName + "/" + folderName + "_1.txt");
-                int pageCount = JSONObject.parse(content).getJSONObject("result").getInteger("pagecount");
+                int pageCount = ((JSONObject) JSONObject.parse(content)).getJSONObject("result").getInteger("pagecount");
                 for (int i = 2; i < pageCount + 1; i++) {
                     String mainUrl = "https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=" + folderName + "&pageIndex=" + i + "&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0";
                     ModelKouBei modelKouBei = new ModelKouBei();
@@ -407,21 +409,54 @@ public class KouBeiMethod {
 //        int getCount = kouBeiDataBase.getCount();
         int getCount = 1320272;
 //        for (int kk = 0; kk < getCount / 1000; kk++) {
-            ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(0 * 1000);
-            for (Object o : dataList) {
-                String fileName = ((KouBeiData) o).get_C_KoubeiID();
-                replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + fileName+"_一级评论_0.txt"), filePath, fileName));
-                System.out.println(replyData.size());
-                if (replyData.size()>100000){
-                    HashSet<Object> set = new HashSet<>(replyData);
-                    replyData.clear();
-                    replyData.addAll(set);
+        ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(0 * 1000);
+        for (Object o : dataList) {
+            String fileName = ((KouBeiData) o).get_C_KoubeiID();
+            replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + fileName + "_一级评论_0.txt"), filePath, fileName));
+            System.out.println(replyData.size());
+            if (replyData.size() > 100000) {
+                HashSet<Object> set = new HashSet<>(replyData);
+                replyData.clear();
+                replyData.addAll(set);
 //                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
-                    replyData.clear();
-                }
+                replyData.clear();
+            }
 //            }
         }
 //            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+    }
+
+    public void parse_一级评论无法解析(String filePath) {
+        ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
+        for (String fileName : fileList) {
+            String content = T_Config_File.method_读取文件内容(filePath + fileName);
+            String input = content;
+
+            // 正则表达式，用来匹配引号以及前面的两个字符
+
+            Pattern pattern = Pattern.compile("\"(.*?)\"(.*?)\"");
+            Matcher matcher = pattern.matcher(input);
+
+            StringBuffer result = new StringBuffer();
+
+            while (matcher.find()) {
+                String firstPart = matcher.group(1); // 第一个引号与第二个引号之间的内容
+                String secondPart = matcher.group(2); // 第二个引号与第三个引号之间的内容
+                System.out.println(firstPart+"\t"+secondPart);
+                // 判断两个引号之间的内容是否都包含中文字符
+                if (firstPart.matches(".*[\\u4e00-\\u9fa5].*") && secondPart.matches(".*[\\u4e00-\\u9fa5].*")) {
+                    // 如果包含中文字符，将中间的引号替换为“很干净”
+                    matcher.appendReplacement(result, "\"" + firstPart + "很干净" + secondPart + "\"");
+                } else {
+                    // 保持原样
+                    matcher.appendReplacement(result, matcher.group());
+                }
+            }
+            matcher.appendTail(result);
+            System.out.println(content);
+            System.out.println(result.toString());
+//            parse_解析一级评论数据(result.toString(),filePath,fileName);
+        }
     }
 
     public ArrayList<ReplyKouBei> parse_解析一级评论数据(String content, String filePath, String fileName) {
@@ -429,9 +464,10 @@ public class KouBeiMethod {
         try {
             JSONObject jsonRoot = null;
             try {
-                jsonRoot = JSONObject.parse(content);
+                jsonRoot = JSON.parseObject(content);
             } catch (Exception e) {
-                System.out.println(filePath+fileName);
+                System.out.println(e);
+                System.out.println(filePath + fileName);
 //                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("一级评论数据/",""), "一级评论解析失败的.txt", filePath + "一级评论数据/" + fileName + "\n");
             }
             if (jsonRoot != null) {
@@ -578,7 +614,6 @@ public class KouBeiMethod {
                     dataList.add(firstReply);
                 }
             }
-//            kouBeiDataBase.insetForeachKouBeiReplyData(dataList);
         } catch (Exception e) {
             e.printStackTrace();
         }

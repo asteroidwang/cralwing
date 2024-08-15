@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.*;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -137,6 +138,31 @@ public class T_Config_File {
         } else {
             return false;
         }
-
     }
+
+    public static boolean downloadImage(String imageUrl, String filePath, String fileName) {
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            URL url = new URL(imageUrl);
+            URLConnection connection = url.openConnection();
+            InputStream inputStream = connection.getInputStream();
+            OutputStream outputStream = new FileOutputStream(filePath + fileName);
+            byte[] buffer = new byte[2048];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
+            }
+            inputStream.close();
+            outputStream.close();
+            System.out.println("成功下载一次\t"+filePath+ fileName);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
