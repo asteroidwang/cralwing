@@ -31,7 +31,7 @@ public class MainPicture {
         // mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
         // mainPicture.method_修改已下载的图片具体页面的下载状态("/Users/asteroid/所有文件数据/图片具体页面url.txt");
         // mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url("/Users/asteroid/所有文件数据/图片/");
-        mainPicture.downLoad_下载图片(filePath + "图片/");
+        // mainPicture.downLoad_下载图片(filePath + "图片/");
     }
 
     // 1.下载所有版本的第一页
