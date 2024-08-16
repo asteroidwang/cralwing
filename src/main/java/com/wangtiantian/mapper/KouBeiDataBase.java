@@ -97,4 +97,10 @@ public class KouBeiDataBase {
         T_Config_KouBei modDataDao = new T_Config_KouBei(2, chooseDataBase, 2);
         return modDataDao.method_查找所有未下载回复的口碑id(begin);
     }
+
+    // 查询未下载的最后层级评论
+    public ArrayList<Object> get_查询未下载的最后层级评论(int begin) {
+        T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 4);
+        return modDataDao.method_分页查询未下载的有二级评论的数据10000条每次(begin);
+    }
 }

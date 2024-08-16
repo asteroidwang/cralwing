@@ -3,6 +3,7 @@ package com.wangtiantian.runKouBei;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.wangtiantian.CommonMoreThread;
 import com.wangtiantian.dao.T_Config_File;
 
 import com.wangtiantian.entity.Bean_Model;
@@ -505,10 +506,10 @@ public class KouBeiMethod {
                     String badge_name = "";
                     String badge_icon = "";
                     if (badge != null) {
-                        user_id = badge.getString("user_id")==null?"-":badge.getString("user_id");
-                        achievement_id = badge.getString("achievement_id")==null?"-":badge.getString("achievement_id");
-                        badge_name = badge.getString("badge_name")==null?"-":badge.getString("badge_name");
-                        badge_icon = badge.getString("badge_icon")==null?"-":badge.getString("badge_icon");
+                        user_id = badge.getString("user_id") == null ? "-" : badge.getString("user_id");
+                        achievement_id = badge.getString("achievement_id") == null ? "-" : badge.getString("achievement_id");
+                        badge_name = badge.getString("badge_name") == null ? "-" : badge.getString("badge_name");
+                        badge_icon = badge.getString("badge_icon") == null ? "-" : badge.getString("badge_icon");
                     }
                     if (subQuoteList.size() != 0) {
                         for (int j = 0; j < subQuoteList.size(); j++) {
@@ -617,5 +618,24 @@ public class KouBeiMethod {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    public void downLoad_下载回复一级评论的数据文件(String filePath) {
+        try {
+
+            int getCount = 3308296;
+            for (int kk = 0; kk < getCount / 1000; kk++) {
+                ArrayList<Object> dataList = kouBeiDataBase.get_查询未下载的最后层级评论(kk*10000);
+                List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < list.size(); i++) {
+                    SecondReplyDataThread moreThread = new SecondReplyDataThread(list.get(i), filePath);
+                    Thread thread = new Thread(moreThread);
+                    thread.start();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

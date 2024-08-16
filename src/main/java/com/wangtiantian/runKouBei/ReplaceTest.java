@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.koubei.ReplyKouBei;
+import com.wangtiantian.mapper.KouBeiDataBase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class ReplaceTest {
 
         }
         System.out.println(res.size());
+        new KouBeiDataBase().insetForeachKouBeiReplyData(res);
     }
 
 
