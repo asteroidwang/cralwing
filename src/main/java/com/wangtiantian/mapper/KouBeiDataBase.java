@@ -103,4 +103,10 @@ public class KouBeiDataBase {
         T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 4);
         return modDataDao.method_分页查询未下载的有二级评论的数据10000条每次(begin);
     }
+
+    public void insert_确认已下载的二级评论数据(ArrayList<Object> dataList) {
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 5);
+        kouBeiDataDao.insertForeach(dataList);
+
+    }
 }

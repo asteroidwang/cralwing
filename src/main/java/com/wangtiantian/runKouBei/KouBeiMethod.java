@@ -638,4 +638,19 @@ public class KouBeiMethod {
             e.printStackTrace();
         }
     }
+    public void confirm_确认已下载的二级评论数据(String filePath){
+        try {
+            ArrayList<String> fileList = T_Config_File.method_按行读取文件(filePath);
+            ArrayList<Object> dataList = new ArrayList<>();
+            for (String fileName:fileList) {
+                ConfirmReplySecond replySecond= new ConfirmReplySecond();
+                replySecond.set_C_ReplySecondUrl(fileName.replace(".txt",""));
+                dataList.add(replySecond);
+            }
+            kouBeiDataBase.insert_确认已下载的二级评论数据(dataList);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 }
