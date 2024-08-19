@@ -18,6 +18,10 @@ public class T_Config_Price extends T_Config_Father {
         return method_有条件的查询("select * from "+tableName+" where C_IsFinish=0");
     }
 
+//    public ArrayList<Object> findDealerCityNotFinish() {
+//        return method_有条件的查询("select * from "+tableName+" where C_IsFinish=0");
+//    }
+
     // 修改经销商数据下载完成的城市的状态
     public void updateCarPriceStatus(String dealerID) {
         String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerID=" + dealerID;
@@ -46,6 +50,10 @@ public class T_Config_Price extends T_Config_Father {
     public void update_修改所有经销商分页url表的数据的下载状态(String fenyeUrl) {
         String sql = "update " + tableName + " set C_IsFinish = 1 where C_DealerFenYeUrl='" + fenyeUrl+"'";
         method_i_d_u(sql);
+    }
+    public ArrayList<Object> get_所有下载有重复经销商数据的城市名称(){
+        String sql ="select distinct C_CityName from "+tableName+" where C_DealerID in( select C_DealerID from "+tableName+" GROUP BY C_DealerID having count(*) >1)";
+        return method_有条件的查询(sql);
     }
 
 }

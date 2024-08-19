@@ -6,6 +6,7 @@ public class Bean_DealerFenYeUrl {
     private int C_ID; public void set_C_ID(int C_ID){this.C_ID=C_ID;}public int get_C_ID(){return C_ID;}
     private String  C_DealerFenYeUrl; public void set_C_DealerFenYeUrl(String C_DealerFenYeUrl){this.C_DealerFenYeUrl=C_DealerFenYeUrl.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_DealerFenYeUrl(){return C_DealerFenYeUrl;}
     private Integer C_IsFinish;public Integer get_C_IsFinish(){return C_IsFinish;}public void set_C_IsFinish(Integer C_IsFinish){this.C_IsFinish = C_IsFinish;}
+
     private String  C_UpdateTime; public void set_C_UpdateTime(String C_UpdateTime){this.C_UpdateTime=C_UpdateTime.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_UpdateTime(){return C_UpdateTime;}
     @Override
     public boolean equals(Object o) {

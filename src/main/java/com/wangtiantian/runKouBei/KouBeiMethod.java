@@ -622,8 +622,7 @@ public class KouBeiMethod {
 
     public void downLoad_下载回复一级评论的数据文件(String filePath) {
         try {
-
-            int getCount = 3308296;
+            int getCount = kouBeiDataBase.get_二级回复文件应有数量();
             for (int kk = 0; kk < getCount / 1000; kk++) {
                 ArrayList<Object> dataList = kouBeiDataBase.get_查询未下载的最后层级评论(kk*10000);
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
@@ -640,11 +639,15 @@ public class KouBeiMethod {
     }
     public void confirm_确认已下载的二级评论数据(String filePath){
         try {
-            ArrayList<String> fileList = T_Config_File.method_按行读取文件(filePath);
+            ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
             ArrayList<Object> dataList = new ArrayList<>();
             for (String fileName:fileList) {
                 ConfirmReplySecond replySecond= new ConfirmReplySecond();
-                replySecond.set_C_ReplySecondUrl(fileName.replace(".txt",""));
+                String tempString = fileName.replace("_二级级评论_0.txt","");
+                String kbId = tempString.split("_")[0];
+                String freplyId = tempString.split("_")[1];
+                String mainUrl = "https://koubeiipv6.app.autohome.com.cn/autov9.13.0/news/replytoplevelsublist.ashx?_appid=koubei&koubeiid="+kbId+"&freplyid="+freplyId+"&next=0&pagesize=999999&pm=1&appversion=1&orderBy=0";
+                replySecond.set_C_ReplySecondUrl(mainUrl);
                 dataList.add(replySecond);
             }
             kouBeiDataBase.insert_确认已下载的二级评论数据(dataList);

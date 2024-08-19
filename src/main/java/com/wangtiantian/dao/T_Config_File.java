@@ -15,9 +15,9 @@ public class T_Config_File {
         String text = "";
         try {
             File file = new File(filePath);
-            if (!file.exists()) {
-                T_Config_File.method_重复写文件_根据路径创建文件夹(" E:/汽车之家/口碑评价数据/20240804/", "不存在.txt", filePath + "\n");
-            }
+//            if (!file.exists()) {
+//                T_Config_File.method_重复写文件_根据路径创建文件夹(" D:/汽车之家/口碑评价数据/20240804/", "不存在.txt", filePath + "\n");
+//            }
             BufferedReader br = new BufferedReader(new FileReader(file));
             StringBuffer sb = new StringBuffer();
             while ((text = br.readLine()) != null) {

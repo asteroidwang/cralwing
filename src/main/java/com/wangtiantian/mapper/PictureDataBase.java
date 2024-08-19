@@ -57,9 +57,9 @@ public class PictureDataBase {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 3);
         tConfigPicture.insertForeach(dataList);
     }
-    public ArrayList<Object> get_已经下载的图片具体页面的数据(){
+    public ArrayList<Object> get_已经下载的图片具体页面的数据(int begin){
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
-        return tConfigPicture.get_查找已下载的数据();
+        return tConfigPicture.method_分页查询已下载的数据10000条每次(begin);
     }
     public void insert_下载图片的url数据入库(ArrayList<Object> dataList){
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
@@ -69,5 +69,9 @@ public class PictureDataBase {
     public ArrayList<Object> get_未下载的图片的url(){
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
         return  tConfigPicture.get_查找未下载的数据();
+    }
+    public int get_下载图片具体页面中还需下载的数量(){
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
+        return tConfigPicture.get_获取表中未下载的数据总数();
     }
 }

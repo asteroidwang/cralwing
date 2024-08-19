@@ -253,6 +253,23 @@ public class T_Config_Father {
         return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 ");
     }
 
+    public int get_获取表中数据数量_有查询条件(String sql) {
+        int num = 0;
+        try {
+            method_连接数据库();
+            ResultSet resultSet = stmt.executeQuery(sql);
+            while (resultSet.next()) {
+                num = (int) resultSet.getObject(1);
+            }
+            System.out.println("数据库连接已断开");
+            resultSet.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return num;
+    }
     public void insertForeach(ArrayList<Object> dataList) {
         int batchSize = 100;
         for (int i = 0; i < dataList.size(); i += batchSize) {
@@ -267,10 +284,15 @@ public class T_Config_Father {
             String sql = "insert into " + tableName + columnList + " values" + tempString.substring(0, tempString.length() - 1);
 //            System.out.println(sql);
             method_i_d_u(sql);
-            System.out.println("分批入库一次");
+            System.out.println(tableName+"分批入库一次");
         }
     }
 
+
+    public  void method_清空表中数据(){
+        String sql ="truncate table "+ tableName;
+        method_i_d_u(sql);
+    }
     public ArrayList<Object> method_分页查询未下载的数据10000条每次(int begin) {
         String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
         return method_有条件的查询(sql);
@@ -278,5 +300,8 @@ public class T_Config_Father {
 
     public ArrayList<Object> get_查找已下载的数据() {
         return method_有条件的查询("select * from " + tableName + " where C_IsFinish =1 ");
+    }
+    public ArrayList<Object> method_分页查询已下载的数据10000条每次(int begin) {
+        return method_有条件的查询("SELECT * FROM " + tableName + " where C_IsFinish = 1  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY");
     }
 }
