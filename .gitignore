@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+src/.DS_Store
+src/main/.DS_Store
+src/main/java/com/wangtiantian/dao/.DS_Store
+src/main/java/com/wangtiantian/.DS_Store
+ E:/汽车之家/口碑评价数据/20240804/不存在.txt
