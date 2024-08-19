@@ -276,4 +276,15 @@ public class T_Config_Father {
         String sql ="truncate table "+ tableName;
         method_i_d_u(sql);
     }
+    public ArrayList<Object> method_分页查询未下载的数据10000条每次(int begin) {
+        String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
+        return method_有条件的查询(sql);
+    }
+
+    public ArrayList<Object> get_查找已下载的数据() {
+        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =1 ");
+    }
+    public ArrayList<Object> method_分页查询已下载的数据10000条每次(int begin) {
+        return method_有条件的查询("SELECT * FROM " + tableName + " where C_IsFinish = 1  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY");
+    }
 }
