@@ -70,4 +70,8 @@ public class PictureDataBase {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
         return  tConfigPicture.get_查找未下载的数据();
     }
+    public int get_下载图片具体页面中还需下载的数量(){
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
+        return tConfigPicture.get_获取表中未下载的数据总数();
+    }
 }

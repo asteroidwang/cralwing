@@ -21,4 +21,9 @@ public class T_Config_Picture extends T_Config_Father {
         String sql = "update " + tableName + " set C_IsFinish =1 where C_PictureHtmlUrl = '" + html + "'";
         method_i_d_u(sql);
     }
+
+    public  int get_获取表中未下载的数据总数(){
+        String sql = "select count(*) from "+tableName+ " where C_IsFinish = 0";
+        return get_获取表中数据数量_有查询条件(sql);
+    }
 }

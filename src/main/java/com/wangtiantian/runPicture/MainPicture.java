@@ -30,9 +30,9 @@ public class MainPicture {
         // mainPicture.parse_解析所有版本的第一页图片文件获取分页总页数并将分页url入库(filePath + "版本图片分页数据/");
         // mainPicture.downLoad_所有分页(filePath + "版本图片分页数据/");
         // mainPicture.parse_解析分页数据入库图片具体页面的url并下载未下载的漏网之鱼(filePath + "版本图片分页数据/");
-        // mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
+         mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
         // mainPicture.method_修改已下载的图片具体页面的下载状态(filePath+"/已下载的图片具体页面.txt");
-         mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url(filePath1 );
+        // mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url(filePath1 );
         // mainPicture.downLoad_下载图片(filePath + "图片/");
     }
 
@@ -174,7 +174,7 @@ public class MainPicture {
 
     // 5.下载图片具体页面的数据文件
     public void downLoad_下载图片的具体页面获取下载高清图的Url地址(String filePath) {
-        int countData = pictureDataBase.get_图片具体页面表中的数据总数();
+        int countData = pictureDataBase.get_下载图片具体页面中还需下载的数量();
         System.out.println(countData);
         for (int k = 0; k < countData / 10000 + 1; k++) {
             ArrayList<Object> dataList = pictureDataBase.get_分页查询所有未下载的图片具体页面的url(k * 10000);
