@@ -40,5 +40,8 @@ public class T_Config_KouBei extends T_Config_Father {
      public  void update修改一级评论的下载状态(String kbId) {
         method_i_d_u("update " + tableName + " set C_IsFinish = 1 where C_KoubeiID  in (" + kbId + ")");
     }
-
+    public ArrayList<Object> method_分页查询未下载的有二级评论的数据10000条每次(int begin) {
+        String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0  and C_freplyCount!='0' and C_freplyCount!='-' ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
+        return method_有条件的查询(sql);
+    }
 }
