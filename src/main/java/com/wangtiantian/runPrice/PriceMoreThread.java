@@ -1,7 +1,9 @@
 package com.wangtiantian.runPrice;
 
 import com.wangtiantian.dao.T_Config_Father;
+import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.price.SaleModData;
+import com.wangtiantian.mapper.PriceDataBase;
 import com.wangtiantian.runPrice.MainPrice;
 
 import java.util.List;
@@ -10,12 +12,10 @@ public class PriceMoreThread implements Runnable {
 
     private List<Object> list;
     private String savePath;
-    private int group;
 
     public PriceMoreThread(List<Object> list, String savePath) {
         this.list = list;
         this.savePath = savePath;
-//        this.group = group;
     }
 
     @Override
@@ -23,12 +23,19 @@ public class PriceMoreThread implements Runnable {
         Thread currentThread = Thread.currentThread();
         System.out.println("Thread " + currentThread.getName() + " (ID: " + currentThread.getId() + ") is processing group.");
         for (Object bean : list) {
+            PriceDataBase priceDataBase = new PriceDataBase();
             try {
-                new CarPriceMethod().method_下载车辆信息数据文件(((SaleModData) bean).get_C_PriceDataUrl(), ((SaleModData) bean).get_C_DealerID() + "_" + ((SaleModData) bean).get_C_ModelID() + ".txt",savePath);
-//                new T_Config_Father(2, 0, 2).updateNoDealerModelStatus(((SaleModData) bean).get_C_DealerID(), ((SaleModData) bean).get_C_ModelID());
+                String mainUrl = ((SaleModData) bean).get_C_PriceDataUrl();
+                String fileName = ((SaleModData) bean).get_C_DealerID() + "_" + ((SaleModData) bean).get_C_ModelID() + ".txt";
+                String dealerID = ((SaleModData) bean).get_C_DealerID();
+                String modId = ((SaleModData) bean).get_C_ModelID();
+                if (T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", savePath, fileName)) {
+                    System.out.println("11");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 }
+
