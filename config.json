@@ -1,9 +1,9 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.0.109:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.124:1433;databaseName=",
     "userName": "sa",
-    "password": "Abc20010318aa",
+    "password": "7777",
     "dbItems": [
       {
         "dbName": "autoHome",
