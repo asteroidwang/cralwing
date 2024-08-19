@@ -1,11 +1,11 @@
 package com.wangtiantian.runKouBei;
 
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.wangtiantian.CommonMoreThread;
 import com.wangtiantian.dao.T_Config_File;
-import com.wangtiantian.dao.T_Config_KouBei;
+
 import com.wangtiantian.entity.Bean_Model;
 import com.wangtiantian.entity.koubei.*;
 import com.wangtiantian.mapper.KouBeiDataBase;
@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import java.util.stream.IntStream;
 
 public class KouBeiMethod {
@@ -81,7 +84,7 @@ public class KouBeiMethod {
             ArrayList<Object> dataList = new ArrayList<>();
             for (String folderName : folderList) {
                 String content = T_Config_File.method_读取文件内容(filePath + folderName + "/" + folderName + "_1.txt");
-                int pageCount = JSONObject.parse(content).getJSONObject("result").getInteger("pagecount");
+                int pageCount = ((JSONObject) JSONObject.parse(content)).getJSONObject("result").getInteger("pagecount");
                 for (int i = 2; i < pageCount + 1; i++) {
                     String mainUrl = "https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=" + folderName + "&pageIndex=" + i + "&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0";
                     ModelKouBei modelKouBei = new ModelKouBei();
@@ -406,41 +409,67 @@ public class KouBeiMethod {
         ArrayList<Object> replyData = new ArrayList<>();
 //        int getCount = kouBeiDataBase.getCount();
         int getCount = 1320272;
-        for (int kk = 0; kk < getCount / 1000; kk++) {
-            ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(kk * 1000);
-            for (Object o : dataList) {
-                String fileName = ((KouBeiData) o).get_C_KoubeiID();
-                replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + fileName+"_一级评论_0.txt"), filePath, fileName));
-                System.out.println(replyData.size());
-                if (replyData.size() > 1000) {
-                    HashSet<Object> set = new HashSet<>(replyData);
-                    replyData.clear();
-                    replyData.addAll(set);
-                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
-                    replyData.clear();
-                }
-                HashSet<Object> set2 = new HashSet<>(replyData);
+//        for (int kk = 0; kk < getCount / 1000; kk++) {
+        ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(0 * 1000);
+        for (Object o : dataList) {
+            String fileName = ((KouBeiData) o).get_C_KoubeiID();
+            replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + fileName + "_一级评论_0.txt"), filePath, fileName));
+            if (replyData.size() > 100000) {
+                HashSet<Object> set = new HashSet<>(replyData);
                 replyData.clear();
-                replyData.addAll(set2);
-                kouBeiDataBase.update_修改一级评论的文件下载状态(fileName);
+                replyData.addAll(set);
+//                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
             }
+//            }
         }
-        if (replyData.size() > 0) {
-            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
-        }
+//            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
     }
 
-    public ArrayList<ReplyKouBei> parse_解析一级评论数据(String content, String filePath, String fileName) {
-        System.out.println("解析一个文件");
-        ArrayList<ReplyKouBei> dataList = new ArrayList<>();
+    public void parse_一级评论无法解析(String filePath) {
+        try {
+            ArrayList<Object> replyData = new ArrayList<>();
+            ArrayList<String> fileList = T_Config_File.method_获取文件名称("/Users/asteroid/所有文件数据/一级评论/");
+            for (String fileName : fileList) {
+                if (fileName.equals(".DS_Store")) {
+                    return;
+                }
+                String content = T_Config_File.method_读取文件内容("/Users/asteroid/所有文件数据/一级评论/" + fileName);
+                Pattern pattern = Pattern.compile("\"rcontent\":(.*?)\"rmemberId\"");
+                Matcher matcher = pattern.matcher(content);
+                StringBuffer result = new StringBuffer();
+                while (matcher.find()) {
+                    String firstPart = matcher.group(1); // 第一个引号与第二个引号之间的内容
+                    if (firstPart.matches(".*[\\u4e00-\\u9fa5].*")) {
+                        // 如果包含中文字符
+                        matcher.appendReplacement(result, "\"rcontent\":\"" + firstPart.replace("\"", "“").replace("\\", "\\\\") + "\",\"rmemberId\"");
+                    } else {
+                        // 保持原样
+                        matcher.appendReplacement(result, matcher.group());
+                    }
+                }
+                ArrayList<Object> data = parse_解析一级评论数据(result.toString(), filePath, fileName);
+                System.out.println(data.size());
+
+            }
+            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public ArrayList<Object> parse_解析一级评论数据(String content, String filePath, String fileName) {
+        ArrayList<Object> dataList = new ArrayList<>();
         try {
             JSONObject jsonRoot = null;
             try {
-                jsonRoot = JSONObject.parse(content);
+                jsonRoot = JSON.parseObject(content);
             } catch (Exception e) {
-                System.out.println(filePath);
-                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("一级评论数据/",""), "一级评论解析失败的.txt", filePath + "一级评论数据/" + fileName + "\n");
+                System.out.println(filePath + fileName);
+                e.printStackTrace();
+//                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("一级评论数据/",""), "一级评论解析失败的.txt", filePath + "一级评论数据/" + fileName + "\n");
             }
+
             if (jsonRoot != null) {
                 JSONArray jsonArray = jsonRoot.getJSONObject("result").getJSONArray("list");
                 String nextString = jsonRoot.getJSONObject("result").getString("next");
@@ -477,10 +506,10 @@ public class KouBeiMethod {
                     String badge_name = "";
                     String badge_icon = "";
                     if (badge != null) {
-                        user_id = badge.getString("user_id");
-                        achievement_id = badge.getString("achievement_id");
-                        badge_name = badge.getString("badge_name");
-                        badge_icon = badge.getString("badge_icon");
+                        user_id = badge.getString("user_id") == null ? "-" : badge.getString("user_id");
+                        achievement_id = badge.getString("achievement_id") == null ? "-" : badge.getString("achievement_id");
+                        badge_name = badge.getString("badge_name") == null ? "-" : badge.getString("badge_name");
+                        badge_icon = badge.getString("badge_icon") == null ? "-" : badge.getString("badge_icon");
                     }
                     if (subQuoteList.size() != 0) {
                         for (int j = 0; j < subQuoteList.size(); j++) {
@@ -585,10 +614,43 @@ public class KouBeiMethod {
                     dataList.add(firstReply);
                 }
             }
-//            kouBeiDataBase.insetForeachKouBeiReplyData(dataList);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    public void downLoad_下载回复一级评论的数据文件(String filePath) {
+        try {
+
+            int getCount = 3308296;
+            for (int kk = 0; kk < getCount / 1000; kk++) {
+                ArrayList<Object> dataList = kouBeiDataBase.get_查询未下载的最后层级评论(kk*10000);
+                List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < list.size(); i++) {
+                    SecondReplyDataThread moreThread = new SecondReplyDataThread(list.get(i), filePath);
+                    Thread thread = new Thread(moreThread);
+                    thread.start();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void confirm_确认已下载的二级评论数据(String filePath){
+        try {
+            ArrayList<String> fileList = T_Config_File.method_按行读取文件(filePath);
+            ArrayList<Object> dataList = new ArrayList<>();
+            for (String fileName:fileList) {
+                ConfirmReplySecond replySecond= new ConfirmReplySecond();
+                replySecond.set_C_ReplySecondUrl(fileName.replace(".txt",""));
+                dataList.add(replySecond);
+            }
+            kouBeiDataBase.insert_确认已下载的二级评论数据(dataList);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
