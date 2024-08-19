@@ -1,9 +1,9 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.0.109:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.124:1433;databaseName=",
     "userName": "sa",
-    "password": "Abc20010318aa",
+    "password": "7777",
     "dbItems": [
       {
         "dbName": "autoHome",
@@ -69,31 +69,31 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.price.CityData",
-            "tableName": "T_CityData_20240813"
+            "tableName": "T_CityData_20240819"
           },
           {
             "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
-            "tableName": "T_DealerFenYeUrl_20240813"
+            "tableName": "T_DealerFenYeUrl_20240819"
           },
           {
             "entity": "com.wangtiantian.entity.price.DealerData",
-            "tableName": "T_DealerData_20240806"
+            "tableName": "T_DealerData_20240819"
           },
           {
             "entity": "com.wangtiantian.entity.price.SaleModData",
-            "tableName": "T_SaleModData_20240806"
+            "tableName": "T_SaleModData_20240819"
           },
           {
             "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
-            "tableName": "T_DealerFenYeUrl_20240813"
+            "tableName": "T_DealerFenYeUrl_20240819"
           },
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
-            "tableName": "T_CarPrice_20240806"
+            "tableName": "T_CarPrice_20240819"
           },
           {
             "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFile",
-            "tableName": "T_ConfirmCarPriceFile_20240806"
+            "tableName": "T_ConfirmCarPriceFile_20240819"
           },
           {
             "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFileModel",
