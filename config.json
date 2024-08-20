@@ -160,6 +160,20 @@
             "tableName": "T_PictureUrl"
           }
         ]
+      },
+      {
+        "dbName": "usedCar",
+        "primary": "C_ID",
+        "db_table": [
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che168.Che168_CityData",
+            "tableName": "T_che168_CityData"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che168.Che168_FenYeUrl",
+            "tableName": "T_che168_FenYeUrl"
+          }
+        ]
       }
     ]
   },
