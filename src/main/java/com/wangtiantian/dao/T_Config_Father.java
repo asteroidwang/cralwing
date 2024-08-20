@@ -287,4 +287,9 @@ public class T_Config_Father {
     public ArrayList<Object> method_分页查询已下载的数据10000条每次(int begin) {
         return method_有条件的查询("SELECT * FROM " + tableName + " where C_IsFinish = 1  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY");
     }
+
+    public void truncate_清空表中数据(){
+        String sql = "truncate table "+tableName;
+        method_i_d_u(sql);
+    }
 }

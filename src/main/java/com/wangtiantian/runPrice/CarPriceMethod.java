@@ -158,16 +158,14 @@ public class CarPriceMethod {
 
             }
             System.out.println(dataList.size());
-            System.out.println(num);
             HashSet<Object> set = new HashSet<>(dataList);
 //            dataList.clear();
 //            dataList.addAll(set);
             System.out.println(set.size());
             priceDataBase.insert_经销商数据入库(dataList);
-//            if (dataList.size()!=set.size()){
-//                priceDataBase.method_修改经销商分页的下载状态为未下载();
-//            }
-
+            if (dataList.size() != set.size()) {
+                priceDataBase.method_修改经销商分页的下载状态为未下载();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,7 +214,7 @@ public class CarPriceMethod {
     public void getCarPriceFile(String filePath) {
         try {
             ArrayList<Object> dataList = new PriceDataBase().get_没有下载的经销商的车型报价页面html();
-            if (dataList.size()<32){
+            if (dataList.size() < 32) {
                 for (Object bean : dataList) {
                     try {
                         String dealerId = ((DealerData) bean).get_C_DealerID();
@@ -228,7 +226,7 @@ public class CarPriceMethod {
                         e.printStackTrace();
                     }
                 }
-            }else {
+            } else {
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
                         .collect(Collectors.toList());
                 for (int i = 0; i < list.size(); i++) {
