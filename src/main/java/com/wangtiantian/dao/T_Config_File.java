@@ -7,7 +7,9 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class T_Config_File {
     //读取文件内容
@@ -44,7 +46,7 @@ public class T_Config_File {
             writer.flush();
             writer.close();
             fos.close();
-            System.out.println("下载一次\t" + filePath + fileName);
+            System.out.println("下载一次\t" + filePath + fileName+"\t"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         } catch (Exception e) {
             System.out.println(e.toString());
         }

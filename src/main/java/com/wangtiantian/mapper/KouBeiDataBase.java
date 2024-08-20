@@ -109,4 +109,9 @@ public class KouBeiDataBase {
         kouBeiDataDao.insertForeach(dataList);
 
     }
+
+    public int get_二级回复文件应有数量(){
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 4);
+        return kouBeiDataDao.get_回复表中数据总量();
+    }
 }
