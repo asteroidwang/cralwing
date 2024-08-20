@@ -780,6 +780,7 @@ public class KouBeiMethod {
     public void downLoad_下载回复一级评论的数据文件(String filePath) {
         try {
             int getCount = kouBeiDataBase.get_二级回复文件应有数量();
+            System.out.println(getCount);
             for (int kk = 0; kk < getCount / 1000; kk++) {
                 ArrayList<Object> dataList = kouBeiDataBase.get_查询未下载的最后层级评论(kk * 10000);
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
