@@ -127,7 +127,7 @@
           },
           {
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
-            "tableName": "T_ReplyKouBei_copy1"
+            "tableName": "T_ReplyKouBei"
           },
           {
             "entity": "com.wangtiantian.entity.koubei.ConfirmReplySecond",

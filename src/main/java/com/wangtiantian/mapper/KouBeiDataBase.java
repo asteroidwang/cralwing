@@ -69,6 +69,10 @@ public class KouBeiDataBase {
     }
 
     // 获取表中数据总数
+    public int get_回复表中未完成的数量() {
+        T_Config_KouBei replyDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
+        return replyDataDao.get_一级评论未完成的数量();
+    }
     public int getCount() {
         T_Config_KouBei replyDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
         return replyDataDao.get_获取表中数据数量();
@@ -94,7 +98,7 @@ public class KouBeiDataBase {
 
     // 查询还未解析的一级评论的口碑id
     public ArrayList<Object> getNotParseFirstPingLunKouBeiId(int begin) {
-        T_Config_KouBei modDataDao = new T_Config_KouBei(2, chooseDataBase, 2);
+        T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
         return modDataDao.method_查找所有未下载回复的口碑id(begin);
     }
 

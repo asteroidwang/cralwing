@@ -5,11 +5,8 @@ import java.util.Objects;
 public class ReplyKouBei {
     private int C_ID;public void set_C_ID(int C_ID){this.C_ID =C_ID;}public int get_C_ID(){return C_ID;}
     private String C_KouBeiID;public void set_C_KouBeiID(String C_KouBeiID){this.C_KouBeiID = C_KouBeiID;} public String get_C_KouBeiID(){return C_KouBeiID;}
-    private String  C_ReplyContent; public void set_C_ReplyContent(String C_ReplyContent){this.C_ReplyContent=C_ReplyContent.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_ReplyContent(){return C_ReplyContent;}
-    private String  C_ReplyUserID; public void set_C_ReplyUserID(String C_ReplyUserID){this.C_ReplyUserID=C_ReplyUserID.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_ReplyUserID(){return C_ReplyUserID;}
-    private String  C_ReplyUserName; public void set_C_ReplyUserName(String C_ReplyUserName){this.C_ReplyUserName=C_ReplyUserName.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_ReplyUserName(){return C_ReplyUserName;}
     private int  C_IsFinish;public int  get_C_IsFinish(){return C_IsFinish;}public void set_C_IsFinish(int C_IsFinish){this.C_IsFinish=C_IsFinish;}
-
+    private String C_hasmore;public String get_C_hasmore(){return  C_hasmore;}public void set_C_hasmore(String C_hasmore){this.C_hasmore = C_hasmore;}
     private String  C_replydate; public void set_C_replydate(String C_replydate){this.C_replydate=C_replydate.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_replydate(){return C_replydate;}
     private String  C_chatcount; public void set_C_chatcount(String C_chatcount){this.C_chatcount=C_chatcount.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_chatcount(){return C_chatcount;}
     private String  C_iscarowner; public void set_C_iscarowner(String C_iscarowner){this.C_iscarowner=C_iscarowner.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_iscarowner(){return C_iscarowner;}
