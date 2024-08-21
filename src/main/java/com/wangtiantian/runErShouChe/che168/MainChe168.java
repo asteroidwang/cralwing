@@ -26,7 +26,8 @@ public class MainChe168 {
         MainChe168 mainChe168 = new MainChe168();
         // mainChe168.get_城市数据(filePath);
         // mainChe168.method_先下载每个城市的第一页二手车数据获取总页数(filePath+"各城市二手车分页/");
-        mainChe168.parse_解析第一页的数据获取总页数(filePath + "各城市二手车分页/");
+         mainChe168.parse_解析第一页的数据获取总页数(filePath + "各城市二手车分页/");
+        // mainChe168.downLoad_下载分页数据(filePath + "各城市二手车分页/");
     }
 
     // 获取城市数据
@@ -105,20 +106,21 @@ public class MainChe168 {
                 if (countNum.equals("全部车源")) {
                     countNum = "0";
                 }
-                int isFinish = 0;
-                for (int i = 1; i < Integer.parseInt(countNum)/56+2; i++) {
+                for (int i = 1; i < Integer.parseInt(countNum) / 56 + 2; i++) {
+                    int isFinish =0;
                     if (i==1){
-                        isFinish=1;
-                    }else {
-                        isFinish=0;
+                        isFinish = 1;
                     }
-                    String mainUrl = "https://www.che168.com/"+fileName.replace("_1.txt","")+"/a0_0msdgscncgpi1ltocsp"+i+"exx0/?pvareaid=102179#currengpostion";
+                    String mainUrl = "https://www.che168.com/" + fileName.replace("_1.txt", "") + "/a0_0msdgscncgpi1ltocsp" + i + "exx0/?pvareaid=102179#currengpostion";
+                    System.out.println(mainUrl);
                     Che168_FenYeUrl fenYeUrl = new Che168_FenYeUrl();
                     fenYeUrl.set_C_FenYeUrl(mainUrl);
                     fenYeUrl.set_C_IsFinish(isFinish);
                     fenYeUrl.set_C_Page(i);
-                    fenYeUrl.set_C_PageCount(Integer.parseInt(countNum)/56+1);
+                    fenYeUrl.set_C_PageCount(Integer.parseInt(countNum) / 56 + 1);
                     fenYeUrl.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    fenYeUrl.set_C_CityPinYin(fileName.replace("_1.txt",""));
+                    fenYeUrl.set_C_CountCar(Integer.parseInt(countNum));
                     dataList.add(fenYeUrl);
                 }
 //                Elements mainItems = mainDoc.select(".viewlist_ul").select("li");
@@ -157,6 +159,78 @@ public class MainChe168 {
         new ErShouCheDataBase().insert_新增二手车数据分页(dataList);
     }
 
+    // 3.下载分页数据
+    public void downLoad_下载分页数据(String filePath) {
+        ArrayList<Object> dataList = new ErShouCheDataBase().get_获取未下载的分页url();
+        if (dataList.size() < 32) {
+            for (Object o : dataList) {
+                String mainUrl = ((Che168_FenYeUrl) o).get_C_FenYeUrl();
+                String cityPinYin = mainUrl.split("/")[3];
+                String fileName = cityPinYin + "_" + ((Che168_FenYeUrl) o).get_C_Page() + ".txt";
+                if (method_访问二手车url获取网页源码(mainUrl, "GBK", filePath, fileName)) {
+                    new ErShouCheDataBase().update_修改已下载的分页数据下载状态(mainUrl);
+                }
+            }
+        } else {
+            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < list.size(); i++) {
+                Che168AllFenYeThread moreThread = new Che168AllFenYeThread(list.get(i), filePath);
+                Thread thread = new Thread(moreThread);
+                thread.start();
+            }
+        }
+
+        if (new ErShouCheDataBase().get_获取未下载的分页url().size() > 0) {
+            downLoad_下载分页数据(filePath);
+        }
+    }
+
+    // 4.解析分页数据获取二手车数据
+    public void parse_解析分页数据获取二手车数据(String filePath) {
+        ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
+        ArrayList<Object> dataList = new ArrayList<>();
+        for (String fileName : fileList) {
+            if (!fileName.equals(".DS_Store")) {
+                String content = T_Config_File.method_读取文件内容(filePath + fileName);
+                Document mainDoc = Jsoup.parse(content);
+                Elements countItems = mainDoc.select(".list-menu").select(".tab-nav").select("li");
+                String countNum = countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "");
+                if (countNum.equals("全部车源")) {
+                    countNum = "0";
+                }
+                Elements mainItems = mainDoc.select(".viewlist_ul").select("li");
+                for (int i = 0; i < mainItems.size(); i++) {
+                    String imgUrl = "https:" + mainItems.get(i).select("img").attr("src");
+                    String carName = mainItems.get(i).select(".card-name").text();
+                    String[] infoItems = mainItems.get(i).select(".cards-unit").text().split("／");
+                    String huiYuan = "";
+                    String mile = "";
+                    String time = "";
+                    String location = "";
+                    if (infoItems.length == 4) {
+                        mile = infoItems[0];
+                        time = infoItems[1];
+                        location = infoItems[2];
+                        huiYuan = infoItems[3];
+                    } else if (infoItems.length == 3) {
+                        mile = infoItems[0];
+                        time = infoItems[1];
+                        location = infoItems[2];
+                    } else if (infoItems.length == 2) {
+                        mile = infoItems[0];
+                        time = infoItems[1];
+                    } else if (infoItems.length == 1) {
+                        mile = infoItems[0];
+                    }
+                    String guohu = mainItems.get(i).select(".tags").select(".tags-light").text();
+                    String htmlUrl = carName.equals("") ? "" : "https://www.che168.com" + mainItems.get(i).select(".carinfo").attr("href");
+
+                }
+            }
+        }
+        new ErShouCheDataBase().insert_新增二手车数据分页(dataList);
+    }
 
     public static Boolean method_访问二手车url获取网页源码(String url, String encode, String filePath, String fileName) {
         Document mainDoc = null;

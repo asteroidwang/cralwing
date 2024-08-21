@@ -42,7 +42,7 @@ public class ReplaceTest {
      * @author Mr-Glacier
      * @apiNote 移除所有特殊字符
      */
-    private static String removeAllSpecialSymbols(String jsonString) {
+    public static String removeAllSpecialSymbols(String jsonString) {
         // 使用正则表达式来匹配并移除所有特殊符号
         // 正则表达式匹配需要保留的字符以外的所有字符
         String regex = "[^\"{}\\[\\],:a-zA-Z0-9\u4e00-\u9fa5]";
