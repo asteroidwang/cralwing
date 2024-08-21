@@ -41,7 +41,6 @@ public class TestNumber {
     }
 
     public static ArrayList<Object> parse_解析一级评论数据(String content, String filePath, String fileName) {
-
         ArrayList<Object> dataList = new ArrayList<>();
         content = content.replace("$", "钱的符号").replace("\\\"", "不该有的英文引号").replace("\\", "两个斜杠");
         Pattern pattern = Pattern.compile("\"rcontent\":\"(.*?)\",\"rmemberId\"");
@@ -63,7 +62,7 @@ public class TestNumber {
                 ReplyKouBei replyKouBei = new ReplyKouBei();
                 replyKouBei.set_C_nextString(nextString);
                 replyKouBei.set_C_hasmore(jsonRoot.getString("hasmore"));
-                replyKouBei.set_C_freplyCount(jsonRoot.getString("freplyCount"));
+                replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
                 replyKouBei.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
                 replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
                 replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
@@ -88,7 +87,7 @@ public class TestNumber {
                 replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
                 replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
                 replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
-                replyKouBei.set_C_freplyCount(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+                replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
                 dataList.add(replyKouBei);
             }
         }
@@ -96,6 +95,7 @@ public class TestNumber {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject wonderObject = ((JSONObject) jsonArray.get(i));
             ReplyKouBei replyKouBei = new ReplyKouBei();
+            replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
             replyKouBei.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
             replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
             replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
@@ -120,39 +120,8 @@ public class TestNumber {
             replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
             replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
             replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
-            replyKouBei.set_C_freplyCount(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+            replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
             dataList.add(replyKouBei);
-            JSONArray subQuoteList = wonderObject.getJSONArray("subQuoteList");
-            for (int j = 0; j < subQuoteList.size(); j++) {
-                JSONObject object = ((JSONObject) subQuoteList.get(j));
-                ReplyKouBei replyKouBei1 = new ReplyKouBei();
-                replyKouBei1.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
-                replyKouBei1.set_C_rfloor(object.getString("rfloor") == null ? "-" : object.getString("rfloor"));
-                replyKouBei1.set_C_iscarowner(object.getString("iscarowner") == null ? "-" : object.getString("iscarowner"));
-                replyKouBei1.set_C_rmemberId(object.getString("rmemberId") == null ? "-" : object.getString("rmemberId"));
-                replyKouBei1.set_C_rcontentLength(object.getString("rcontentLength") == null ? "-" : object.getString("rcontentLength"));
-                replyKouBei1.set_C_createType(object.getString("createType") == null ? "-" : object.getString("createType"));
-                replyKouBei1.set_C_freplyId(object.getString("freplyId") == null ? "-" : object.getString("freplyId"));
-                replyKouBei1.set_C_rup(object.getString("rup") == null ? "-" : object.getString("rup"));
-                replyKouBei1.set_C_chatIndex(object.getString("chatIndex") == null ? "-" : object.getString("chatIndex"));
-                replyKouBei1.set_C_rmemberSex(object.getString("rmemberSex") == null ? "-" : object.getString("rmemberSex"));
-                replyKouBei1.set_C_robjId(object.getString("robjId") == null ? "-" : object.getString("robjId"));
-                replyKouBei1.set_C_rmemberName(object.getString("rmemberName") == null ? "-" : object.getString("rmemberName"));
-                replyKouBei1.set_C_rreplyDate(object.getString("rreplyDate") == null ? "-" : object.getString("rreplyDate"));
-                replyKouBei1.set_C_carname(object.getString("carname") == null ? "-" : object.getString("carname"));
-                replyKouBei1.set_C_replyId(object.getString("replyId") == null ? "-" : object.getString("replyId"));
-                replyKouBei1.set_C_forbidReply(object.getString("forbidReply") == null ? "-" : object.getString("forbidReply"));
-                replyKouBei1.set_C_ruserHeaderImage(object.getString("ruserHeaderImage") == null ? "-" : object.getString("ruserHeaderImage"));
-                replyKouBei1.set_C_rtargetMemberId(object.getString("rtargetMemberId") == null ? "-" : object.getString("rtargetMemberId"));
-                replyKouBei1.set_C_carownerlevels(object.getString("carownerlevels") == null ? "-" : object.getString("carownerlevels"));
-                replyKouBei1.set_C_chatcount(object.getString("chatcount") == null ? "-" : object.getString("chatcount"));
-                replyKouBei1.set_C_replydate(object.getString("replydate") == null ? "-" : object.getString("replydate"));
-                replyKouBei1.set_C_rtargetReplyId(object.getString("rtargetReplyId") == null ? "-" : object.getString("rtargetReplyId"));
-                replyKouBei1.set_C_location(object.getString("location") == null ? "-" : object.getString("location"));
-                replyKouBei1.set_C_rcontent(object.getString("rcontent") == null ? "-" : object.getString("rcontent"));
-                replyKouBei1.set_C_freplyCount(object.getString("freplyCount") == null ? "-" : object.getString("freplyCount"));
-                dataList.add(replyKouBei1);
-            }
         }
         return dataList;
     }

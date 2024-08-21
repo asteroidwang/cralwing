@@ -28,7 +28,8 @@ import java.util.stream.IntStream;
 public class KouBeiMethod {
     private KouBeiDataBase kouBeiDataBase = new KouBeiDataBase();
     //    private String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/口碑评价数据/20240804/";
-    private String filePath = "E:/汽车之家/口碑评价数据/20240804/";
+//    private String filePath = "E:/汽车之家/口碑评价数据/20240804/";
+    private String filePath = "/Users/asteroid/所有文件数据/一级评论";
 
     // 获取每个车型的第一页口碑
     public void getModelKouBeiFirstFileUrl() {
@@ -409,22 +410,22 @@ public class KouBeiMethod {
 //        ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "一级评论数据/");
         int getCount = kouBeiDataBase.getCount();
         for (int kk = 0; kk < getCount / 10000; kk++) {
-            ArrayList<Object> dataList = kouBeiDataBase.getNotParseFirstPingLunKouBeiId(kk*10000);
+            ArrayList<Object> dataList = kouBeiDataBase.getNotParseFirstPingLunKouBeiId(kk * 10000);
 //        + "_一级评论_0.txt"
             for (Object o : dataList) {
-                String kbId = ((KouBeiData)o).get_C_KoubeiID();
-                replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + kbId+"_一级评论_0.txt"), filePath, kbId+"_一级评论_0.txt"));
+                String kbId = ((KouBeiData) o).get_C_KoubeiID();
+                replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + kbId + "_一级评论_0.txt"), filePath, kbId + "_一级评论_0.txt"));
                 if (replyData.size() > 1000) {
                     HashSet<Object> set = new HashSet<>(replyData);
                     replyData.clear();
                     replyData.addAll(set);
-                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+//                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
                 }
             }
             HashSet<Object> set = new HashSet<>(replyData);
             replyData.clear();
             replyData.addAll(set);
-            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+//            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
 //        ArrayList<Object> replyData = new ArrayList<>();
 //        int getCount = kouBeiDataBase.get_回复表中未完成的数量();
 //        for (int kk = 0; kk < getCount / 10000; kk++) {
@@ -446,7 +447,6 @@ public class KouBeiMethod {
     }
 
     public ArrayList<Object> parse_解析一级评论数据(String content, String filePath, String fileName) {
-
         ArrayList<Object> dataList = new ArrayList<>();
         content = content.replace("$", "钱的符号").replace("\\\"", "不该有的英文引号").replace("\\", "两个斜杠");
         Pattern pattern = Pattern.compile("\"rcontent\":\"(.*?)\",\"rmemberId\"");
@@ -468,7 +468,7 @@ public class KouBeiMethod {
                 ReplyKouBei replyKouBei = new ReplyKouBei();
                 replyKouBei.set_C_nextString(nextString);
                 replyKouBei.set_C_hasmore(jsonRoot.getString("hasmore"));
-                replyKouBei.set_C_freplyCount(jsonRoot.getString("freplyCount"));
+                replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
                 replyKouBei.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
                 replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
                 replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
@@ -493,7 +493,7 @@ public class KouBeiMethod {
                 replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
                 replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
                 replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
-                replyKouBei.set_C_freplyCount(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+                replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
                 dataList.add(replyKouBei);
             }
         }
@@ -501,6 +501,7 @@ public class KouBeiMethod {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject wonderObject = ((JSONObject) jsonArray.get(i));
             ReplyKouBei replyKouBei = new ReplyKouBei();
+            replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
             replyKouBei.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
             replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
             replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
@@ -525,39 +526,39 @@ public class KouBeiMethod {
             replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
             replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
             replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
-            replyKouBei.set_C_freplyCount(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+            replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
             dataList.add(replyKouBei);
-            JSONArray subQuoteList = wonderObject.getJSONArray("subQuoteList");
-            for (int j = 0; j < subQuoteList.size(); j++) {
-                JSONObject object = ((JSONObject) subQuoteList.get(j));
-                ReplyKouBei replyKouBei1 = new ReplyKouBei();
-                replyKouBei1.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
-                replyKouBei1.set_C_rfloor(object.getString("rfloor") == null ? "-" : object.getString("rfloor"));
-                replyKouBei1.set_C_iscarowner(object.getString("iscarowner") == null ? "-" : object.getString("iscarowner"));
-                replyKouBei1.set_C_rmemberId(object.getString("rmemberId") == null ? "-" : object.getString("rmemberId"));
-                replyKouBei1.set_C_rcontentLength(object.getString("rcontentLength") == null ? "-" : object.getString("rcontentLength"));
-                replyKouBei1.set_C_createType(object.getString("createType") == null ? "-" : object.getString("createType"));
-                replyKouBei1.set_C_freplyId(object.getString("freplyId") == null ? "-" : object.getString("freplyId"));
-                replyKouBei1.set_C_rup(object.getString("rup") == null ? "-" : object.getString("rup"));
-                replyKouBei1.set_C_chatIndex(object.getString("chatIndex") == null ? "-" : object.getString("chatIndex"));
-                replyKouBei1.set_C_rmemberSex(object.getString("rmemberSex") == null ? "-" : object.getString("rmemberSex"));
-                replyKouBei1.set_C_robjId(object.getString("robjId") == null ? "-" : object.getString("robjId"));
-                replyKouBei1.set_C_rmemberName(object.getString("rmemberName") == null ? "-" : object.getString("rmemberName"));
-                replyKouBei1.set_C_rreplyDate(object.getString("rreplyDate") == null ? "-" : object.getString("rreplyDate"));
-                replyKouBei1.set_C_carname(object.getString("carname") == null ? "-" : object.getString("carname"));
-                replyKouBei1.set_C_replyId(object.getString("replyId") == null ? "-" : object.getString("replyId"));
-                replyKouBei1.set_C_forbidReply(object.getString("forbidReply") == null ? "-" : object.getString("forbidReply"));
-                replyKouBei1.set_C_ruserHeaderImage(object.getString("ruserHeaderImage") == null ? "-" : object.getString("ruserHeaderImage"));
-                replyKouBei1.set_C_rtargetMemberId(object.getString("rtargetMemberId") == null ? "-" : object.getString("rtargetMemberId"));
-                replyKouBei1.set_C_carownerlevels(object.getString("carownerlevels") == null ? "-" : object.getString("carownerlevels"));
-                replyKouBei1.set_C_chatcount(object.getString("chatcount") == null ? "-" : object.getString("chatcount"));
-                replyKouBei1.set_C_replydate(object.getString("replydate") == null ? "-" : object.getString("replydate"));
-                replyKouBei1.set_C_rtargetReplyId(object.getString("rtargetReplyId") == null ? "-" : object.getString("rtargetReplyId"));
-                replyKouBei1.set_C_location(object.getString("location") == null ? "-" : object.getString("location"));
-                replyKouBei1.set_C_rcontent(object.getString("rcontent") == null ? "-" : object.getString("rcontent"));
-                replyKouBei1.set_C_freplyCount(object.getString("freplyCount") == null ? "-" : object.getString("freplyCount"));
-                dataList.add(replyKouBei1);
-            }
+//            JSONArray subQuoteList = wonderObject.getJSONArray("subQuoteList");
+//            for (int j = 0; j < subQuoteList.size(); j++) {
+//                JSONObject object = ((JSONObject) subQuoteList.get(j));
+//                ReplyKouBei replyKouBei1 = new ReplyKouBei();
+//                replyKouBei1.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
+//                replyKouBei1.set_C_rfloor(object.getString("rfloor") == null ? "-" : object.getString("rfloor"));
+//                replyKouBei1.set_C_iscarowner(object.getString("iscarowner") == null ? "-" : object.getString("iscarowner"));
+//                replyKouBei1.set_C_rmemberId(object.getString("rmemberId") == null ? "-" : object.getString("rmemberId"));
+//                replyKouBei1.set_C_rcontentLength(object.getString("rcontentLength") == null ? "-" : object.getString("rcontentLength"));
+//                replyKouBei1.set_C_createType(object.getString("createType") == null ? "-" : object.getString("createType"));
+//                replyKouBei1.set_C_freplyId(object.getString("freplyId") == null ? "-" : object.getString("freplyId"));
+//                replyKouBei1.set_C_rup(object.getString("rup") == null ? "-" : object.getString("rup"));
+//                replyKouBei1.set_C_chatIndex(object.getString("chatIndex") == null ? "-" : object.getString("chatIndex"));
+//                replyKouBei1.set_C_rmemberSex(object.getString("rmemberSex") == null ? "-" : object.getString("rmemberSex"));
+//                replyKouBei1.set_C_robjId(object.getString("robjId") == null ? "-" : object.getString("robjId"));
+//                replyKouBei1.set_C_rmemberName(object.getString("rmemberName") == null ? "-" : object.getString("rmemberName"));
+//                replyKouBei1.set_C_rreplyDate(object.getString("rreplyDate") == null ? "-" : object.getString("rreplyDate"));
+//                replyKouBei1.set_C_carname(object.getString("carname") == null ? "-" : object.getString("carname"));
+//                replyKouBei1.set_C_replyId(object.getString("replyId") == null ? "-" : object.getString("replyId"));
+//                replyKouBei1.set_C_forbidReply(object.getString("forbidReply") == null ? "-" : object.getString("forbidReply"));
+//                replyKouBei1.set_C_ruserHeaderImage(object.getString("ruserHeaderImage") == null ? "-" : object.getString("ruserHeaderImage"));
+//                replyKouBei1.set_C_rtargetMemberId(object.getString("rtargetMemberId") == null ? "-" : object.getString("rtargetMemberId"));
+//                replyKouBei1.set_C_carownerlevels(object.getString("carownerlevels") == null ? "-" : object.getString("carownerlevels"));
+//                replyKouBei1.set_C_chatcount(object.getString("chatcount") == null ? "-" : object.getString("chatcount"));
+//                replyKouBei1.set_C_replydate(object.getString("replydate") == null ? "-" : object.getString("replydate"));
+//                replyKouBei1.set_C_rtargetReplyId(object.getString("rtargetReplyId") == null ? "-" : object.getString("rtargetReplyId"));
+//                replyKouBei1.set_C_location(object.getString("location") == null ? "-" : object.getString("location"));
+//                replyKouBei1.set_C_rcontent(object.getString("rcontent") == null ? "-" : object.getString("rcontent"));
+//                replyKouBei1.set_C_freplyCount(object.getString("freplyCount") == null ? "-" : object.getString("freplyCount"));
+//                dataList.add(replyKouBei1);
+//            }
         }
         return dataList;
     }
@@ -576,7 +577,6 @@ public class KouBeiMethod {
                 System.out.println(jsonArray);
                 String nextString = jsonRoot.getJSONObject("result").getString("next");
                 for (int i = 0; i < jsonArray.size(); i++) {
-                    System.out.println(jsonArray.get(i));
                     ReplyKouBei firstReply = new ReplyKouBei();
                     String replydate = ((JSONObject) jsonArray.get(i)).getString("replydate") == null ? "-" : ((JSONObject) jsonArray.get(i)).getString("replydate");
                     String chatcount = ((JSONObject) jsonArray.get(i)).getString("chatcount") == null ? "-" : ((JSONObject) jsonArray.get(i)).getString("chatcount");
@@ -614,67 +614,7 @@ public class KouBeiMethod {
                         badge_name = badge.getString("badge_name") == null ? "-" : badge.getString("badge_name");
                         badge_icon = badge.getString("badge_icon") == null ? "-" : badge.getString("badge_icon");
                     }
-                    if (subQuoteList != null) {
-                        for (int j = 0; j < subQuoteList.size(); j++) {
-                            ReplyKouBei secondReply = new ReplyKouBei();
-                            String replydateSub = ((JSONObject) subQuoteList.get(j)).getString("replydate") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("replydate");
-                            String chatcountSub = ((JSONObject) subQuoteList.get(j)).getString("chatcount") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("chatcount");
-                            String iscarownerSub = ((JSONObject) subQuoteList.get(j)).getString("iscarowner") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("iscarowner");
-                            String carownerlevelsSub = ((JSONObject) subQuoteList.get(j)).getString("carownerlevels") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("carownerlevels");
-                            String carnameSub = ((JSONObject) subQuoteList.get(j)).getString("carname") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("carname");
-                            String forbidReplySub = ((JSONObject) subQuoteList.get(j)).getString("forbidReply") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("forbidReply");
-                            String rmemberSexSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberSex") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberSex");
-                            String robjIdSub = ((JSONObject) subQuoteList.get(j)).getString("robjId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("robjId");
-                            String rreplyDateSub = ((JSONObject) subQuoteList.get(j)).getString("rreplyDate") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rreplyDate");
-                            String rupSub = ((JSONObject) subQuoteList.get(j)).getString("rup") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rup");
-                            String replyIdSub = ((JSONObject) subQuoteList.get(j)).getString("replyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("replyId");
-                            String freplyIdSub = ((JSONObject) subQuoteList.get(j)).getString("freplyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("freplyId");
-                            String rtargetReplyIdSub = ((JSONObject) subQuoteList.get(j)).getString("rtargetReplyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rtargetReplyId");
-                            String rtargetMemberIdSub = ((JSONObject) subQuoteList.get(j)).getString("rtargetMemberId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rtargetMemberId");
-                            String rfloorSub = ((JSONObject) subQuoteList.get(j)).getString("rfloor") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rfloor");
-                            String rcontentLengthSub = ((JSONObject) subQuoteList.get(j)).getString("rcontentLength") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rcontentLength");
-                            String createTypeSub = ((JSONObject) subQuoteList.get(j)).getString("createType") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("createType");
-                            String chatIndexSub = ((JSONObject) subQuoteList.get(j)).getString("chatIndex") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("chatIndex");
-                            String freplyCountSub = ((JSONObject) subQuoteList.get(j)).getString("freplyCount") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("freplyCount");
-                            String rcontentSub = ((JSONObject) subQuoteList.get(j)).getString("rcontent") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rcontent");
-                            String rmemberIdSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberId");
-                            String rmemberNameSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberName") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberName");
-                            String ruserHeaderImageSub = ((JSONObject) subQuoteList.get(j)).getString("ruserHeaderImage") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("ruserHeaderImage");
-                            secondReply.set_C_replydateSub(replydateSub);
-                            secondReply.set_C_chatcountSub(chatcountSub);
-                            secondReply.set_C_iscarownerSub(iscarownerSub);
-                            secondReply.set_C_carownerlevelsSub(carownerlevelsSub);
-                            secondReply.set_C_carnameSub(carnameSub);
-                            secondReply.set_C_forbidReplySub(forbidReplySub);
-                            secondReply.set_C_rmemberSexSub(rmemberSexSub);
-                            secondReply.set_C_robjIdSub(robjIdSub);
-                            secondReply.set_C_rreplyDateSub(rreplyDateSub);
-                            secondReply.set_C_rupSub(rupSub);
-                            secondReply.set_C_replyIdSub(replyIdSub);
-                            secondReply.set_C_freplyIdSub(freplyIdSub);
-                            secondReply.set_C_rtargetReplyIdSub(rtargetReplyIdSub);
-                            secondReply.set_C_rtargetMemberIdSub(rtargetMemberIdSub);
-                            secondReply.set_C_rfloorSub(rfloorSub);
-                            secondReply.set_C_rcontentLengthSub(rcontentLengthSub);
-                            secondReply.set_C_createTypeSub(createTypeSub);
-                            secondReply.set_C_chatIndexSub(chatIndexSub);
-                            secondReply.set_C_freplyCountSub(freplyCountSub);
-                            secondReply.set_C_rcontentSub(rcontentSub);
-                            secondReply.set_C_rmemberIdSub(rmemberIdSub);
-                            secondReply.set_C_rmemberNameSub(rmemberNameSub);
-                            secondReply.set_C_ruserHeaderImageSub(ruserHeaderImageSub);
-                            secondReply.set_C_badge_icon(badge_icon);
-                            secondReply.set_C_badge_user_id(user_id);
-                            secondReply.set_C_badge_achievement_id(achievement_id);
-                            secondReply.set_C_badge_name(badge_name);
-                            secondReply.set_C_KouBeiID(robjId);
-                            secondReply.set_C_TargetUserID(rtargetMemberId);
-                            secondReply.set_C_nextString(nextString);
-                            secondReply.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                            dataList.add(secondReply);
-                        }
-                    }
-
+//
                     firstReply.set_C_replydate(replydate);
                     firstReply.set_C_chatcount(chatcount);
                     firstReply.set_C_iscarowner(iscarowner);
@@ -682,7 +622,7 @@ public class KouBeiMethod {
                     firstReply.set_C_carname(carname);
                     firstReply.set_C_location(location);
                     firstReply.set_C_forbidReply(forbidReply);
-                    firstReply.set_C_freplyCount(freplyCount);
+                    firstReply.set_C_freplyCount_TieZi(freplyCount);
                     firstReply.set_C_rmemberSex(rmemberSex);
                     firstReply.set_C_robjId(robjId);
                     firstReply.set_C_rreplyDate(rreplyDate);
@@ -699,13 +639,13 @@ public class KouBeiMethod {
                     firstReply.set_C_rmemberId(rmemberId);
                     firstReply.set_C_rmemberName(rmemberName);
                     firstReply.set_C_replyId(replyId);
-                    firstReply.set_C_badge_icon(badge_icon);
+                    firstReply.set_C_badge_badge_icon(badge_icon);
                     firstReply.set_C_badge_user_id(user_id);
                     firstReply.set_C_badge_achievement_id(achievement_id);
-                    firstReply.set_C_badge_name(badge_name);
+                    firstReply.set_C_badge_badge_name(badge_name);
                     firstReply.set_C_KouBeiID(robjId);
-                    firstReply.set_C_TargetUserID("");
                     firstReply.set_C_IsFinish(0);
+                    firstReply.set_C_freplyCount_First(freplyCount);
                     firstReply.set_C_nextString(nextString);
                     firstReply.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                     dataList.add(firstReply);
@@ -758,6 +698,67 @@ public class KouBeiMethod {
 
     public void parse_解析二级评论数据(String filePath) {
         try {
+//            if (subQuoteList != null) {
+//                        for (int j = 0; j < subQuoteList.size(); j++) {
+//                            ReplyKouBei secondReply = new ReplyKouBei();
+//                            String replydateSub = ((JSONObject) subQuoteList.get(j)).getString("replydate") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("replydate");
+//                            String chatcountSub = ((JSONObject) subQuoteList.get(j)).getString("chatcount") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("chatcount");
+//                            String iscarownerSub = ((JSONObject) subQuoteList.get(j)).getString("iscarowner") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("iscarowner");
+//                            String carownerlevelsSub = ((JSONObject) subQuoteList.get(j)).getString("carownerlevels") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("carownerlevels");
+//                            String carnameSub = ((JSONObject) subQuoteList.get(j)).getString("carname") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("carname");
+//                            String forbidReplySub = ((JSONObject) subQuoteList.get(j)).getString("forbidReply") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("forbidReply");
+//                            String rmemberSexSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberSex") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberSex");
+//                            String robjIdSub = ((JSONObject) subQuoteList.get(j)).getString("robjId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("robjId");
+//                            String rreplyDateSub = ((JSONObject) subQuoteList.get(j)).getString("rreplyDate") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rreplyDate");
+//                            String rupSub = ((JSONObject) subQuoteList.get(j)).getString("rup") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rup");
+//                            String replyIdSub = ((JSONObject) subQuoteList.get(j)).getString("replyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("replyId");
+//                            String freplyIdSub = ((JSONObject) subQuoteList.get(j)).getString("freplyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("freplyId");
+//                            String rtargetReplyIdSub = ((JSONObject) subQuoteList.get(j)).getString("rtargetReplyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rtargetReplyId");
+//                            String rtargetMemberIdSub = ((JSONObject) subQuoteList.get(j)).getString("rtargetMemberId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rtargetMemberId");
+//                            String rfloorSub = ((JSONObject) subQuoteList.get(j)).getString("rfloor") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rfloor");
+//                            String rcontentLengthSub = ((JSONObject) subQuoteList.get(j)).getString("rcontentLength") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rcontentLength");
+//                            String createTypeSub = ((JSONObject) subQuoteList.get(j)).getString("createType") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("createType");
+//                            String chatIndexSub = ((JSONObject) subQuoteList.get(j)).getString("chatIndex") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("chatIndex");
+//                            String freplyCountSub = ((JSONObject) subQuoteList.get(j)).getString("freplyCount") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("freplyCount");
+//                            String rcontentSub = ((JSONObject) subQuoteList.get(j)).getString("rcontent") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rcontent");
+//                            String rmemberIdSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberId");
+//                            String rmemberNameSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberName") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberName");
+//                            String ruserHeaderImageSub = ((JSONObject) subQuoteList.get(j)).getString("ruserHeaderImage") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("ruserHeaderImage");
+//                            secondReply.set_C_replydateSub(replydateSub);
+//                            secondReply.set_C_chatcountSub(chatcountSub);
+//                            secondReply.set_C_iscarownerSub(iscarownerSub);
+//                            secondReply.set_C_carownerlevelsSub(carownerlevelsSub);
+//                            secondReply.set_C_carnameSub(carnameSub);
+//                            secondReply.set_C_forbidReplySub(forbidReplySub);
+//                            secondReply.set_C_rmemberSexSub(rmemberSexSub);
+//                            secondReply.set_C_robjIdSub(robjIdSub);
+//                            secondReply.set_C_rreplyDateSub(rreplyDateSub);
+//                            secondReply.set_C_rupSub(rupSub);
+//                            secondReply.set_C_replyIdSub(replyIdSub);
+//                            secondReply.set_C_freplyIdSub(freplyIdSub);
+//                            secondReply.set_C_rtargetReplyIdSub(rtargetReplyIdSub);
+//                            secondReply.set_C_rtargetMemberIdSub(rtargetMemberIdSub);
+//                            secondReply.set_C_rfloorSub(rfloorSub);
+//                            secondReply.set_C_rcontentLengthSub(rcontentLengthSub);
+//                            secondReply.set_C_createTypeSub(createTypeSub);
+//                            secondReply.set_C_chatIndexSub(chatIndexSub);
+//                            secondReply.set_C_freplyCountSub(freplyCountSub);
+//                            secondReply.set_C_rcontentSub(rcontentSub);
+//                            secondReply.set_C_rmemberIdSub(rmemberIdSub);
+//                            secondReply.set_C_rmemberNameSub(rmemberNameSub);
+//                            secondReply.set_C_ruserHeaderImageSub(ruserHeaderImageSub);
+//                            secondReply.set_C_badge_icon(badge_icon);
+//                            secondReply.set_C_badge_user_id(user_id);
+//                            secondReply.set_C_badge_achievement_id(achievement_id);
+//                            secondReply.set_C_badge_name(badge_name);
+//                            secondReply.set_C_KouBeiID(robjId);
+//                            secondReply.set_C_TargetUserID(rtargetMemberId);
+//                            secondReply.set_C_nextString(nextString);
+//                            secondReply.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//                            dataList.add(secondReply);
+//                        }
+//                    }
+
             ArrayList<Object> dataList = new ArrayList<>();
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
             for (String fileName : fileList) {
@@ -827,7 +828,7 @@ public class KouBeiMethod {
                             firstReply.set_C_carname(carname);
                             firstReply.set_C_location(location);
                             firstReply.set_C_forbidReply(forbidReply);
-                            firstReply.set_C_freplyCount(freplyCount);
+//                            firstReply.set_C_freplyCount(freplyCount);
                             firstReply.set_C_rmemberSex(rmemberSex);
                             firstReply.set_C_robjId(robjId);
                             firstReply.set_C_rreplyDate(rreplyDate);
@@ -844,12 +845,12 @@ public class KouBeiMethod {
                             firstReply.set_C_rmemberId(rmemberId);
                             firstReply.set_C_rmemberName(rmemberName);
                             firstReply.set_C_replyId(replyId);
-                            firstReply.set_C_badge_icon(badge_icon);
+//                            firstReply.set_C_badge_icon(badge_icon);
                             firstReply.set_C_badge_user_id(user_id);
                             firstReply.set_C_badge_achievement_id(achievement_id);
-                            firstReply.set_C_badge_name(badge_name);
+//                            firstReply.set_C_badge_name(badge_name);
                             firstReply.set_C_KouBeiID(robjId);
-                            firstReply.set_C_TargetUserID("");
+//                            firstReply.set_C_TargetUserID("");
                             firstReply.set_C_IsFinish(0);
                             firstReply.set_C_nextString(nextString);
                             firstReply.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
