@@ -106,6 +106,7 @@ public class PriceDataBase {
             String cityName = ((DealerData) o).get_C_CityName();
             dealerFenYeDao.update_修改有重复经销商数据的下载状态(cityName);
         }
+        dealerDao.truncate_清空表中数据();
 
     }
 

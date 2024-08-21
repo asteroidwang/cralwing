@@ -123,7 +123,9 @@ public class CarPriceMethod {
                 thread.start();
             }
         }
-
+        if (priceDataBase.get_所有未下载的经销商分页url数据().size() > 0) {
+            downLoad_下载经销商分页数据(filePath);
+        }
 
     }
 
@@ -142,30 +144,33 @@ public class CarPriceMethod {
                     DealerData dealerData = new DealerData();
                     dealerData.set_C_DealerID(mainItems.get(i).attr("id"));
                     Elements items = mainItems.get(i).select(".tit-row");
-                    dealerData.set_C_DealerName(items.select("a").select("span").text());
-                    dealerData.set_C_Type(items.select("span").get(1).text());
-                    dealerData.set_C_SaleBrandName(mainItems.get(i).select("ul").select("li").get(1).select("span").select("em").text());
-                    dealerData.set_C_SaleNum(Integer.parseInt(mainItems.get(i).select("ul").select("li").get(1).select("a").text().replace("共", "").replace("个在售车型", "")));
-                    dealerData.set_C_Phone(mainItems.get(i).select("ul").select("li").get(2).select(".tel").text());
-                    dealerData.set_C_SaleAddress(mainItems.get(i).select("ul").select("li").get(2).select(".gray.data-business-tip").text() + "->" + mainItems.get(i).select("ul").select("li").get(2).select(".floating").text());
-                    dealerData.set_C_Address(mainItems.get(i).select("ul").select("li").get(3).select(".info-addr").text());
-                    dealerData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                    dealerData.set_C_CityName(fileName.replace(fileName.substring(fileName.indexOf("_")), ""));
-                    dealerData.set_C_IsFinish(0);
-                    dealerData.set_C_FileName(fileName);
-                    dataList.add(dealerData);
+                    if (!items.select("a").select("span").text().equals("")){
+                        dealerData.set_C_DealerName(items.select("a").select("span").text());
+                        dealerData.set_C_Type(items.select("span").get(1).text());
+                        dealerData.set_C_SaleBrandName(mainItems.get(i).select("ul").select("li").get(1).select("span").select("em").text());
+                        dealerData.set_C_SaleNum(Integer.parseInt(mainItems.get(i).select("ul").select("li").get(1).select("a").text().replace("共", "").replace("个在售车型", "")));
+                        dealerData.set_C_Phone(mainItems.get(i).select("ul").select("li").get(2)==null?"-":mainItems.get(i).select("ul").select("li").get(2).select(".tel").text());
+                        dealerData.set_C_SaleAddress(mainItems.get(i).select("ul").select("li").get(2)==null?"-":mainItems.get(i).select("ul").select("li").get(2).select(".gray.data-business-tip").text() + "->" + mainItems.get(i).select("ul").select("li").get(2).select(".floating").text());
+                        dealerData.set_C_Address(mainItems.get(i).select("ul").select("li").get(3).select(".info-addr").text());
+                        dealerData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                        dealerData.set_C_CityName(fileName.replace(fileName.substring(fileName.indexOf("_")), ""));
+                        dealerData.set_C_IsFinish(0);
+                        dealerData.set_C_FileName(fileName);
+                        dataList.add(dealerData);
+                    }else {
+                        System.out.println(fileName);
+                    }
                 }
-
             }
             System.out.println(dataList.size());
             HashSet<Object> set = new HashSet<>(dataList);
 //            dataList.clear();
 //            dataList.addAll(set);
             System.out.println(set.size());
-            priceDataBase.insert_经销商数据入库(dataList);
-            if (dataList.size() != set.size()) {
-                priceDataBase.method_修改经销商分页的下载状态为未下载();
-            }
+//            priceDataBase.insert_经销商数据入库(dataList);
+//            if (dataList.size() != set.size()) {
+//                priceDataBase.method_修改经销商分页的下载状态为未下载();
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -276,7 +281,9 @@ public class CarPriceMethod {
                 thread.start();
             }
         }
-
+if (new PriceDataBase().get_没有下载的经销商的车型报价页面接口().size()>0){
+    getCarPriceFile2(filePath);
+}
 
 //        for (Object o : dataList) {
 //            String mainUrl = "https://dealer.autohome.com.cn/handler/other/getdata?__action=dealer.getfacseriesinfobydealerid&dealerId=" + ((DealerData) o).get_C_DealerID() + "&show0Price=1";

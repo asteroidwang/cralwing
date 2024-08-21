@@ -56,7 +56,7 @@ public class T_Config_Price extends T_Config_Father {
         return method_有条件的查询(sql);
     }
     public void update_修改有重复经销商数据的下载状态(String cityName){
-        String sql ="update "+tableName+" set C_IsFinish = 0 where C_CityName like '%"+cityName+"%'";
+        String sql ="update "+tableName+" set C_IsFinish = 0 where C_DealerFenYeUrl like '%https://dealer.autohome.com.cn/"+cityName+"/%'";
         method_i_d_u(sql);
     }
 }
