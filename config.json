@@ -69,31 +69,31 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.price.CityData",
-            "tableName": "T_CityData_20240819"
+            "tableName": "T_CityData_20240820"
           },
           {
             "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
-            "tableName": "T_DealerFenYeUrl_20240819"
+            "tableName": "T_DealerFenYeUrl_20240820"
           },
           {
             "entity": "com.wangtiantian.entity.price.DealerData",
-            "tableName": "T_DealerData_20240819"
+            "tableName": "T_DealerData_20240820"
           },
           {
             "entity": "com.wangtiantian.entity.price.SaleModData",
-            "tableName": "T_SaleModData_20240819"
+            "tableName": "T_SaleModData_20240820"
           },
           {
             "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
-            "tableName": "T_DealerFenYeUrl_20240819"
+            "tableName": "T_DealerFenYeUrl_20240820"
           },
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
-            "tableName": "T_CarPrice_20240819"
+            "tableName": "T_CarPrice_20240820"
           },
           {
             "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFile",
-            "tableName": "T_ConfirmCarPriceFile_20240819"
+            "tableName": "T_ConfirmCarPriceFile_20240820"
           },
           {
             "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFileModel",
@@ -158,6 +158,20 @@
           {
             "entity": "com.wangtiantian.entity.picture.PictureUrl",
             "tableName": "T_PictureUrl"
+          }
+        ]
+      },
+      {
+        "dbName": "usedCar",
+        "primary": "C_ID",
+        "db_table": [
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che168.Che168_CityData",
+            "tableName": "T_che168_CityData"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che168.Che168_FenYeUrl",
+            "tableName": "T_che168_FenYeUrl"
           }
         ]
       }
