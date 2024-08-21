@@ -25,15 +25,15 @@ public class MainConfigData {
 
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/20240810/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/20240820/";
 
         // mainConfigData.method_下载品牌厂商车型数据(filePath+"初始数据/");
         // mainConfigData.parse_品牌厂商车型数据(filePath+"初始数据/");
-        // mainConfigData.method_下载含有版本数据的文件(filePath+"含版本数据的文件");
+        // mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
         // mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
         // mainConfigData.method_下载配置数据(filePath + "params/");
-        // mainConfigData.method_解析列名(filePath+"列名/");
-        // mainConfigData.method_取列名(filePath+"列名/");
+        // mainConfigData.method_解析列名(filePath);
+        // mainConfigData.method_取列名(filePath);
          mainConfigData.method_解析配置数据(filePath);
     }
 
@@ -156,22 +156,48 @@ public class MainConfigData {
         try {
             // 1.在售
             ArrayList<Object> onSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("在售", 0);
-            List<List<Object>> saList = IntStream.range(0, 6).mapToObj(i -> onSaleList.subList(i * (onSaleList.size() + 5) / 6, Math.min((i + 1) * (onSaleList.size() + 5) / 6, onSaleList.size())))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < saList.size(); i++) {
-                ModelMoreThread modelMoreThread = new ModelMoreThread(saList.get(i), filePath, 0);
-                Thread thread = new Thread(modelMoreThread);
-                thread.start();
+            if (onSaleList.size() < 32) {
+                for (Object bean : onSaleList) {
+                    String modId = ((Bean_Model) bean).get_C_ModelID();
+                    String url = "";
+
+                    url = "https://www.autohome.com.cn/" + modId + "/#pvareaid=3454427";
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_在售.txt")) {
+                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "在售", 1);
+                    }
+                }
+            } else {
+                List<List<Object>> saList = IntStream.range(0, 6).mapToObj(i -> onSaleList.subList(i * (onSaleList.size() + 5) / 6, Math.min((i + 1) * (onSaleList.size() + 5) / 6, onSaleList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < saList.size(); i++) {
+                    ModelMoreThread modelMoreThread = new ModelMoreThread(saList.get(i), filePath, 0);
+                    Thread thread = new Thread(modelMoreThread);
+                    thread.start();
+                }
             }
+
             // 2.停售
             ArrayList<Object> noSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("停售", 0);
-            List<List<Object>> noSalist = IntStream.range(0, 6).mapToObj(i -> noSaleList.subList(i * (noSaleList.size() + 5) / 6, Math.min((i + 1) * (noSaleList.size() + 5) / 6, noSaleList.size())))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < noSalist.size(); i++) {
-                ModelMoreThread modelMoreThread = new ModelMoreThread(noSalist.get(i), filePath, 1);
-                Thread thread = new Thread(modelMoreThread);
-                thread.start();
+            if (noSaleList.size() < 32) {
+                for (Object bean : noSaleList) {
+                    String modId = ((Bean_Model) bean).get_C_ModelID();
+                    String url = "";
+
+                    url = "https://www.autohome.com.cn/" + modId + "/sale.html#pvareaid=3311673";
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_停售.txt")) {
+                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "停售", 1);
+                    }
+                }
+            } else {
+                List<List<Object>> noSalist = IntStream.range(0, 6).mapToObj(i -> noSaleList.subList(i * (noSaleList.size() + 5) / 6, Math.min((i + 1) * (noSaleList.size() + 5) / 6, noSaleList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < noSalist.size(); i++) {
+                    ModelMoreThread modelMoreThread = new ModelMoreThread(noSalist.get(i), filePath, 1);
+                    Thread thread = new Thread(modelMoreThread);
+                    thread.start();
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -181,23 +207,50 @@ public class MainConfigData {
         try {
             // 1.在售
             ArrayList<Object> onSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("图片页面在售", 0);
-            List<List<Object>> salist = IntStream.range(0, 6).mapToObj(i -> onSaleList.subList(i * (onSaleList.size() + 5) / 6, Math.min((i + 1) * (onSaleList.size() + 5) / 6, onSaleList.size())))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < salist.size(); i++) {
-                ModelMoreThread modelMoreThread = new ModelMoreThread(salist.get(i), filePath, 2);
-                Thread thread = new Thread(modelMoreThread);
-                thread.start();
+            if (onSaleList.size() < 32) {
+                for (Object bean : onSaleList) {
+                    String modId = ((Bean_Model) bean).get_C_ModelID();
+                    String url = "";
+
+                    url = "https://car.autohome.com.cn/pic/series/" + modId + ".html#pvareaid=3454438";
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面在售.txt")) {
+                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "图片页面在售", 1);
+                    }
+
+                }
+            }else {
+                List<List<Object>> salist = IntStream.range(0, 6).mapToObj(i -> onSaleList.subList(i * (onSaleList.size() + 5) / 6, Math.min((i + 1) * (onSaleList.size() + 5) / 6, onSaleList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < salist.size(); i++) {
+                    ModelMoreThread modelMoreThread = new ModelMoreThread(salist.get(i), filePath, 2);
+                    Thread thread = new Thread(modelMoreThread);
+                    thread.start();
+                }
             }
+
 
             // 2.停售
             ArrayList<Object> noSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("图片页面停售", 0);
-            List<List<Object>> noSalist = IntStream.range(0, 6).mapToObj(i -> noSaleList.subList(i * (noSaleList.size() + 5) / 6, Math.min((i + 1) * (noSaleList.size() + 5) / 6, noSaleList.size())))
-                    .collect(Collectors.toList());
-            for (int i = 0; i < noSalist.size(); i++) {
-                ModelMoreThread modelMoreThread = new ModelMoreThread(noSalist.get(i), filePath, 3);
-                Thread thread = new Thread(modelMoreThread);
-                thread.start();
+            if (noSaleList.size() < 32) {
+                for (Object bean : noSaleList) {
+                    String modId = ((Bean_Model) bean).get_C_ModelID();
+                    String url = "";
+
+                    url = "https://car.autohome.com.cn/pic/series-t/" + modId + ".html";
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面停售.txt")) {
+                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "图片页面停售", 1);
+                    }
+                }
+            } else {
+                List<List<Object>> noSalist = IntStream.range(0, 6).mapToObj(i -> noSaleList.subList(i * (noSaleList.size() + 5) / 6, Math.min((i + 1) * (noSaleList.size() + 5) / 6, noSaleList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < noSalist.size(); i++) {
+                    ModelMoreThread modelMoreThread = new ModelMoreThread(noSalist.get(i), filePath, 3);
+                    Thread thread = new Thread(modelMoreThread);
+                    thread.start();
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -379,7 +432,7 @@ public class MainConfigData {
     // 5.版本ids入库 下载配置数据
     public void method_下载配置数据(String filePath) {
         try {
-            dataBaseMethod.insert_批量插入版本ids();
+            //dataBaseMethod.insert_批量插入版本ids();
             ArrayList<Object> paramsList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 0);
             ArrayList<Object> configList = dataBaseMethod.method_根据数据类型获取未下载的数据("config", 0);
             ArrayList<Object> bagList = dataBaseMethod.method_根据数据类型获取未下载的数据("bag", 0);
@@ -444,8 +497,9 @@ public class MainConfigData {
 
     // 解析配置数据获取列名
     public void method_解析列名(String filePath) {
-        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
-        for (int i = 1; i < groupList.size() + 1; i++) {
+//        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
+       int groupCount = dataBaseMethod.get_版本表中组数();
+        for (int i = 1; i < groupCount + 1; i++) {
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             method_解析params_列名(paramsContent.substring(9, paramsContent.length() - 1), filePath);
@@ -461,9 +515,20 @@ public class MainConfigData {
             LinkedHashSet<String> hashSet_config = new LinkedHashSet<>(columnNames_config);
             ArrayList<String> lost_params = new ArrayList<>(hashSet_params);
             ArrayList<String> lost_config = new ArrayList<>(hashSet_config);
-            System.out.println(lost_params.toString().substring(1, lost_params.toString().length() - 1).replace(", ", "\n"));
-            System.out.println("=============");
-            System.out.println(lost_config.toString().substring(1, lost_config.toString().length() - 1).replace(", ", "\n"));
+            for(String paramsString:lost_params){
+                String params_原来=paramsString;
+                String params_替换=paramsString.replace("/","_").replace("-","_").replace("[","_").replace("]","_").replace(" ","_").replace(".","_").replace("（","_").replace("）","_").replace("*","_").replace("·","_").replace("(","_").replace(")","_").replace("%","_").replace("°","_").replace("・","_");
+                System.out.println(params_原来+"\t"+params_替换);
+            }
+            System.out.println("==================================================");
+            for(String configString:lost_config){
+                String config_原来=configString;
+                String config_替换=configString.replace("/","_").replace("-","_").replace("[","_").replace("]","_").replace(" ","_").replace(".","_").replace("（","_").replace("）","_").replace("*","_").replace("·","_").replace("(","_").replace(")","_").replace("%","_").replace("°","_").replace("・","_");
+                System.out.println(config_原来+"\t"+config_替换);
+            }
+//            System.out.println(lost_params.toString().substring(1, lost_params.toString().length() - 1).replace(", ", "\n")+"\t"+lost_params.toString().substring(1, lost_params.toString().length() - 1).replace("/", "_").replace(", ", "\n"));
+//            System.out.println("=============");
+//            System.out.println(lost_config.toString().substring(1, lost_config.toString().length() - 1).replace(", ", "\n")+"\t"+lost_config.toString().substring(1, lost_config.toString().length() - 1).replace("/", "_").replace(", ", "\n"));
         } catch (Exception e) {
 
         }
@@ -474,9 +539,9 @@ public class MainConfigData {
         ArrayList<Object> params = new ArrayList<>();
         ArrayList<Object> config = new ArrayList<>();
         ArrayList<Object> bag = new ArrayList<>();
-
-        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
-        for (int i = 1; i < groupList.size() + 1; i++) {
+        int groupCount = dataBaseMethod.get_版本表中组数();
+//        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
+        for (int i = 1; i < groupCount + 1; i++) {
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             String bagContent = T_Config_File.method_读取文件内容(filePath + "bag/" + i + "_bag.txt");

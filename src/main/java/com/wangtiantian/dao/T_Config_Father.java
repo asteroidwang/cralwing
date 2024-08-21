@@ -253,23 +253,6 @@ public class T_Config_Father {
         return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 ");
     }
 
-    public int get_获取表中数据数量_有查询条件(String sql) {
-        int num = 0;
-        try {
-            method_连接数据库();
-            ResultSet resultSet = stmt.executeQuery(sql);
-            while (resultSet.next()) {
-                num = (int) resultSet.getObject(1);
-            }
-            System.out.println("数据库连接已断开");
-            resultSet.close();
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return num;
-    }
     public void insertForeach(ArrayList<Object> dataList) {
         int batchSize = 100;
         for (int i = 0; i < dataList.size(); i += batchSize) {
@@ -307,5 +290,10 @@ public class T_Config_Father {
     public ArrayList<Object> method_查询未下载的数据() {
         String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0";
         return method_有条件的查询(sql);
+    }
+
+    public void truncate_清空表中数据(){
+        String sql = "truncate table "+tableName;
+        method_i_d_u(sql);
     }
 }
