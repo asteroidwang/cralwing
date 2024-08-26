@@ -1,7 +1,7 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.0.124:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.1.10:1433;databaseName=",
     "userName": "sa",
     "password": "7777",
     "dbItems": [
@@ -132,6 +132,10 @@
           {
             "entity": "com.wangtiantian.entity.koubei.ConfirmReplySecond",
             "tableName": "T_ConfirmReplySecond"
+          },
+          {
+            "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
+            "tableName": "T_ReplyKouBei_Second"
           }
         ]
       },
@@ -158,6 +162,10 @@
           {
             "entity": "com.wangtiantian.entity.picture.PictureUrl",
             "tableName": "T_PictureUrl"
+          },
+          {
+            "entity": "com.wangtiantian.entity.picture.PictureConfirmUrl",
+            "tableName": "T_ConfirmPictureUrl"
           }
         ]
       },
