@@ -61,6 +61,12 @@ public class KouBeiDataBase {
         kouBeiDataDao.insertForeach(dataList);
 
     }
+    public ArrayList<Object> find_查找所有口碑帖子数据下载图片(int begin) {
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
+//       return kouBeiDataDao.method_查询未下载的数据();
+        return kouBeiDataDao.method_分页查询未下载的数据10000条每次(begin);
+
+    }
 
     // 获取未下载口碑帖子回复的口碑id
     public ArrayList<Object> getReplyKouBei(int begin) {
@@ -123,5 +129,11 @@ public class KouBeiDataBase {
     public int get_二级回复文件应有数量(){
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 4);
         return kouBeiDataDao.get_回复表中数据总量();
+    }
+
+    public void insert_需要下载的口碑帖子里的图片(ArrayList<Object> dataList) {
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
+        kouBeiDataDao.insertForeach(dataList);
+
     }
 }
