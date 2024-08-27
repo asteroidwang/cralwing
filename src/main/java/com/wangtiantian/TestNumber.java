@@ -27,17 +27,34 @@ public class TestNumber {
         KouBeiDataBase kouBeiDataBase = new KouBeiDataBase();
         String filePath = "E:/汽车之家/口碑评价数据/20240804/";
         ArrayList<Object> replyData = new ArrayList<>();
-//        ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "一级评论数据/");
-        int getCount = kouBeiDataBase.getCount();
-        for (int kk = 0; kk < getCount / 1000; kk++) {
-            ArrayList<Object> dataList = kouBeiDataBase.getNotParseFirstPingLunKouBeiId(kk * 10000);
+        ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "一级评论数据/");
+//        int getCount = kouBeiDataBase.getCount();
+        int numCount = 0;
+
+//        for (int kk = 0; kk < getCount / 10000; kk++) {
+//            ArrayList<Object> dataList = kouBeiDataBase.getNotParseFirstPingLunKouBeiId(kk * 10000);
 //        + "_一级评论_0.txt"
-            for (Object o : dataList) {
-                String kbId = ((KouBeiData) o).get_C_KoubeiID();
+            for (String o : dataList) {
+                String kbId =o.replace("_一级评论_0.txt","");
                 replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + kbId + "_一级评论_0.txt"), filePath, kbId + "_一级评论_0.txt"));
+//               numCount+= parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + kbId + "_一级评论_0.txt"), filePath, kbId + "_一级评论_0.txt");
+               numCount++;
+                System.out.println(numCount);
+                if (replyData.size() > 1000) {
+                    HashSet<Object> set = new HashSet<>(replyData);
+                    replyData.clear();
+                    replyData.addAll(set);
+                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+                }
             }
-        }
+//        }
         System.out.println(replyData.size());
+        HashSet<Object> set = new HashSet<>(replyData);
+        replyData.clear();
+        replyData.addAll(set);
+        kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+
+
     }
 
     public static ArrayList<Object> parse_解析一级评论数据(String content, String filePath, String fileName) {
@@ -122,7 +139,39 @@ public class TestNumber {
             replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
             replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
             dataList.add(replyKouBei);
+//            JSONArray subQuoteList = wonderObject.getJSONArray("subQuoteList");
+//            for (int j = 0; j < subQuoteList.size(); j++) {
+//                JSONObject object = ((JSONObject) subQuoteList.get(j));
+//                ReplyKouBei replyKouBei1 = new ReplyKouBei();
+//                replyKouBei1.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
+//                replyKouBei1.set_C_rfloor(object.getString("rfloor") == null ? "-" : object.getString("rfloor"));
+//                replyKouBei1.set_C_iscarowner(object.getString("iscarowner") == null ? "-" : object.getString("iscarowner"));
+//                replyKouBei1.set_C_rmemberId(object.getString("rmemberId") == null ? "-" : object.getString("rmemberId"));
+//                replyKouBei1.set_C_rcontentLength(object.getString("rcontentLength") == null ? "-" : object.getString("rcontentLength"));
+//                replyKouBei1.set_C_createType(object.getString("createType") == null ? "-" : object.getString("createType"));
+//                replyKouBei1.set_C_freplyId(object.getString("freplyId") == null ? "-" : object.getString("freplyId"));
+//                replyKouBei1.set_C_rup(object.getString("rup") == null ? "-" : object.getString("rup"));
+//                replyKouBei1.set_C_chatIndex(object.getString("chatIndex") == null ? "-" : object.getString("chatIndex"));
+//                replyKouBei1.set_C_rmemberSex(object.getString("rmemberSex") == null ? "-" : object.getString("rmemberSex"));
+//                replyKouBei1.set_C_robjId(object.getString("robjId") == null ? "-" : object.getString("robjId"));
+//                replyKouBei1.set_C_rmemberName(object.getString("rmemberName") == null ? "-" : object.getString("rmemberName"));
+//                replyKouBei1.set_C_rreplyDate(object.getString("rreplyDate") == null ? "-" : object.getString("rreplyDate"));
+//                replyKouBei1.set_C_carname(object.getString("carname") == null ? "-" : object.getString("carname"));
+//                replyKouBei1.set_C_replyId(object.getString("replyId") == null ? "-" : object.getString("replyId"));
+//                replyKouBei1.set_C_forbidReply(object.getString("forbidReply") == null ? "-" : object.getString("forbidReply"));
+//                replyKouBei1.set_C_ruserHeaderImage(object.getString("ruserHeaderImage") == null ? "-" : object.getString("ruserHeaderImage"));
+//                replyKouBei1.set_C_rtargetMemberId(object.getString("rtargetMemberId") == null ? "-" : object.getString("rtargetMemberId"));
+//                replyKouBei1.set_C_carownerlevels(object.getString("carownerlevels") == null ? "-" : object.getString("carownerlevels"));
+//                replyKouBei1.set_C_chatcount(object.getString("chatcount") == null ? "-" : object.getString("chatcount"));
+//                replyKouBei1.set_C_replydate(object.getString("replydate") == null ? "-" : object.getString("replydate"));
+//                replyKouBei1.set_C_rtargetReplyId(object.getString("rtargetReplyId") == null ? "-" : object.getString("rtargetReplyId"));
+//                replyKouBei1.set_C_location(object.getString("location") == null ? "-" : object.getString("location"));
+//                replyKouBei1.set_C_rcontent(object.getString("rcontent") == null ? "-" : object.getString("rcontent"));
+//                replyKouBei1.set_C_freplyCount(object.getString("freplyCount") == null ? "-" : object.getString("freplyCount"));
+//                dataList.add(replyKouBei1);
+//            }
         }
+        System.out.println("解析完一次");
         return dataList;
     }
 

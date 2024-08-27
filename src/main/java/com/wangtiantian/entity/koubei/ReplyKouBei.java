@@ -44,11 +44,11 @@ public class ReplyKouBei {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReplyKouBei that = (ReplyKouBei) o;
-        return Objects.equals(C_KouBeiID, that.C_KouBeiID)&& Objects.equals(C_replyId,that.C_replyId)&&Objects.equals(C_badge_user_id,that.C_badge_user_id); // Compare relevant fields
+        return Objects.equals(C_KouBeiID, that.C_KouBeiID)&& Objects.equals(C_replyId,that.C_replyId)&&Objects.equals(C_rmemberId,that.C_rmemberId); // Compare relevant fields
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(C_KouBeiID,C_replyId,C_badge_user_id); // Use relevant fields
+        return Objects.hash(C_KouBeiID,C_replyId,C_rmemberId); // Use relevant fields
     }
 }

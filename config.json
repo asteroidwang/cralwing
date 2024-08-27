@@ -132,6 +132,10 @@
           {
             "entity": "com.wangtiantian.entity.koubei.ConfirmReplySecond",
             "tableName": "T_ConfirmReplySecond"
+          },
+          {
+            "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
+            "tableName": "T_ReplyKouBei_Second"
           }
         ]
       },
@@ -158,6 +162,10 @@
           {
             "entity": "com.wangtiantian.entity.picture.PictureUrl",
             "tableName": "T_PictureUrl"
+          },
+          {
+            "entity": "com.wangtiantian.entity.picture.PictureConfirmUrl",
+            "tableName": "T_ConfirmPictureUrl"
           }
         ]
       },
