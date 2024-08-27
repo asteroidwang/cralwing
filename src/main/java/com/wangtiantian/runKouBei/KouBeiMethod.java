@@ -705,20 +705,20 @@ public class KouBeiMethod {
                     String kbId = fileName.split("_")[0];
 
                     replyData.addAll(parse_解析二级评论数据(content, filePath, fileName));
-//                    if (replyData.size() > 10000) {
-//                        HashSet<Object> set = new HashSet<>(replyData);
-//                        replyData.clear();
-//                        replyData.addAll(set);
-//                        System.out.println("入库");
-//                        kouBeiDataBase.insetForeachKouBeiReplyDat2(replyData);
-//                        replyData.clear();
-//                    }
+                    if (replyData.size() > 10000) {
+                        HashSet<Object> set = new HashSet<>(replyData);
+                        replyData.clear();
+                        replyData.addAll(set);
+                        System.out.println("入库");
+                        kouBeiDataBase.insetForeachKouBeiReplyDat2(replyData);
+                        replyData.clear();
+                    }
                 }
             }
-//            HashSet<Object> set = new HashSet<>(replyData);
-//            replyData.clear();
-//            replyData.addAll(set);
-//            kouBeiDataBase.insetForeachKouBeiReplyDat2(replyData);
+            HashSet<Object> set = new HashSet<>(replyData);
+            replyData.clear();
+            replyData.addAll(set);
+            kouBeiDataBase.insetForeachKouBeiReplyDat2(replyData);
         } catch (
                 Exception e) {
             e.printStackTrace();
@@ -741,8 +741,48 @@ public class KouBeiMethod {
             JSONObject jsonRoot = JSONObject.parseObject(content);
             JSONObject jsonResult = jsonRoot.getJSONObject("result");
             String nextString= jsonResult.getString("next");
-            String ruserHeaderImage = jsonResult.gtstring
-            System.out.println(jsonResult);
+            String ruserHeaderImage = jsonResult.getString("ruserHeaderImage");
+            String iscarowenr = jsonResult.getString("iscarowner");
+            String rmemberId = jsonResult.getString("rmemberId");
+            String carownerlevels = jsonResult.getString("carownerlevels");
+            JSONArray jsonArray = jsonResult.getJSONArray("list");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject wonderObject = ((JSONObject) jsonArray.get(i));
+                ReplyKouBei replyKouBei = new ReplyKouBei();
+                replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
+                replyKouBei.set_C_KouBeiID(fileName.split("_")[0]);
+                replyKouBei.set_C_ruserHeaderImage(ruserHeaderImage);
+                replyKouBei.set_C_iscarowner(iscarowenr);
+                replyKouBei.set_C_rmemberId(rmemberId);
+                replyKouBei.set_C_iscarowner(iscarowenr);
+                replyKouBei.set_C_carownerlevels(carownerlevels);
+                replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
+                replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
+                replyKouBei.set_C_rmemberId(wonderObject.getString("rmemberId") == null ? "-" : wonderObject.getString("rmemberId"));
+                replyKouBei.set_C_rcontentLength(wonderObject.getString("rcontentLength") == null ? "-" : wonderObject.getString("rcontentLength"));
+                replyKouBei.set_C_createType(wonderObject.getString("createType") == null ? "-" : wonderObject.getString("createType"));
+                replyKouBei.set_C_freplyId(wonderObject.getString("freplyId") == null ? "-" : wonderObject.getString("freplyId"));
+                replyKouBei.set_C_rup(wonderObject.getString("rup") == null ? "-" : wonderObject.getString("rup"));
+                replyKouBei.set_C_chatIndex(wonderObject.getString("chatIndex") == null ? "-" : wonderObject.getString("chatIndex"));
+                replyKouBei.set_C_rmemberSex(wonderObject.getString("rmemberSex") == null ? "-" : wonderObject.getString("rmemberSex"));
+                replyKouBei.set_C_robjId(wonderObject.getString("robjId") == null ? "-" : wonderObject.getString("robjId"));
+                replyKouBei.set_C_rmemberName(wonderObject.getString("rmemberName") == null ? "-" : wonderObject.getString("rmemberName"));
+                replyKouBei.set_C_rreplyDate(wonderObject.getString("rreplyDate") == null ? "-" : wonderObject.getString("rreplyDate"));
+                replyKouBei.set_C_carname(wonderObject.getString("carname") == null ? "-" : wonderObject.getString("carname"));
+                replyKouBei.set_C_replyId(wonderObject.getString("replyId") == null ? "-" : wonderObject.getString("replyId"));
+                replyKouBei.set_C_forbidReply(wonderObject.getString("forbidReply") == null ? "-" : wonderObject.getString("forbidReply"));
+                replyKouBei.set_C_ruserHeaderImage(wonderObject.getString("ruserHeaderImage") == null ? "-" : wonderObject.getString("ruserHeaderImage"));
+                replyKouBei.set_C_rtargetMemberId(wonderObject.getString("rtargetMemberId") == null ? "-" : wonderObject.getString("rtargetMemberId"));
+                replyKouBei.set_C_carownerlevels(wonderObject.getString("carownerlevels") == null ? "-" : wonderObject.getString("carownerlevels"));
+                replyKouBei.set_C_chatcount(wonderObject.getString("chatcount") == null ? "-" : wonderObject.getString("chatcount"));
+                replyKouBei.set_C_replydate(wonderObject.getString("replydate") == null ? "-" : wonderObject.getString("replydate"));
+                replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
+                replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
+                replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
+                replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+                replyKouBei.set_C_nextString(nextString);
+                dataList.add(replyKouBei);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
