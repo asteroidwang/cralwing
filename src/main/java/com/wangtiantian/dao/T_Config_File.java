@@ -167,4 +167,15 @@ public class T_Config_File {
         }
     }
 
+    public static void delete_删除文件(String filePath){
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.delete()){
+                System.out.println("已删除");
+            }else {
+                System.out.println("删除失败");
+            }
+        }
+    }
+
 }

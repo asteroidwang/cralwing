@@ -96,6 +96,12 @@ public class KouBeiDataBase {
 
     }
 
+
+    public void insetForeachKouBeiReplyDat2(ArrayList<Object> dataList) {
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 6);
+        kouBeiDataDao.insertForeach(dataList);
+
+    }
     // 查询还未解析的一级评论的口碑id
     public ArrayList<Object> getNotParseFirstPingLunKouBeiId(int begin) {
         T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
