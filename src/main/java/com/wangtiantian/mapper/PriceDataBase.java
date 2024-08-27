@@ -102,6 +102,7 @@ public class PriceDataBase {
         T_Config_Price dealerFenYeDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 1);
         T_Config_Price dealerDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 2);
         ArrayList<Object> fenYeDataList = dealerDao.get_所有下载有重复经销商数据的城市名称();
+        System.out.println(fenYeDataList.size());
         for (Object o : fenYeDataList) {
             String cityName = ((DealerData) o).get_C_CityName();
             dealerFenYeDao.update_修改有重复经销商数据的下载状态(cityName);
