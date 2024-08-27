@@ -29,9 +29,7 @@ public class PriceMoreThread implements Runnable {
                 String fileName = ((SaleModData) bean).get_C_DealerID() + "_" + ((SaleModData) bean).get_C_ModelID() + ".txt";
                 String dealerID = ((SaleModData) bean).get_C_DealerID();
                 String modId = ((SaleModData) bean).get_C_ModelID();
-                if (T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", savePath, fileName)) {
-                    System.out.println("11");
-                }
+                T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", savePath, fileName);
             } catch (Exception e) {
                 e.printStackTrace();
             }

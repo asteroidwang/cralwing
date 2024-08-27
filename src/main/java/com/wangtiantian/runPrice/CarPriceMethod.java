@@ -144,20 +144,23 @@ public class CarPriceMethod {
                     DealerData dealerData = new DealerData();
                     dealerData.set_C_DealerID(mainItems.get(i).attr("id"));
                     Elements items = mainItems.get(i).select(".tit-row");
-                    if (!items.select("a").select("span").text().equals("")){
-                        dealerData.set_C_DealerName(items.select("a").select("span").text());
-                        dealerData.set_C_Type(items.select("span").get(1).text());
-                        dealerData.set_C_SaleBrandName(mainItems.get(i).select("ul").select("li").get(1).select("span").select("em").text());
-                        dealerData.set_C_SaleNum(Integer.parseInt(mainItems.get(i).select("ul").select("li").get(1).select("a").text().replace("共", "").replace("个在售车型", "")));
-                        dealerData.set_C_Phone(mainItems.get(i).select("ul").select("li").get(2)==null?"-":mainItems.get(i).select("ul").select("li").get(2).select(".tel").text());
-                        dealerData.set_C_SaleAddress(mainItems.get(i).select("ul").select("li").get(2)==null?"-":mainItems.get(i).select("ul").select("li").get(2).select(".gray.data-business-tip").text() + "->" + mainItems.get(i).select("ul").select("li").get(2).select(".floating").text());
-                        dealerData.set_C_Address(mainItems.get(i).select("ul").select("li").get(3).select(".info-addr").text());
-                        dealerData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                        dealerData.set_C_CityName(fileName.replace(fileName.substring(fileName.indexOf("_")), ""));
-                        dealerData.set_C_IsFinish(0);
-                        dealerData.set_C_FileName(fileName);
-                        dataList.add(dealerData);
-                    }else {
+                    if (!items.select("a").select("span").text().equals("")) {
+                        if(mainItems.get(i).select("ul").select("li").size()>3){
+                            dealerData.set_C_DealerName(items.select("a").select("span").text());
+                            dealerData.set_C_Type(items.select("span").get(1).text());
+                            dealerData.set_C_SaleBrandName(mainItems.get(i).select("ul").select("li").get(1).select("span").select("em").text());
+                            dealerData.set_C_SaleNum(Integer.parseInt(mainItems.get(i).select("ul").select("li").get(1).select("a").text().replace("共", "").replace("个在售车型", "")));
+                            dealerData.set_C_Phone(mainItems.get(i).select("ul").select("li").get(2) == null ? "-" : mainItems.get(i).select("ul").select("li").get(2).select(".tel").text());
+                            dealerData.set_C_SaleAddress(mainItems.get(i).select("ul").select("li").get(2) == null ? "-" : mainItems.get(i).select("ul").select("li").get(2).select(".gray.data-business-tip").text() + "->" + mainItems.get(i).select("ul").select("li").get(2).select(".floating").text());
+                            dealerData.set_C_Address(mainItems.get(i).select("ul").select("li").get(3)==null?"-":mainItems.get(i).select("ul").select("li").get(3).select(".info-addr").text());
+                            dealerData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                            dealerData.set_C_CityName(fileName.replace(fileName.substring(fileName.indexOf("_")), ""));
+                            dealerData.set_C_IsFinish(0);
+                            dealerData.set_C_FileName(fileName);
+                            dataList.add(dealerData);
+                        }
+
+                    } else {
                         System.out.println(fileName);
                     }
                 }
@@ -167,10 +170,11 @@ public class CarPriceMethod {
 //            dataList.clear();
 //            dataList.addAll(set);
             System.out.println(set.size());
-//            priceDataBase.insert_经销商数据入库(dataList);
-//            if (dataList.size() != set.size()) {
-//                priceDataBase.method_修改经销商分页的下载状态为未下载();
-//            }
+            priceDataBase.insert_经销商数据入库(dataList);
+            if (dataList.size() != set.size()) {
+                priceDataBase.method_修改经销商分页的下载状态为未下载();
+//                downLoad_下载经销商分页数据(filePath);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -281,9 +285,9 @@ public class CarPriceMethod {
                 thread.start();
             }
         }
-if (new PriceDataBase().get_没有下载的经销商的车型报价页面接口().size()>0){
-    getCarPriceFile2(filePath);
-}
+        if (new PriceDataBase().get_没有下载的经销商的车型报价页面接口().size() > 0) {
+            getCarPriceFile2(filePath);
+        }
 
 //        for (Object o : dataList) {
 //            String mainUrl = "https://dealer.autohome.com.cn/handler/other/getdata?__action=dealer.getfacseriesinfobydealerid&dealerId=" + ((DealerData) o).get_C_DealerID() + "&show0Price=1";
@@ -341,30 +345,33 @@ if (new PriceDataBase().get_没有下载的经销商的车型报价页面接口(
         ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
         ArrayList<SaleModData> dataArrayList = new ArrayList<>();
         for (String fileName : fileList) {
-            String content = T_Config_File.method_读取文件内容(filePath + fileName);
-            JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
-            System.out.println(filePath + fileName + "\t" + jsonRoot);
+            if (!fileName.equals(".DS_Store")) {
+                String content = T_Config_File.method_读取文件内容(filePath + fileName);
+                System.out.println(fileName);
+                JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
+//            System.out.println(filePath + fileName + "\t" + jsonRoot);
 
-            JSONArray jsonArray = jsonRoot.getJSONArray("list");
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JSONArray modArray = ((JSONObject) jsonArray.get(i)).getJSONArray("SeriesList");
-                for (int j = 0; j < modArray.size(); j++) {
-                    String dealerId = fileName.replace(".txt", "");
-                    SaleModData saleModData = new SaleModData();
-                    saleModData.set_C_DealerID(dealerId);
-                    saleModData.set_C_FactoryID(((JSONObject) jsonArray.get(i)).getString("FactoryId"));
-                    saleModData.set_C_ModelID(((JSONObject) modArray.get(j)).getString("SeriesId"));
-                    saleModData.set_C_PriceDataUrl("https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + saleModData.get_C_DealerID() + "&seriesId=" + saleModData.get_C_ModelID() + "&show0Price=1");
-                    saleModData.set_C_IsFinish(0);
-                    saleModData.set_C_数据来源("接口");
-                    saleModData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                    dataArrayList.add(saleModData);
+                JSONArray jsonArray = jsonRoot.getJSONArray("list");
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONArray modArray = ((JSONObject) jsonArray.get(i)).getJSONArray("SeriesList");
+                    for (int j = 0; j < modArray.size(); j++) {
+                        String dealerId = fileName.replace(".txt", "");
+                        SaleModData saleModData = new SaleModData();
+                        saleModData.set_C_DealerID(dealerId);
+                        saleModData.set_C_FactoryID(((JSONObject) jsonArray.get(i)).getString("FactoryId"));
+                        saleModData.set_C_ModelID(((JSONObject) modArray.get(j)).getString("SeriesId"));
+                        saleModData.set_C_PriceDataUrl("https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + saleModData.get_C_DealerID() + "&seriesId=" + saleModData.get_C_ModelID() + "&show0Price=1");
+                        saleModData.set_C_IsFinish(0);
+                        saleModData.set_C_数据来源("接口");
+                        saleModData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                        dataArrayList.add(saleModData);
+                    }
                 }
             }
+            HashSet<SaleModData> set = new HashSet<>(dataArrayList);
+            dataArrayList.clear();
+            dataArrayList.addAll(set);
         }
-        HashSet<SaleModData> set = new HashSet<>(dataArrayList);
-        dataArrayList.clear();
-        dataArrayList.addAll(set);
 //        new PriceDataBase().saleModData(dataArrayList);
         return dataArrayList;
     }
