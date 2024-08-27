@@ -568,9 +568,9 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-        dataBaseMethod.method_批量插入配置数据(params, "params");
+//        dataBaseMethod.method_批量插入配置数据(params, "params");
         dataBaseMethod.method_批量插入配置数据(config, "config");
-        dataBaseMethod.method_批量插入配置数据(bag, "bag");
+//        dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
 
