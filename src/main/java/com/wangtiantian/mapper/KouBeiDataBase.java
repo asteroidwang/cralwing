@@ -61,6 +61,7 @@ public class KouBeiDataBase {
         kouBeiDataDao.insertForeach(dataList);
 
     }
+
     public ArrayList<Object> find_查找所有口碑帖子数据下载图片(int begin) {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
 //       return kouBeiDataDao.method_查询未下载的数据();
@@ -79,6 +80,7 @@ public class KouBeiDataBase {
         T_Config_KouBei replyDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
         return replyDataDao.get_一级评论未完成的数量();
     }
+
     public int getCount() {
         T_Config_KouBei replyDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
         return replyDataDao.get_获取表中数据数量();
@@ -108,6 +110,7 @@ public class KouBeiDataBase {
         kouBeiDataDao.insertForeach(dataList);
 
     }
+
     // 查询还未解析的一级评论的口碑id
     public ArrayList<Object> getNotParseFirstPingLunKouBeiId(int begin) {
         T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
@@ -126,7 +129,7 @@ public class KouBeiDataBase {
 
     }
 
-    public int get_二级回复文件应有数量(){
+    public int get_二级回复文件应有数量() {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 4);
         return kouBeiDataDao.get_回复表中数据总量();
     }
@@ -135,5 +138,15 @@ public class KouBeiDataBase {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
         kouBeiDataDao.insertForeach(dataList);
 
+    }
+
+    public int get_口碑图片总数() {
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
+        return kouBeiDataDao.get_回复表中数据总量();
+    }
+
+    public ArrayList<Object> get_获取口碑图片的url数据(int begin) {
+        T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
+        return modDataDao.method_分页查询未下载的有二级评论的数据10000条每次(begin);
     }
 }

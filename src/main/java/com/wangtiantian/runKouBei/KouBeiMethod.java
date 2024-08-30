@@ -789,19 +789,19 @@ public class KouBeiMethod {
         return dataList;
     }
 
-    public void method_下载口碑数据中的图片(String filePath) {
+    public void method_获取口碑数据中的图片Url入库() {
         try {
             ArrayList<Object> dataList = new ArrayList<>();
             int numCount = kouBeiDataBase.getCount();
-            for (int kk = 0; kk <numCount/10000 ; kk++) {
-                ArrayList<Object> dataResultList = kouBeiDataBase.find_查找所有口碑帖子数据下载图片(kk*10000);
+            for (int kk = 0; kk < numCount / 10000; kk++) {
+                ArrayList<Object> dataResultList = kouBeiDataBase.find_查找所有口碑帖子数据下载图片(kk * 10000);
                 for (int i = 0; i < dataResultList.size(); i++) {
                     String mainContent = ((KouBeiData) dataResultList.get(i)).get_C_KouBeiContent();
                     String kouBeiId = ((KouBeiData) dataResultList.get(i)).get_C_KoubeiID();
                     String showId = ((KouBeiData) dataResultList.get(i)).get_C_ShowID();
                     Document mainDoc = Jsoup.parse(mainContent);
                     Elements mainItems = mainDoc.select(".lazyload");
-                    if (mainItems.size()>0){
+                    if (mainItems.size() > 0) {
                         for (int j = 0; j < mainItems.size(); j++) {
                             KouBeiPicture kouBeiPicture = new KouBeiPicture();
                             kouBeiPicture.set_C_PictureUrl(mainItems.get(j).attr("data-src"));
@@ -812,17 +812,49 @@ public class KouBeiMethod {
                             kouBeiPicture.set_C_NumCount(mainItems.size());
                             kouBeiPicture.set_C_Position(String.valueOf(j));
                             dataList.add(kouBeiPicture);
-                            if (dataList.size()>10000){
+                            if (dataList.size() > 10000) {
                                 kouBeiDataBase.insert_需要下载的口碑帖子里的图片(dataList);
                                 dataList.clear();
                             }
                         }
                     }
                 }
-                if (dataList.size()>0){
+                if (dataList.size() > 0) {
                     kouBeiDataBase.insert_需要下载的口碑帖子里的图片(dataList);
                 }
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void downLoad_下载口碑中的图片(String filePath) {
+        try {
+            int numCount = kouBeiDataBase.get_口碑图片总数();
+
+                for (int kk = 0; kk < numCount / 10000; kk++) {
+                    ArrayList<Object> dataResultList = kouBeiDataBase.get_获取口碑图片的url数据(kk * 10000);
+                    if (dataResultList.size()>36){
+                        List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataResultList.subList(i * (dataResultList.size() + 5) / 6, Math.min((i + 1) * (dataResultList.size() + 5) / 6, dataResultList.size())))
+                                .collect(Collectors.toList());
+                        for (int i = 0; i < list.size(); i++) {
+                            KouBeiPictureMoreThread moreThread = new KouBeiPictureMoreThread(list.get(i), filePath);
+                            Thread thread = new Thread(moreThread);
+                            thread.start();
+                        }
+                    }else {
+                        for (int i = 0; i < dataResultList.size(); i++) {
+                            String showId = ((KouBeiPicture)dataResultList.get(i)).get_C_ShowID();
+                            String kbId = ((KouBeiPicture)dataResultList.get(i)).get_C_KouBeiID();
+                            String position = ((KouBeiPicture)dataResultList.get(i)).get_C_Position();
+                            String mainUrl = ((KouBeiPicture)dataResultList.get(i)).get_C_PictureUrl();
+                            T_Config_File.downloadImage(mainUrl, filePath + showId + "/", showId + "_" + kbId + "_" + position);
+                        }
+                    }
+
+                }
+
 
         } catch (Exception e) {
             e.printStackTrace();
