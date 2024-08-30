@@ -10,7 +10,7 @@ public class Bean_Model {
 //        private String  C_ModelStatus;public String  get_C_ModelStatus(){return C_ModelStatus;}public void set_C_ModelStatus(String C_ModelStatus){this.C_ModelStatus=C_ModelStatus==null?"-":C_ModelStatus.replace("\t","").replace("\r","").replace("\r\n","").replace("\n","");}
         private String  C_FactoryID;public String  get_C_FactoryID(){return C_FactoryID;}public void set_C_FactoryID(String C_FactoryID){this.C_FactoryID=C_FactoryID==null?"-":C_FactoryID.replace("\t","").replace("\r","").replace("\r\n","").replace("\n","");}
         private String  C_BrandID;public String  get_C_BrandID(){return C_BrandID;}public void set_C_BrandID(String C_BrandID){this.C_BrandID=C_BrandID==null?"-":C_BrandID.replace("\t","").replace("\r","").replace("\r\n","").replace("\n","");}
-        private int  C_是否下载;public int  get_C_是否下载(){return C_是否下载;}public void set_C_是否下载(int C_是否下载){this.C_是否下载=C_是否下载;}
+        private int  C_IsFinish;public int  get_C_IsFinish(){return C_IsFinish;}public void set_C_IsFinish(int C_IsFinish){this.C_IsFinish=C_IsFinish;}
         private int  C_在售;public int  get_C_在售(){return C_在售;}public void set_C_在售(int C_在售){this.C_在售=C_在售;}
         private int  C_停售;public int  get_C_停售(){return C_停售;}public void set_C_停售(int C_停售){this.C_停售=C_停售;}
         private int  C_图片页面在售;public int  get_C_图片页面在售(){return C_图片页面在售;}public void set_C_图片页面在售(int C_图片页面在售){this.C_图片页面在售=C_图片页面在售;}
