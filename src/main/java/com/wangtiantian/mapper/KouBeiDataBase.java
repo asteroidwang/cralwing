@@ -142,11 +142,11 @@ public class KouBeiDataBase {
 
     public int get_口碑图片总数() {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
-        return kouBeiDataDao.get_回复表中数据总量();
+        return kouBeiDataDao.get_获取表中数据数量();
     }
 
     public ArrayList<Object> get_获取口碑图片的url数据(int begin) {
         T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
-        return modDataDao.method_分页查询未下载的有二级评论的数据10000条每次(begin);
+        return modDataDao.method_分页查询未下载的数据10000条每次(begin);
     }
 }
