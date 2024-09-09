@@ -20,8 +20,9 @@ public class MainPicture {
 
     public static void main(String[] args) {
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/图片数据/";
-        String filePath = "D:/爬取网页源数据/汽车之家/图片数据/";
-        String filePath1 = "F:/汽车之家/图片的具体页面/";
+        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/图片数据/";
+//        String filePath = "D:/爬取网页源数据/汽车之家/图片数据/";
+//        String filePath1 = "F:/汽车之家/图片的具体页面/";
         MainPicture mainPicture = new MainPicture();
         // mainPicture.downLoad_下载所有版本的第一页全图文件(filePath+"版本图片分页数据/");
         // mainPicture.parse_解析所有版本的第一页图片文件获取分页总页数并将分页url入库(filePath + "版本图片分页数据/");
@@ -30,7 +31,7 @@ public class MainPicture {
         // mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
         // mainPicture.method_修改已下载的图片具体页面的下载状态(filePath+"/已下载的图片具体页面.txt");
         // mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url(filePath1);
-         mainPicture.downLoad_下载图片(filePath + "图片/");
+        // mainPicture.downLoad_下载图片(filePath + "图片/");
         // mainPicture.update_修改已下载的图片的状态(filePath + "图片/");
 
     }
