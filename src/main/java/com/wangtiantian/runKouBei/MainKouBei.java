@@ -57,6 +57,8 @@ public class MainKouBei {
         // new KouBeiMethod().parse_一级评论无法解析("/Users/asteroid/所有文件数据/一级评论/");
         // new KouBeiMethod().downLoad_下载回复一级评论的数据文件(currentFilePath+"二级评论数据/");
         // new KouBeiMethod().confirm_确认已下载的二级评论数据(currentFilePath+"二级评论数据/");
-         new KouBeiMethod().method_解析二级评论数据(currentFilePath+"二级评论数据/");
+        // new KouBeiMethod().method_解析二级评论数据(currentFilePath+"二级评论数据/");
+        // new KouBeiMethod().method_获取口碑数据中的图片Url入库();
+        new KouBeiMethod().downLoad_下载口碑中的图片("");
     }
 }

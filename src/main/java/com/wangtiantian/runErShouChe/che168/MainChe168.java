@@ -132,6 +132,7 @@ public class MainChe168 {
     // 3.下载分页数据
     public void downLoad_下载分页数据(String filePath) {
         ArrayList<Object> dataList = new ErShouCheDataBase().get_获取未下载的分页url();
+        System.out.println(dataList.size());
         if (dataList.size() < 32) {
             for (Object o : dataList) {
                 String mainUrl = ((Che168_FenYeUrl) o).get_C_FenYeUrl();
