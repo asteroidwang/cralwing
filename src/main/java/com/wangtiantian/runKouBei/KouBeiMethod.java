@@ -832,9 +832,11 @@ public class KouBeiMethod {
     public void downLoad_下载口碑中的图片(String filePath) {
         try {
             int numCount = kouBeiDataBase.get_口碑图片总数();
-
-                for (int kk = 0; kk < numCount / 10000; kk++) {
+            System.out.println(numCount);
+            int kk=0;
+//                for (int kk = 0; kk < numCount / 10000; kk++) {
                     ArrayList<Object> dataResultList = kouBeiDataBase.get_获取口碑图片的url数据(kk * 10000);
+                    System.out.println(dataResultList.size());
                     if (dataResultList.size()>36){
                         List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataResultList.subList(i * (dataResultList.size() + 5) / 6, Math.min((i + 1) * (dataResultList.size() + 5) / 6, dataResultList.size())))
                                 .collect(Collectors.toList());
@@ -853,10 +855,28 @@ public class KouBeiMethod {
                         }
                     }
 
-                }
+//                }
 
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update_修改已下载的口碑图片的口碑状态(String filePath){
+        try {
+            ArrayList<String> showIdList = T_Config_File.method_获取文件夹名称(filePath);
+            ArrayList<Object> dataList =new ArrayList<>();
+            for(String showId:showIdList){
+                System.out.println(showId);
+                ConfirmKouBeiPicture confirmKouBeiPicture = new ConfirmKouBeiPicture();
+                confirmKouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                confirmKouBeiPicture.set_C_ShowID(showId);
+                dataList.add(confirmKouBeiPicture);
+            }
+            new KouBeiDataBase().insert_已下载的口碑帖子里的图片数据(dataList);
+//            downLoad_下载口碑中的图片(filePath);
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

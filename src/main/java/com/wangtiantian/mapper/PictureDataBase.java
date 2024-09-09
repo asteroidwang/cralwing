@@ -99,6 +99,8 @@ public class PictureDataBase {
     public void insert_确认下载图片的url数据入库(ArrayList<Object> dataList) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 5);
         tConfigPicture.insertForeach(dataList);
+        T_Config_Picture tConfigPicture2 = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
+        tConfigPicture2.method_i_d_u("update T_PictureUrl set C_IsFinish = 1 where concat(C_VersionId,'_',C_ImgType,'_',C_ImgId) in (select distinct C_ImgUrl from T_ConfirmPictureUrl)");
     }
 
     public void update_修改厂商id() {

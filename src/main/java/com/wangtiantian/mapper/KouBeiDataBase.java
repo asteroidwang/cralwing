@@ -142,11 +142,18 @@ public class KouBeiDataBase {
 
     public int get_口碑图片总数() {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
-        return kouBeiDataDao.get_获取表中数据数量();
+        return kouBeiDataDao.get_一级评论未完成的数量();
     }
 
     public ArrayList<Object> get_获取口碑图片的url数据(int begin) {
         T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
         return modDataDao.method_分页查询未下载的数据10000条每次(begin);
+    }
+
+    public void insert_已下载的口碑帖子里的图片数据(ArrayList<Object> dataList) {
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 8);
+        kouBeiDataDao.insertForeach(dataList);
+        T_Config_KouBei kouBeiDataDao2 = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
+        kouBeiDataDao2.method_i_d_u("update T_KouBeiPictureUrl set C_IsFinish = 1 where C_ShowID in (select distinct C_ShowId from T_ConfirmKouBeiPicture)");
     }
 }

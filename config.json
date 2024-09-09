@@ -139,6 +139,9 @@
           },{
             "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
             "tableName": "T_KouBeiPictureUrl"
+          },{
+            "entity": "com.wangtiantian.entity.koubei.ConfirmKouBeiPicture",
+            "tableName": "T_ConfirmKouBeiPicture"
           }
         ]
       },

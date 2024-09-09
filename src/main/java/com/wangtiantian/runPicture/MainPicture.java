@@ -30,8 +30,9 @@ public class MainPicture {
         // mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
         // mainPicture.method_修改已下载的图片具体页面的下载状态(filePath+"/已下载的图片具体页面.txt");
         // mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url(filePath1);
-         mainPicture.downLoad_下载图片(filePath + "图片/");
+//         mainPicture.downLoad_下载图片(filePath + "图片/");
 //         mainPicture.update_修改已下载的图片的状态(filePath + "图片/");
+         mainPicture.update_修改已下载的图片的状态("F:/汽车之家/图片数据/图片/");
 
     }
 
