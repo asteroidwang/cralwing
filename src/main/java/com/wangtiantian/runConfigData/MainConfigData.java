@@ -26,19 +26,19 @@ public class MainConfigData {
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).replace("-", "");
-//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
-        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240826" + "/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
+//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240826" + "/";
 
         // 创建表
-//        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-//        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-//        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-//        mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
-//        mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-//        mainConfigData.method_下载配置数据(filePath + "params/");
-//        mainConfigData.method_解析列名(filePath);
-//        mainConfigData.method_取列名(filePath);
-        mainConfigData.method_解析配置数据(filePath);
+        // mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+         mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+         mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+        // mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
+        // mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+        // mainConfigData.method_下载配置数据(filePath + "params/");
+        // mainConfigData.method_解析列名(filePath);
+        // mainConfigData.method_取列名(filePath);
+        // mainConfigData.method_解析配置数据(filePath);
     }
 
     // 创建爬取汽车之家配置数据所需要的表
@@ -439,7 +439,7 @@ public class MainConfigData {
     // 5.版本ids入库 下载配置数据
     public void method_下载配置数据(String filePath) {
         try {
-            dataBaseMethod.insert_批量插入版本ids();
+//            dataBaseMethod.insert_批量插入版本ids();
             ArrayList<Object> paramsList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 0);
             ArrayList<Object> configList = dataBaseMethod.method_根据数据类型获取未下载的数据("config", 0);
             ArrayList<Object> bagList = dataBaseMethod.method_根据数据类型获取未下载的数据("bag", 0);
@@ -506,7 +506,8 @@ public class MainConfigData {
     public void method_解析列名(String filePath) {
 //        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
         int groupCount = dataBaseMethod.get_版本表中组数();
-        for (int i = 1; i < groupCount + 1; i++) {
+        System.out.println(groupCount);
+        for (int i = 1; i < groupCount; i++) {
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             method_解析params_列名(paramsContent.substring(9, paramsContent.length() - 1), filePath);
@@ -568,9 +569,9 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-//        dataBaseMethod.method_批量插入配置数据(params, "params");
+        dataBaseMethod.method_批量插入配置数据(params, "params");
         dataBaseMethod.method_批量插入配置数据(config, "config");
-//        dataBaseMethod.method_批量插入配置数据(bag, "bag");
+        dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
 

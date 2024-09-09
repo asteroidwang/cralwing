@@ -151,7 +151,7 @@ public class MainChe168 {
                 thread.start();
             }
         }
-
+        System.out.println(new ErShouCheDataBase().get_获取未下载的分页url().size());
         if (new ErShouCheDataBase().get_获取未下载的分页url().size() > 0) {
             downLoad_下载分页数据(filePath);
         }
