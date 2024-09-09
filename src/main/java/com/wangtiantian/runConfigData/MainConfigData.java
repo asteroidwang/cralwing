@@ -30,15 +30,15 @@ public class MainConfigData {
         String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240826" + "/";
 
         // 创建表
-//        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-//        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-//        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-//        mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
-//        mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-//        mainConfigData.method_下载配置数据(filePath + "params/");
-//        mainConfigData.method_解析列名(filePath);
-//        mainConfigData.method_取列名(filePath);
-        mainConfigData.method_解析配置数据(filePath);
+        // mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+         mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+         mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+        // mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
+        // mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+        // mainConfigData.method_下载配置数据(filePath + "params/");
+        // mainConfigData.method_解析列名(filePath);
+        // mainConfigData.method_取列名(filePath);
+        // mainConfigData.method_解析配置数据(filePath);
     }
 
     // 创建爬取汽车之家配置数据所需要的表

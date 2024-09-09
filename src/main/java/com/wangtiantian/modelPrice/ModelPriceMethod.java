@@ -414,11 +414,13 @@ public class ModelPriceMethod {
 
     public void method_解析车辆价格信息数据(String filePath) {
         ArrayList<Object> dealerList = new ModelDealerPriceDataBase().get_dataListDealer();
+        System.out.println(dealerList.size());
         ArrayList<Object> dataList = new ArrayList<>();
         for (Object o : dealerList) {
             String dealerId = ((ModelDealerData) o).get_C_DealerId();
             String modId = ((ModelDealerData) o).get_C_ModelId();
             String content = T_Config_File.method_读取文件内容(filePath + dealerId + "_" + modId + ".txt");
+            System.out.println(content);
             JSONObject mainJson = null;
             try {
                 mainJson = JSONObject.parseObject(content);
@@ -453,6 +455,7 @@ public class ModelPriceMethod {
                         carPrice.set_C_VersionName(jsonObject.getString("specName"));
                         carPrice.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                         dataList.add(carPrice);
+                        System.out.println(dataList.size());
                     }
                 }
             }
