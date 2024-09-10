@@ -31,4 +31,9 @@ public class T_Config_Picture extends T_Config_Father {
         String sql = "select count(*) from "+tableName+ " where C_IsFinish = 0";
         return get_获取表中数据数量_有查询条件(sql);
     }
+
+    public void update_修改厂商id(){
+        String sql ="update T_PictureUrl set T_PictureUrl.C_FactoryID = T_Picture_Version.C_FactoryId from T_Picture_Version where  T_PictureUrl.C_VersionId = T_Picture_Version.C_VersionID";
+        method_i_d_u(sql);
+    }
 }

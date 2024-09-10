@@ -55,6 +55,15 @@ public class T_Config_Price extends T_Config_Father {
         String sql ="select distinct C_CityName from "+tableName+" where C_DealerID in( select C_DealerID from "+tableName+" GROUP BY C_DealerID having count(*) >1)";
         return method_有条件的查询(sql);
     }
+    public void update_修改有重复经销商数据的下载状态(String cityName){
+        String sql ="update "+tableName+" set C_IsFinish = 0 where C_DealerFenYeUrl like '%https://dealer.autohome.com.cn/"+cityName+"/%'";
+        method_i_d_u(sql);
+    }
+    public void update_修改已下载的车辆价格信息的状态(){
+        String sql ="update "+tableName+" set C_IsFinish = 1 where concat(C_DealerId,'_',C_ModelId) in (select distinct concat(C_DealerId,'_',C_ModelId) from T_ConfirmCarPriceFile_20240902)";
+        method_i_d_u(sql);
+    }
+
 
 }
 

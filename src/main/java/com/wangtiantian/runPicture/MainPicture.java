@@ -1,10 +1,7 @@
 package com.wangtiantian.runPicture;
 
 import com.wangtiantian.dao.T_Config_File;
-import com.wangtiantian.entity.picture.PictureHtmlFileData;
-import com.wangtiantian.entity.picture.PictureHtmlUrl;
-import com.wangtiantian.entity.picture.PictureUrl;
-import com.wangtiantian.entity.picture.Picture_FenYeUrl;
+import com.wangtiantian.entity.picture.*;
 import com.wangtiantian.mapper.PictureDataBase;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,11 +28,11 @@ public class MainPicture {
         // mainPicture.parse_解析所有版本的第一页图片文件获取分页总页数并将分页url入库(filePath + "版本图片分页数据/");
         // mainPicture.downLoad_所有分页(filePath + "版本图片分页数据/");
         // mainPicture.parse_解析分页数据入库图片具体页面的url并下载未下载的漏网之鱼(filePath + "版本图片分页数据/");
-//         mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
-         mainPicture.method_修改已下载的图片具体页面的下载状态(filePath + "图片的具体页面/");
-        // mainPicture.method_修改已下载的图片具体页面的下载状态(filePath1);
-//        mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url(filePath + "图片的具体页面/");
-        // mainPicture.downLoad_下载图片(filePath + "图片/");
+        // mainPicture.downLoad_下载图片的具体页面获取下载高清图的Url地址(filePath + "图片的具体页面/");
+        mainPicture.method_修改已下载的图片具体页面的下载状态(filePath + "图片的具体页面/");
+        //mainPicture.parse_解析下载图片的具体页面获取下载图片的url或者高清图的url(filePath + "图片的具体页面/");
+        //mainPicture.downLoad_下载图片(filePath + "图片/");
+        //mainPicture.update_修改已下载的图片的状态(filePath + "图片/");
     }
 
     // 1.下载所有版本的第一页
@@ -188,7 +185,6 @@ public class MainPicture {
                 thread.start();
             }
         }
-
     }
 
     // 6.修改已下载的图片具体页面的下载状态
@@ -200,7 +196,7 @@ public class MainPicture {
             ArrayList<Object> result = new ArrayList<>();
             for (String fileNeme : dataList) {
                 fileNeme = fileNeme.replace(".txt", "");
-                String url = "https://car.autohome.com.cn/photo/" + fileNeme.split("_")[2] + "/" + fileNeme.split("_")[4] + "/" + fileNeme.split("_")[3] + ".html";
+                String url = fileNeme.split("_")[2] + "/" + fileNeme.split("_")[4] + "/" + fileNeme.split("_")[3];
                 PictureHtmlFileData pictureHtmlFileData = new PictureHtmlFileData();
                 pictureHtmlFileData.set_C_PictureHtmlUrl(url);
                 pictureHtmlFileData.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -298,28 +294,74 @@ public class MainPicture {
     // 8.下载图片
     public void downLoad_下载图片(String filePath) {
         try {
-            ArrayList<Object> dataList = pictureDataBase.get_未下载的图片的url();
-//            for (Object bean : dataList) {
-//                try {
-//                    String mainUrl = ((PictureUrl) bean).get_C_GaoQingImgUrl().equals("无高清图") ? ((PictureUrl) bean).get_C_ImgUrl() : ((PictureUrl) bean).get_C_GaoQingImgUrl();
-//                    String tempFilePath = ((PictureUrl) bean).get_C_BrandId() + "/" + ((PictureUrl) bean).get_C_ModelId() + "/" + ((PictureUrl) bean).get_C_VersionId() + "/" + ((PictureUrl) bean).get_C_ImgType() + "/";
-//                    String fileName = ((PictureUrl) bean).get_C_ImgId();
-//                    if (T_Config_File.downloadImage(mainUrl, filePath + tempFilePath, fileName+".jpg")) {
-//                        T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("图片/", ""), "已下载的图片Url.txt", mainUrl + "\n");
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
-                    .collect(Collectors.toList());
-            for (int ii = 0; ii < list.size(); ii++) {
-                PictureUrlThread moreThread = new PictureUrlThread(list.get(ii), filePath);
-                Thread thread = new Thread(moreThread);
-                thread.start();
+            pictureDataBase.update_修改厂商id();
+            int countData = pictureDataBase.get_下载图片表中还需下载的数量();
+            System.out.println(countData);
+            for (int k = 0; k < countData / 10000 + 1; k++) {
+                ArrayList<Object> dataList = pictureDataBase.get_分页查询所有未下载的图片的url(k * 10000);
+                if (dataList.size() < 36) {
+                    for (Object bean : dataList) {
+                        try {
+                            String mainUrl = ((PictureUrl) bean).get_C_GaoQingImgUrl().equals("无高清图") ? ((PictureUrl) bean).get_C_ImgUrl() : ((PictureUrl) bean).get_C_GaoQingImgUrl();
+                            String tempFilePath = ((PictureUrl) bean).get_C_BrandId() + "/" + ((PictureUrl) bean).get_C_FactoryId() + "/" + ((PictureUrl) bean).get_C_ModelId() + "/" + ((PictureUrl) bean).get_C_VersionId() + "/" + ((PictureUrl) bean).get_C_ImgType() + "/";
+                            String fileName = ((PictureUrl) bean).get_C_ImgId();
+                            if (T_Config_File.downloadImage(mainUrl, filePath + tempFilePath, fileName + ".jpg")) {
+                                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("图片/", ""), "已下载的图片Url.txt", mainUrl + "\n");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                            .collect(Collectors.toList());
+                    for (int ii = 0; ii < list.size(); ii++) {
+                        PictureUrlThread moreThread = new PictureUrlThread(list.get(ii), filePath);
+                        Thread thread = new Thread(moreThread);
+                        thread.start();
+                    }
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // 9.修改已下载的图片的数据
+    public void update_修改已下载的图片的状态(String filePath) {
+        ArrayList<Object> daaList = new ArrayList<>();
+        ArrayList<String> folder_Brand_List = T_Config_File.method_获取文件夹名称(filePath);
+        for (String brandFolderName : folder_Brand_List) {
+            ArrayList<String> folder_Factory_List = T_Config_File.method_获取文件夹名称(filePath + brandFolderName + "/");
+            for (String fctFolderName : folder_Factory_List) {
+                ArrayList<String> folder_Model_List = T_Config_File.method_获取文件夹名称(filePath + brandFolderName + "/" + fctFolderName + "/");
+                for (String modFolderName : folder_Model_List) {
+                    ArrayList<String> folder_Version_List = T_Config_File.method_获取文件夹名称(filePath + brandFolderName + "/" + fctFolderName + "/" + modFolderName + "/");
+                    for (String versionFolderName : folder_Version_List) {
+                        ArrayList<String> folder_Type_List = T_Config_File.method_获取文件夹名称(filePath + brandFolderName + "/" + fctFolderName + "/" + modFolderName + "/" + versionFolderName + "/");
+                        for (String typeFolderName : folder_Type_List) {
+                            ArrayList<String> imgList = T_Config_File.method_获取文件名称(filePath + brandFolderName + "/" + fctFolderName + "/" + modFolderName + "/" + versionFolderName + "/" + typeFolderName + "/");
+                            for (String imgFileName : imgList) {
+                                String mainUrl = versionFolderName + "_" + typeFolderName + "_" + imgFileName.replace(".jpg", "");
+                                PictureConfirmUrl pictureConfirmUrl = new PictureConfirmUrl();
+                                pictureConfirmUrl.set_C_ImgUrl(mainUrl);
+                                pictureConfirmUrl.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                                daaList.add(pictureConfirmUrl);
+                                if (daaList.size() > 10000) {
+                                    pictureDataBase.insert_确认下载图片的url数据入库(daaList);
+                                    daaList.clear();
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        if (daaList.size() > 0) {
+            pictureDataBase.insert_确认下载图片的url数据入库(daaList);
+        }
+
     }
 }

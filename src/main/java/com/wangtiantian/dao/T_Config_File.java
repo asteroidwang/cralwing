@@ -7,10 +7,12 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,7 +52,7 @@ public class T_Config_File {
             writer.flush();
             writer.close();
             fos.close();
-            System.out.println("下载一次\t" + filePath + fileName);
+            System.out.println("下载一次\t" + filePath + fileName+"\t"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         } catch (Exception e) {
             System.out.println(e.toString());
         }
@@ -180,6 +182,17 @@ public class T_Config_File {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static void delete_删除文件(String filePath){
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.delete()){
+                System.out.println("已删除");
+            }else {
+                System.out.println("删除失败");
+            }
         }
     }
 

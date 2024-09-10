@@ -99,14 +99,16 @@ public class PriceDataBase {
     }
 
     public void method_修改经销商分页的下载状态为未下载() {
+        T_Config_Price dealerFenYeDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 1);
         T_Config_Price dealerDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 2);
-
-        T_Config_Price dealerFenYeDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 2);
-        ArrayList<Object> fenYeDataList = dealerFenYeDao.get_所有下载有重复经销商数据的城市名称();
+        ArrayList<Object> fenYeDataList = dealerDao.get_所有下载有重复经销商数据的城市名称();
+        System.out.println(fenYeDataList.size());
         for (Object o : fenYeDataList) {
             String cityName = ((DealerData) o).get_C_CityName();
-            System.out.println(cityName);
+            dealerFenYeDao.update_修改有重复经销商数据的下载状态(cityName);
         }
+        dealerDao.truncate_清空表中数据();
+
     }
 
     /***
@@ -191,6 +193,7 @@ public class PriceDataBase {
         T_Config_Price carPriceDao = new T_Config_Price(chooseDataBaseType, chooseDataBase, 7);
         carPriceDao.insertForeach(dataList);
     }
+
 
 
 }

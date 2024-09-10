@@ -1,5 +1,9 @@
 package com.wangtiantian.mapper;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sun.corba.se.impl.oa.poa.AOMEntry;
 import com.wangtiantian.dao.T_Config_AutoHome;
 import com.wangtiantian.dao.T_Config_AutoHome_new;
 import com.wangtiantian.dao.T_Config_File;
@@ -8,6 +12,7 @@ import com.wangtiantian.entity.*;
 import com.wangtiantian.entity.configData.Bean_VersionIds;
 import com.wangtiantian.entity.price.SaleModData;
 
+import javax.jws.soap.SOAPBinding;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -44,6 +49,9 @@ public class DataBaseMethod {
     public void method_入库版本数据(ArrayList<Object> dataList) {
         T_Config_AutoHome_new verDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 3);
         verDao.insertForeach(dataList);
+        // 修改版本id的分组10个一组
+        verDao.update_修改版本id的分组();
+
     }
 
     public ArrayList<Object> method_根据数据类型获取未下载的数据(String dataType, int status) {
@@ -54,6 +62,7 @@ public class DataBaseMethod {
     public String method_根据组号查询版本id(int group) {
         StringBuffer stringBuffer = new StringBuffer();
         T_Config_AutoHome_new verDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 3);
+//        verDao.update_修改版本id的分组();
         ArrayList<Object> result = verDao.method_根据组号查询版本id(group);
         for (Object o : result) {
             String verId = ((Bean_Version) o).get_C_VersionID();
@@ -71,6 +80,7 @@ public class DataBaseMethod {
     public void insert_批量插入版本ids() {
         T_Config_AutoHome_new verDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 3);
         ArrayList<Object> result = verDao.method_获取组号();
+        System.out.println(result.size());
         ArrayList<Object> idsDataList = new ArrayList<>();
         for (int i = 1; i < result.size() + 1; i++) {
             Bean_VersionIds beanVersionIds = new Bean_VersionIds();
@@ -83,6 +93,7 @@ public class DataBaseMethod {
             beanVersionIds.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             idsDataList.add(beanVersionIds);
         }
+        System.out.println(idsDataList.size());
         T_Config_AutoHome_new verIdsDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 4);
         verIdsDao.insertForeach(idsDataList);
     }
@@ -100,5 +111,39 @@ public class DataBaseMethod {
             T_Config_AutoHome bagDao = new T_Config_AutoHome(chooseDataBaseType, chooseDataBase, 7);
             bagDao.insertForeach(dataList);
         }
+    }
+
+    public int get_版本表中组数() {
+        T_Config_AutoHome_new verIdsDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 4);
+        return verIdsDao.get_获取表中数据数量();
+    }
+
+
+    // 创建爬取汽车之家配置数据所需要的表
+    public void method_创建爬取汽车之家配置数据所需要的表(String currentTime) {
+        T_Config_AutoHome_new tableDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 0);
+        String brandTableName = "T_汽车之家_品牌表_" + currentTime;
+        String factoryTableName = "T_汽车之家_厂商表_" + currentTime;
+        String versionTableName = "T_汽车之家_版本表_" + currentTime;
+        String modelTableName = "T_汽车之家_车型表_" + currentTime;
+        String versionIdTableName = "T_汽车之家_版本id表_" + currentTime;
+        String bagTableName = "T_汽车之家_选装包_" + currentTime;
+
+        tableDao.create_品牌表(brandTableName);
+        tableDao.create_厂商表(factoryTableName);
+        tableDao.create_车型表(modelTableName);
+        tableDao.create_版本表(versionTableName);
+        tableDao.create_版本Id表(versionIdTableName);
+        tableDao.create_选装包表(bagTableName);
+        String content = T_Config_File.method_读取文件内容("config.json");
+        String tempTime = JSON.parseArray(content).getJSONObject(0).getJSONArray("dbItems").getJSONObject(0).getJSONArray("db_table").getJSONObject(0).getString("tableName").replace("T_汽车之家_品牌表", "").replace("_", "");
+        String brand_lastTableName = "T_汽车之家_品牌表_" + tempTime;
+        String factory_lastTableName = "T_汽车之家_厂商表_" + tempTime;
+        String version_lastTableName = "T_汽车之家_版本表_" + tempTime;
+        String model_lastTableName = "T_汽车之家_车型表_" + tempTime;
+        String versionId_lastTableName = "T_汽车之家_版本id表_" + tempTime;
+        String bag_lastTableName = "T_汽车之家_选装包_" + tempTime;
+        String updateContent = content.replace(brand_lastTableName, brandTableName).replace(factory_lastTableName, factoryTableName).replace(model_lastTableName, modelTableName).replace(version_lastTableName, versionTableName).replace(versionId_lastTableName, versionIdTableName).replace(bag_lastTableName, bagTableName);
+        T_Config_File.method_写文件_根据路径创建文件夹("", "config.json", updateContent);
     }
 }

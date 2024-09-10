@@ -20,47 +20,56 @@ public class PictureDataBase {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 0);
         tConfigPicture.update_修改已下载数据的版本状态(versionId);
     }
+
     public void insertConfirmCarPriceFileModel(ArrayList<Object> dataList) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
         tConfigPicture.insertForeach(dataList);
     }
-    public ArrayList<Object> get_所有未下载的分页url(){
+
+    public ArrayList<Object> get_所有未下载的分页url() {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
         return tConfigPicture.get_查找未下载的数据();
     }
+
     public void update_修改下载分页数据的版本状态(String fenYeUrl) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
         tConfigPicture.update_修改已下载分页数据的版本状态(fenYeUrl);
     }
 
-    public ArrayList<Object> get_图片分页表中的所有数据(){
+    public ArrayList<Object> get_图片分页表中的所有数据() {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 1);
         return tConfigPicture.method_查找();
     }
+
     public void insert_图片具体页面的文件下载相关数据(ArrayList<Object> dataList) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
         tConfigPicture.insertForeach(dataList);
     }
-    public ArrayList<Object> get_分页查询所有未下载的图片具体页面的url(int begin){
+
+    public ArrayList<Object> get_分页查询所有未下载的图片具体页面的url(int begin) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
         return tConfigPicture.method_分页查询未下载的数据10000条每次(begin);
     }
+
     public void update_修改下载图片具体页面的下载状态(String htmlUrl) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
-         tConfigPicture.update_修改下载图片具体页面的下载状态(htmlUrl);
+        tConfigPicture.update_修改下载图片具体页面的下载状态(htmlUrl);
     }
-    public int get_图片具体页面表中的数据总数(){
+
+    public int get_图片具体页面表中的数据总数() {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
         return tConfigPicture.get_获取表中数据数量();
     }
+
     public void insert_图片具体页面已下载的文件数据(ArrayList<Object> dataList) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 3);
         tConfigPicture.insertForeach(dataList);
         T_Config_Picture tConfigPicture2 = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
-        tConfigPicture2.method_i_d_u("update T_Picture_Html set C_IsFinish = 1 where C_PictureHtmlUrl in (select distinct C_PictureHtmlUrl from T_PictureHtmlFileData)");
+        tConfigPicture2.method_i_d_u("update T_Picture_Html set C_IsFinish = 1 where concat(C_VersionId,'/',C_ImgType,'/',C_ImgId) in (select distinct C_PictureHtmlUrl from T_PictureHtmlFileData)");
 
     }
-    public ArrayList<Object> get_已经下载的图片具体页面的数据(int begin){
+
+    public ArrayList<Object> get_已经下载的图片具体页面的数据(int begin) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
         return tConfigPicture.method_分页查询已下载的数据10000条每次(begin);
     }
@@ -68,17 +77,42 @@ public class PictureDataBase {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
         return tConfigPicture.get_获取表中已下载的图片具体页面数据总数();
     }
-    public void insert_下载图片的url数据入库(ArrayList<Object> dataList){
+
+    public void insert_下载图片的url数据入库(ArrayList<Object> dataList) {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
         tConfigPicture.insertForeach(dataList);
     }
 
-    public ArrayList<Object> get_未下载的图片的url(){
+    public ArrayList<Object> get_未下载的图片的url() {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
-        return  tConfigPicture.get_查找未下载的数据();
+        return tConfigPicture.get_查找未下载的数据();
     }
-    public int get_下载图片具体页面中还需下载的数量(){
+
+    public int get_下载图片具体页面中还需下载的数量() {
         T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 2);
         return tConfigPicture.get_获取表中未下载的数据总数();
     }
+
+
+    public ArrayList<Object> get_分页查询所有未下载的图片的url(int begin) {
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
+        return tConfigPicture.method_分页查询未下载的数据10000条每次(begin);
+    }
+
+    public void insert_确认下载图片的url数据入库(ArrayList<Object> dataList) {
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 5);
+        tConfigPicture.insertForeach(dataList);
+        T_Config_Picture tConfigPicture2 = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
+        tConfigPicture2.method_i_d_u("update T_PictureUrl set C_IsFinish = 1 where concat(C_VersionId,'_',C_ImgType,'_',C_ImgId) in (select distinct C_ImgUrl from T_ConfirmPictureUrl)");
+    }
+    public int get_下载图片表中还需下载的数量() {
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
+        return tConfigPicture.get_获取表中未下载的数据总数();
+    }
+
+    public void update_修改厂商id() {
+        T_Config_Picture tConfigPicture = new T_Config_Picture(chooseDataBaseType, chooseDataBase, 4);
+        tConfigPicture.update_修改厂商id();
+    }
+
 }

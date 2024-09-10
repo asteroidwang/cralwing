@@ -29,6 +29,7 @@ public class KouBeiMethod {
     private KouBeiDataBase kouBeiDataBase = new KouBeiDataBase();
     //    private String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/口碑评价数据/20240804/";
     private String filePath = "E:/汽车之家/口碑评价数据/20240804/";
+//    private String filePath = "/Users/asteroid/所有文件数据/一级评论";
 
     // 获取每个车型的第一页口碑
     public void getModelKouBeiFirstFileUrl() {
@@ -405,73 +406,173 @@ public class KouBeiMethod {
 
     // 解析口碑的一级回复数据
     public void method_一级评论数据() {
-//        ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "一级评论数据/");
         ArrayList<Object> replyData = new ArrayList<>();
-//        int getCount = kouBeiDataBase.getCount();
-        int getCount = 1320272;
-//        for (int kk = 0; kk < getCount / 1000; kk++) {
-        ArrayList<Object> dataList = kouBeiDataBase.getReplyKouBei(0 * 1000);
-        for (Object o : dataList) {
-            String fileName = ((KouBeiData) o).get_C_KoubeiID();
-            replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + fileName + "_一级评论_0.txt"), filePath, fileName));
-            if (replyData.size() > 100000) {
+        ArrayList<String> dataList = T_Config_File.method_获取文件名称(filePath + "一级评论数据/");
+        for (String o : dataList) {
+            String kbId = o.replace("_一级评论_0.txt", "");
+            replyData.addAll(parse_解析一级评论数据(T_Config_File.method_读取文件内容(filePath + "一级评论数据/" + kbId + "_一级评论_0.txt"), filePath, kbId + "_一级评论_0.txt"));
+            if (replyData.size() > 10000) {
                 HashSet<Object> set = new HashSet<>(replyData);
                 replyData.clear();
                 replyData.addAll(set);
-//                    kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+                kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
+                replyData.clear();
             }
-//            }
         }
-//            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
-    }
+        HashSet<Object> set = new HashSet<>(replyData);
+        replyData.clear();
+        replyData.addAll(set);
 
-    public void parse_一级评论无法解析(String filePath) {
-        try {
-            ArrayList<Object> replyData = new ArrayList<>();
-            ArrayList<String> fileList = T_Config_File.method_获取文件名称("/Users/asteroid/所有文件数据/一级评论/");
-            for (String fileName : fileList) {
-                if (fileName.equals(".DS_Store")) {
-                    return;
-                }
-                String content = T_Config_File.method_读取文件内容("/Users/asteroid/所有文件数据/一级评论/" + fileName);
-                Pattern pattern = Pattern.compile("\"rcontent\":(.*?)\"rmemberId\"");
-                Matcher matcher = pattern.matcher(content);
-                StringBuffer result = new StringBuffer();
-                while (matcher.find()) {
-                    String firstPart = matcher.group(1); // 第一个引号与第二个引号之间的内容
-                    if (firstPart.matches(".*[\\u4e00-\\u9fa5].*")) {
-                        // 如果包含中文字符
-                        matcher.appendReplacement(result, "\"rcontent\":\"" + firstPart.replace("\"", "“").replace("\\", "\\\\") + "\",\"rmemberId\"");
-                    } else {
-                        // 保持原样
-                        matcher.appendReplacement(result, matcher.group());
-                    }
-                }
-                ArrayList<Object> data = parse_解析一级评论数据(result.toString(), filePath, fileName);
-                System.out.println(data.size());
-
-            }
-            kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        kouBeiDataBase.insetForeachKouBeiReplyData(replyData);
     }
 
     public ArrayList<Object> parse_解析一级评论数据(String content, String filePath, String fileName) {
+        ArrayList<Object> dataList = new ArrayList<>();
+        content = content.replace("$", "钱的符号").replace("\\\"", "不该有的英文引号").replace("\\", "两个斜杠");
+        Pattern pattern = Pattern.compile("\"rcontent\":\"(.*?)\",\"rmemberId\"");
+        Matcher matcher = pattern.matcher(content);
+        StringBuffer result = new StringBuffer();
+        while (matcher.find()) {
+            String firstPart = matcher.group(1); // 第一个引号与第二个引号之间的内容
+            matcher.appendReplacement(result, "\"rcontent\":\"" + firstPart.replace("\n", "").replace("\r", "").replace("\n\r", "").replace("'", "''").replace("\"", "不该有的英文引号") + "\",\"rmemberId\"");
+        }
+        matcher.appendTail(result);
+        content = result.toString();
+//        System.out.println(filePath + fileName);
+//        System.out.println(content);
+        JSONObject jsonRoot1 = null;
+        try {
+            jsonRoot1 = JSONObject.parseObject(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (jsonRoot1 != null) {
+            if (jsonRoot1.getString("message").equals("")) {
+            } else {
+                JSONObject jsonRoot = jsonRoot1.getJSONObject("result");
+                if (jsonRoot != null) {
+                    JSONArray jsonArray = jsonRoot.getJSONArray("list");
+                    System.out.println(jsonArray);
+                    JSONArray jsonArray1 = jsonRoot.getJSONArray("wonderfullist");
+                    String nextString = jsonRoot.getString("next");
+                    if (jsonArray1.size() != 0) {
+                        for (int i = 0; i < jsonArray1.size(); i++) {
+                            JSONObject wonderObject = ((JSONObject) jsonArray1.get(i));
+                            ReplyKouBei replyKouBei = new ReplyKouBei();
+                            replyKouBei.set_C_nextString(nextString);
+                            replyKouBei.set_C_hasmore(jsonRoot.getString("hasmore"));
+                            replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
+                            replyKouBei.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
+                            replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
+                            replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
+                            replyKouBei.set_C_rmemberId(wonderObject.getString("rmemberId") == null ? "-" : wonderObject.getString("rmemberId"));
+                            replyKouBei.set_C_rcontentLength(wonderObject.getString("rcontentLength") == null ? "-" : wonderObject.getString("rcontentLength"));
+                            replyKouBei.set_C_createType(wonderObject.getString("createType") == null ? "-" : wonderObject.getString("createType"));
+                            replyKouBei.set_C_freplyId(wonderObject.getString("freplyId") == null ? "-" : wonderObject.getString("freplyId"));
+                            replyKouBei.set_C_rup(wonderObject.getString("rup") == null ? "-" : wonderObject.getString("rup"));
+                            replyKouBei.set_C_chatIndex(wonderObject.getString("chatIndex") == null ? "-" : wonderObject.getString("chatIndex"));
+                            replyKouBei.set_C_rmemberSex(wonderObject.getString("rmemberSex") == null ? "-" : wonderObject.getString("rmemberSex"));
+                            replyKouBei.set_C_robjId(wonderObject.getString("robjId") == null ? "-" : wonderObject.getString("robjId"));
+                            replyKouBei.set_C_rmemberName(wonderObject.getString("rmemberName") == null ? "-" : wonderObject.getString("rmemberName"));
+                            replyKouBei.set_C_rreplyDate(wonderObject.getString("rreplyDate") == null ? "-" : wonderObject.getString("rreplyDate"));
+                            replyKouBei.set_C_carname(wonderObject.getString("carname") == null ? "-" : wonderObject.getString("carname"));
+                            replyKouBei.set_C_replyId(wonderObject.getString("replyId") == null ? "-" : wonderObject.getString("replyId"));
+                            replyKouBei.set_C_forbidReply(wonderObject.getString("forbidReply") == null ? "-" : wonderObject.getString("forbidReply"));
+                            replyKouBei.set_C_ruserHeaderImage(wonderObject.getString("ruserHeaderImage") == null ? "-" : wonderObject.getString("ruserHeaderImage"));
+                            replyKouBei.set_C_rtargetMemberId(wonderObject.getString("rtargetMemberId") == null ? "-" : wonderObject.getString("rtargetMemberId"));
+                            replyKouBei.set_C_carownerlevels(wonderObject.getString("carownerlevels") == null ? "-" : wonderObject.getString("carownerlevels"));
+                            replyKouBei.set_C_chatcount(wonderObject.getString("chatcount") == null ? "-" : wonderObject.getString("chatcount"));
+                            replyKouBei.set_C_replydate(wonderObject.getString("replydate") == null ? "-" : wonderObject.getString("replydate"));
+                            replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
+                            replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
+                            replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
+                            replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+                            dataList.add(replyKouBei);
+                        }
+                    }
+
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject wonderObject = ((JSONObject) jsonArray.get(i));
+                        ReplyKouBei replyKouBei = new ReplyKouBei();
+                        replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
+                        replyKouBei.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
+                        replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
+                        replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
+                        replyKouBei.set_C_rmemberId(wonderObject.getString("rmemberId") == null ? "-" : wonderObject.getString("rmemberId"));
+                        replyKouBei.set_C_rcontentLength(wonderObject.getString("rcontentLength") == null ? "-" : wonderObject.getString("rcontentLength"));
+                        replyKouBei.set_C_createType(wonderObject.getString("createType") == null ? "-" : wonderObject.getString("createType"));
+                        replyKouBei.set_C_freplyId(wonderObject.getString("freplyId") == null ? "-" : wonderObject.getString("freplyId"));
+                        replyKouBei.set_C_rup(wonderObject.getString("rup") == null ? "-" : wonderObject.getString("rup"));
+                        replyKouBei.set_C_chatIndex(wonderObject.getString("chatIndex") == null ? "-" : wonderObject.getString("chatIndex"));
+                        replyKouBei.set_C_rmemberSex(wonderObject.getString("rmemberSex") == null ? "-" : wonderObject.getString("rmemberSex"));
+                        replyKouBei.set_C_robjId(wonderObject.getString("robjId") == null ? "-" : wonderObject.getString("robjId"));
+                        replyKouBei.set_C_rmemberName(wonderObject.getString("rmemberName") == null ? "-" : wonderObject.getString("rmemberName"));
+                        replyKouBei.set_C_rreplyDate(wonderObject.getString("rreplyDate") == null ? "-" : wonderObject.getString("rreplyDate"));
+                        replyKouBei.set_C_carname(wonderObject.getString("carname") == null ? "-" : wonderObject.getString("carname"));
+                        replyKouBei.set_C_replyId(wonderObject.getString("replyId") == null ? "-" : wonderObject.getString("replyId"));
+                        replyKouBei.set_C_forbidReply(wonderObject.getString("forbidReply") == null ? "-" : wonderObject.getString("forbidReply"));
+                        replyKouBei.set_C_ruserHeaderImage(wonderObject.getString("ruserHeaderImage") == null ? "-" : wonderObject.getString("ruserHeaderImage"));
+                        replyKouBei.set_C_rtargetMemberId(wonderObject.getString("rtargetMemberId") == null ? "-" : wonderObject.getString("rtargetMemberId"));
+                        replyKouBei.set_C_carownerlevels(wonderObject.getString("carownerlevels") == null ? "-" : wonderObject.getString("carownerlevels"));
+                        replyKouBei.set_C_chatcount(wonderObject.getString("chatcount") == null ? "-" : wonderObject.getString("chatcount"));
+                        replyKouBei.set_C_replydate(wonderObject.getString("replydate") == null ? "-" : wonderObject.getString("replydate"));
+                        replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
+                        replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
+                        replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
+                        replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+                        dataList.add(replyKouBei);
+//            JSONArray subQuoteList = wonderObject.getJSONArray("subQuoteList");
+//            for (int j = 0; j < subQuoteList.size(); j++) {
+//                JSONObject object = ((JSONObject) subQuoteList.get(j));
+//                ReplyKouBei replyKouBei1 = new ReplyKouBei();
+//                replyKouBei1.set_C_KouBeiID(fileName.replace("_一级评论_0.txt", "").equals("") ? "-" : fileName.replace("_一级评论_0.txt", ""));
+//                replyKouBei1.set_C_rfloor(object.getString("rfloor") == null ? "-" : object.getString("rfloor"));
+//                replyKouBei1.set_C_iscarowner(object.getString("iscarowner") == null ? "-" : object.getString("iscarowner"));
+//                replyKouBei1.set_C_rmemberId(object.getString("rmemberId") == null ? "-" : object.getString("rmemberId"));
+//                replyKouBei1.set_C_rcontentLength(object.getString("rcontentLength") == null ? "-" : object.getString("rcontentLength"));
+//                replyKouBei1.set_C_createType(object.getString("createType") == null ? "-" : object.getString("createType"));
+//                replyKouBei1.set_C_freplyId(object.getString("freplyId") == null ? "-" : object.getString("freplyId"));
+//                replyKouBei1.set_C_rup(object.getString("rup") == null ? "-" : object.getString("rup"));
+//                replyKouBei1.set_C_chatIndex(object.getString("chatIndex") == null ? "-" : object.getString("chatIndex"));
+//                replyKouBei1.set_C_rmemberSex(object.getString("rmemberSex") == null ? "-" : object.getString("rmemberSex"));
+//                replyKouBei1.set_C_robjId(object.getString("robjId") == null ? "-" : object.getString("robjId"));
+//                replyKouBei1.set_C_rmemberName(object.getString("rmemberName") == null ? "-" : object.getString("rmemberName"));
+//                replyKouBei1.set_C_rreplyDate(object.getString("rreplyDate") == null ? "-" : object.getString("rreplyDate"));
+//                replyKouBei1.set_C_carname(object.getString("carname") == null ? "-" : object.getString("carname"));
+//                replyKouBei1.set_C_replyId(object.getString("replyId") == null ? "-" : object.getString("replyId"));
+//                replyKouBei1.set_C_forbidReply(object.getString("forbidReply") == null ? "-" : object.getString("forbidReply"));
+//                replyKouBei1.set_C_ruserHeaderImage(object.getString("ruserHeaderImage") == null ? "-" : object.getString("ruserHeaderImage"));
+//                replyKouBei1.set_C_rtargetMemberId(object.getString("rtargetMemberId") == null ? "-" : object.getString("rtargetMemberId"));
+//                replyKouBei1.set_C_carownerlevels(object.getString("carownerlevels") == null ? "-" : object.getString("carownerlevels"));
+//                replyKouBei1.set_C_chatcount(object.getString("chatcount") == null ? "-" : object.getString("chatcount"));
+//                replyKouBei1.set_C_replydate(object.getString("replydate") == null ? "-" : object.getString("replydate"));
+//                replyKouBei1.set_C_rtargetReplyId(object.getString("rtargetReplyId") == null ? "-" : object.getString("rtargetReplyId"));
+//                replyKouBei1.set_C_location(object.getString("location") == null ? "-" : object.getString("location"));
+//                replyKouBei1.set_C_rcontent(object.getString("rcontent") == null ? "-" : object.getString("rcontent"));
+//                replyKouBei1.set_C_freplyCount(object.getString("freplyCount") == null ? "-" : object.getString("freplyCount"));
+//                dataList.add(replyKouBei1);
+//            }
+                    }
+                }
+            }
+        }
+        System.out.println("解析完一次");
+        System.out.println(dataList.size());
+        return dataList;
+    }
+
+    public ArrayList<Object> parse_解析一级评论数据_原来(String content, String filePath, String fileName) {
         ArrayList<Object> dataList = new ArrayList<>();
         try {
             JSONObject jsonRoot = null;
             try {
                 jsonRoot = JSON.parseObject(content);
             } catch (Exception e) {
-                System.out.println(filePath + fileName);
                 e.printStackTrace();
-//                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("一级评论数据/",""), "一级评论解析失败的.txt", filePath + "一级评论数据/" + fileName + "\n");
             }
-
             if (jsonRoot != null) {
                 JSONArray jsonArray = jsonRoot.getJSONObject("result").getJSONArray("list");
+                System.out.println(jsonArray);
                 String nextString = jsonRoot.getJSONObject("result").getString("next");
                 for (int i = 0; i < jsonArray.size(); i++) {
                     ReplyKouBei firstReply = new ReplyKouBei();
@@ -511,70 +612,7 @@ public class KouBeiMethod {
                         badge_name = badge.getString("badge_name") == null ? "-" : badge.getString("badge_name");
                         badge_icon = badge.getString("badge_icon") == null ? "-" : badge.getString("badge_icon");
                     }
-                    if (subQuoteList.size() != 0) {
-                        for (int j = 0; j < subQuoteList.size(); j++) {
-                            ReplyKouBei secondReply = new ReplyKouBei();
-                            String replydateSub = ((JSONObject) subQuoteList.get(j)).getString("replydate") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("replydate");
-                            String chatcountSub = ((JSONObject) subQuoteList.get(j)).getString("chatcount") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("chatcount");
-                            String iscarownerSub = ((JSONObject) subQuoteList.get(j)).getString("iscarowner") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("iscarowner");
-                            String carownerlevelsSub = ((JSONObject) subQuoteList.get(j)).getString("carownerlevels") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("carownerlevels");
-                            String carnameSub = ((JSONObject) subQuoteList.get(j)).getString("carname") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("carname");
-                            String forbidReplySub = ((JSONObject) subQuoteList.get(j)).getString("forbidReply") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("forbidReply");
-                            String rmemberSexSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberSex") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberSex");
-                            String robjIdSub = ((JSONObject) subQuoteList.get(j)).getString("robjId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("robjId");
-                            String rreplyDateSub = ((JSONObject) subQuoteList.get(j)).getString("rreplyDate") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rreplyDate");
-                            String rupSub = ((JSONObject) subQuoteList.get(j)).getString("rup") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rup");
-                            String replyIdSub = ((JSONObject) subQuoteList.get(j)).getString("replyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("replyId");
-                            String freplyIdSub = ((JSONObject) subQuoteList.get(j)).getString("freplyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("freplyId");
-                            String rtargetReplyIdSub = ((JSONObject) subQuoteList.get(j)).getString("rtargetReplyId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rtargetReplyId");
-                            String rtargetMemberIdSub = ((JSONObject) subQuoteList.get(j)).getString("rtargetMemberId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rtargetMemberId");
-                            String rfloorSub = ((JSONObject) subQuoteList.get(j)).getString("rfloor") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rfloor");
-                            String rcontentLengthSub = ((JSONObject) subQuoteList.get(j)).getString("rcontentLength") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rcontentLength");
-                            String createTypeSub = ((JSONObject) subQuoteList.get(j)).getString("createType") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("createType");
-                            String chatIndexSub = ((JSONObject) subQuoteList.get(j)).getString("chatIndex") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("chatIndex");
-                            String freplyCountSub = ((JSONObject) subQuoteList.get(j)).getString("freplyCount") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("freplyCount");
-                            String rcontentSub = ((JSONObject) subQuoteList.get(j)).getString("rcontent") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rcontent");
-                            String rmemberIdSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberId") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberId");
-                            String rmemberNameSub = ((JSONObject) subQuoteList.get(j)).getString("rmemberName") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("rmemberName");
-                            String ruserHeaderImageSub = ((JSONObject) subQuoteList.get(j)).getString("ruserHeaderImage") == null ? "-" : ((JSONObject) subQuoteList.get(j)).getString("ruserHeaderImage");
-                            secondReply.set_C_replydateSub(replydateSub);
-                            secondReply.set_C_chatcountSub(chatcountSub);
-                            secondReply.set_C_iscarownerSub(iscarownerSub);
-                            secondReply.set_C_carownerlevelsSub(carownerlevelsSub);
-                            secondReply.set_C_carnameSub(carnameSub);
-                            secondReply.set_C_forbidReplySub(forbidReplySub);
-                            secondReply.set_C_rmemberSexSub(rmemberSexSub);
-                            secondReply.set_C_robjIdSub(robjIdSub);
-                            secondReply.set_C_rreplyDateSub(rreplyDateSub);
-                            secondReply.set_C_rupSub(rupSub);
-                            secondReply.set_C_replyIdSub(replyIdSub);
-                            secondReply.set_C_freplyIdSub(freplyIdSub);
-                            secondReply.set_C_rtargetReplyIdSub(rtargetReplyIdSub);
-                            secondReply.set_C_rtargetMemberIdSub(rtargetMemberIdSub);
-                            secondReply.set_C_rfloorSub(rfloorSub);
-                            secondReply.set_C_rcontentLengthSub(rcontentLengthSub);
-                            secondReply.set_C_createTypeSub(createTypeSub);
-                            secondReply.set_C_chatIndexSub(chatIndexSub);
-                            secondReply.set_C_freplyCountSub(freplyCountSub);
-                            secondReply.set_C_rcontentSub(rcontentSub);
-                            secondReply.set_C_rmemberIdSub(rmemberIdSub);
-                            secondReply.set_C_rmemberNameSub(rmemberNameSub);
-                            secondReply.set_C_ruserHeaderImageSub(ruserHeaderImageSub);
-                            secondReply.set_C_badge_icon(badge_icon);
-                            secondReply.set_C_badge_user_id(user_id);
-                            secondReply.set_C_badge_achievement_id(achievement_id);
-                            secondReply.set_C_badge_name(badge_name);
-                            secondReply.set_C_KouBeiID(robjId);
-                            secondReply.set_C_ReplyContent(rcontent);
-                            secondReply.set_C_ReplyUserID(rmemberId);
-                            secondReply.set_C_ReplyUserName(rmemberName);
-                            secondReply.set_C_TargetUserID(rtargetMemberId);
-                            secondReply.set_C_nextString(nextString);
-                            secondReply.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                            dataList.add(secondReply);
-                        }
-                    }
-
+//
                     firstReply.set_C_replydate(replydate);
                     firstReply.set_C_chatcount(chatcount);
                     firstReply.set_C_iscarowner(iscarowner);
@@ -582,7 +620,7 @@ public class KouBeiMethod {
                     firstReply.set_C_carname(carname);
                     firstReply.set_C_location(location);
                     firstReply.set_C_forbidReply(forbidReply);
-                    firstReply.set_C_freplyCount(freplyCount);
+                    firstReply.set_C_freplyCount_TieZi(freplyCount);
                     firstReply.set_C_rmemberSex(rmemberSex);
                     firstReply.set_C_robjId(robjId);
                     firstReply.set_C_rreplyDate(rreplyDate);
@@ -599,16 +637,13 @@ public class KouBeiMethod {
                     firstReply.set_C_rmemberId(rmemberId);
                     firstReply.set_C_rmemberName(rmemberName);
                     firstReply.set_C_replyId(replyId);
-                    firstReply.set_C_badge_icon(badge_icon);
+                    firstReply.set_C_badge_badge_icon(badge_icon);
                     firstReply.set_C_badge_user_id(user_id);
                     firstReply.set_C_badge_achievement_id(achievement_id);
-                    firstReply.set_C_badge_name(badge_name);
+                    firstReply.set_C_badge_badge_name(badge_name);
                     firstReply.set_C_KouBeiID(robjId);
-                    firstReply.set_C_ReplyContent(rcontent);
-                    firstReply.set_C_ReplyUserID(rmemberId);
-                    firstReply.set_C_ReplyUserName(rmemberName);
-                    firstReply.set_C_TargetUserID("");
                     firstReply.set_C_IsFinish(0);
+                    firstReply.set_C_freplyCount_First(freplyCount);
                     firstReply.set_C_nextString(nextString);
                     firstReply.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                     dataList.add(firstReply);
@@ -623,8 +658,9 @@ public class KouBeiMethod {
     public void downLoad_下载回复一级评论的数据文件(String filePath) {
         try {
             int getCount = kouBeiDataBase.get_二级回复文件应有数量();
+            System.out.println(getCount);
             for (int kk = 0; kk < getCount / 1000; kk++) {
-                ArrayList<Object> dataList = kouBeiDataBase.get_查询未下载的最后层级评论(kk*10000);
+                ArrayList<Object> dataList = kouBeiDataBase.get_查询未下载的最后层级评论(kk * 10000);
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
                         .collect(Collectors.toList());
                 for (int i = 0; i < list.size(); i++) {
@@ -637,23 +673,211 @@ public class KouBeiMethod {
             e.printStackTrace();
         }
     }
-    public void confirm_确认已下载的二级评论数据(String filePath){
+
+    public void confirm_确认已下载的二级评论数据(String filePath) {
         try {
             ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
             ArrayList<Object> dataList = new ArrayList<>();
-            for (String fileName:fileList) {
-                ConfirmReplySecond replySecond= new ConfirmReplySecond();
-                String tempString = fileName.replace("_二级级评论_0.txt","");
+            for (String fileName : fileList) {
+                ConfirmReplySecond replySecond = new ConfirmReplySecond();
+                String tempString = fileName.replace("_二级级评论_0.txt", "");
                 String kbId = tempString.split("_")[0];
                 String freplyId = tempString.split("_")[1];
-                String mainUrl = "https://koubeiipv6.app.autohome.com.cn/autov9.13.0/news/replytoplevelsublist.ashx?_appid=koubei&koubeiid="+kbId+"&freplyid="+freplyId+"&next=0&pagesize=999999&pm=1&appversion=1&orderBy=0";
+                String mainUrl = "https://koubeiipv6.app.autohome.com.cn/autov9.13.0/news/replytoplevelsublist.ashx?_appid=koubei&koubeiid=" + kbId + "&freplyid=" + freplyId + "&next=0&pagesize=999999&pm=1&appversion=1&orderBy=0";
                 replySecond.set_C_ReplySecondUrl(mainUrl);
                 dataList.add(replySecond);
             }
             kouBeiDataBase.insert_确认已下载的二级评论数据(dataList);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void method_解析二级评论数据(String filePath) {
+        try {
+            ArrayList<Object> replyData = new ArrayList<>();
+            ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
+            for (String fileName : fileList) {
+                if (!fileName.equals(".DS_Store")) {
+
+                    String content = T_Config_File.method_读取文件内容(filePath + fileName);
+                    String kbId = fileName.split("_")[0];
+
+                    replyData.addAll(parse_解析二级评论数据(content, filePath, fileName));
+                    if (replyData.size() > 10000) {
+                        HashSet<Object> set = new HashSet<>(replyData);
+                        replyData.clear();
+                        replyData.addAll(set);
+                        System.out.println("入库");
+                        kouBeiDataBase.insetForeachKouBeiReplyDat2(replyData);
+                        replyData.clear();
+                    }
+                }
+            }
+            HashSet<Object> set = new HashSet<>(replyData);
+            replyData.clear();
+            replyData.addAll(set);
+            kouBeiDataBase.insetForeachKouBeiReplyDat2(replyData);
+        } catch (
+                Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Object> parse_解析二级评论数据(String content, String filePath, String fileName) {
+        ArrayList<Object> dataList = new ArrayList<>();
+        try {
+            content = content.replace("$", "钱的符号").replace("\\\"", "不该有的英文引号").replace("\\", "两个斜杠");
+            Pattern pattern = Pattern.compile("\"rcontent\":\"(.*?)\",\"rmemberId\"");
+            Matcher matcher = pattern.matcher(content);
+            StringBuffer result = new StringBuffer();
+            while (matcher.find()) {
+                String firstPart = matcher.group(1); // 第一个引号与第二个引号之间的内容
+                matcher.appendReplacement(result, "\"rcontent\":\"" + firstPart.replace("\n", "").replace("\r", "").replace("\n\r", "").replace("'", "''").replace("\"", "不该有的英文引号") + "\",\"rmemberId\"");
+            }
+            matcher.appendTail(result);
+            content = result.toString();
+            JSONObject jsonRoot = JSONObject.parseObject(content);
+            JSONObject jsonResult = jsonRoot.getJSONObject("result");
+            String nextString = jsonResult.getString("next");
+            String ruserHeaderImage = jsonResult.getString("ruserHeaderImage");
+            String iscarowenr = jsonResult.getString("iscarowner");
+            String rmemberId = jsonResult.getString("rmemberId");
+            String carownerlevels = jsonResult.getString("carownerlevels");
+            JSONArray jsonArray = jsonResult.getJSONArray("list");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject wonderObject = ((JSONObject) jsonArray.get(i));
+                ReplyKouBei replyKouBei = new ReplyKouBei();
+                replyKouBei.set_C_freplyCount_TieZi(jsonRoot.getString("freplyCount"));
+                replyKouBei.set_C_KouBeiID(fileName.split("_")[0]);
+                replyKouBei.set_C_ruserHeaderImage(ruserHeaderImage);
+                replyKouBei.set_C_iscarowner(iscarowenr);
+                replyKouBei.set_C_rmemberId(rmemberId);
+                replyKouBei.set_C_iscarowner(iscarowenr);
+                replyKouBei.set_C_carownerlevels(carownerlevels);
+                replyKouBei.set_C_rfloor(wonderObject.getString("rfloor") == null ? "-" : wonderObject.getString("rfloor"));
+                replyKouBei.set_C_iscarowner(wonderObject.getString("iscarowner") == null ? "-" : wonderObject.getString("iscarowner"));
+                replyKouBei.set_C_rmemberId(wonderObject.getString("rmemberId") == null ? "-" : wonderObject.getString("rmemberId"));
+                replyKouBei.set_C_rcontentLength(wonderObject.getString("rcontentLength") == null ? "-" : wonderObject.getString("rcontentLength"));
+                replyKouBei.set_C_createType(wonderObject.getString("createType") == null ? "-" : wonderObject.getString("createType"));
+                replyKouBei.set_C_freplyId(wonderObject.getString("freplyId") == null ? "-" : wonderObject.getString("freplyId"));
+                replyKouBei.set_C_rup(wonderObject.getString("rup") == null ? "-" : wonderObject.getString("rup"));
+                replyKouBei.set_C_chatIndex(wonderObject.getString("chatIndex") == null ? "-" : wonderObject.getString("chatIndex"));
+                replyKouBei.set_C_rmemberSex(wonderObject.getString("rmemberSex") == null ? "-" : wonderObject.getString("rmemberSex"));
+                replyKouBei.set_C_robjId(wonderObject.getString("robjId") == null ? "-" : wonderObject.getString("robjId"));
+                replyKouBei.set_C_rmemberName(wonderObject.getString("rmemberName") == null ? "-" : wonderObject.getString("rmemberName"));
+                replyKouBei.set_C_rreplyDate(wonderObject.getString("rreplyDate") == null ? "-" : wonderObject.getString("rreplyDate"));
+                replyKouBei.set_C_carname(wonderObject.getString("carname") == null ? "-" : wonderObject.getString("carname"));
+                replyKouBei.set_C_replyId(wonderObject.getString("replyId") == null ? "-" : wonderObject.getString("replyId"));
+                replyKouBei.set_C_forbidReply(wonderObject.getString("forbidReply") == null ? "-" : wonderObject.getString("forbidReply"));
+                replyKouBei.set_C_ruserHeaderImage(wonderObject.getString("ruserHeaderImage") == null ? "-" : wonderObject.getString("ruserHeaderImage"));
+                replyKouBei.set_C_rtargetMemberId(wonderObject.getString("rtargetMemberId") == null ? "-" : wonderObject.getString("rtargetMemberId"));
+                replyKouBei.set_C_carownerlevels(wonderObject.getString("carownerlevels") == null ? "-" : wonderObject.getString("carownerlevels"));
+                replyKouBei.set_C_chatcount(wonderObject.getString("chatcount") == null ? "-" : wonderObject.getString("chatcount"));
+                replyKouBei.set_C_replydate(wonderObject.getString("replydate") == null ? "-" : wonderObject.getString("replydate"));
+                replyKouBei.set_C_rtargetReplyId(wonderObject.getString("rtargetReplyId") == null ? "-" : wonderObject.getString("rtargetReplyId"));
+                replyKouBei.set_C_location(wonderObject.getString("location") == null ? "-" : wonderObject.getString("location"));
+                replyKouBei.set_C_rcontent(wonderObject.getString("rcontent") == null ? "-" : wonderObject.getString("rcontent"));
+                replyKouBei.set_C_freplyCount_First(wonderObject.getString("freplyCount") == null ? "-" : wonderObject.getString("freplyCount"));
+                replyKouBei.set_C_nextString(nextString);
+                dataList.add(replyKouBei);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    public void method_获取口碑数据中的图片Url入库() {
+        try {
+            ArrayList<Object> dataList = new ArrayList<>();
+            int numCount = kouBeiDataBase.getCount();
+            for (int kk = 0; kk < numCount / 10000; kk++) {
+                ArrayList<Object> dataResultList = kouBeiDataBase.find_查找所有口碑帖子数据下载图片(kk * 10000);
+                for (int i = 0; i < dataResultList.size(); i++) {
+                    String mainContent = ((KouBeiData) dataResultList.get(i)).get_C_KouBeiContent();
+                    String kouBeiId = ((KouBeiData) dataResultList.get(i)).get_C_KoubeiID();
+                    String showId = ((KouBeiData) dataResultList.get(i)).get_C_ShowID();
+                    Document mainDoc = Jsoup.parse(mainContent);
+                    Elements mainItems = mainDoc.select(".lazyload");
+                    if (mainItems.size() > 0) {
+                        for (int j = 0; j < mainItems.size(); j++) {
+                            KouBeiPicture kouBeiPicture = new KouBeiPicture();
+                            kouBeiPicture.set_C_PictureUrl(mainItems.get(j).attr("data-src"));
+                            kouBeiPicture.set_C_IsFinish(0);
+                            kouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                            kouBeiPicture.set_C_ShowID(showId);
+                            kouBeiPicture.set_C_KouBeiID(kouBeiId);
+                            kouBeiPicture.set_C_NumCount(mainItems.size());
+                            kouBeiPicture.set_C_Position(String.valueOf(j));
+                            dataList.add(kouBeiPicture);
+                            if (dataList.size() > 10000) {
+                                kouBeiDataBase.insert_需要下载的口碑帖子里的图片(dataList);
+                                dataList.clear();
+                            }
+                        }
+                    }
+                }
+                if (dataList.size() > 0) {
+                    kouBeiDataBase.insert_需要下载的口碑帖子里的图片(dataList);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void downLoad_下载口碑中的图片(String filePath) {
+        try {
+            int numCount = kouBeiDataBase.get_口碑图片总数();
+            System.out.println(numCount);
+            int kk=0;
+//                for (int kk = 0; kk < numCount / 10000; kk++) {
+                    ArrayList<Object> dataResultList = kouBeiDataBase.get_获取口碑图片的url数据(kk * 10000);
+                    System.out.println(dataResultList.size());
+                    if (dataResultList.size()>36){
+                        List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataResultList.subList(i * (dataResultList.size() + 5) / 6, Math.min((i + 1) * (dataResultList.size() + 5) / 6, dataResultList.size())))
+                                .collect(Collectors.toList());
+                        for (int i = 0; i < list.size(); i++) {
+                            KouBeiPictureMoreThread moreThread = new KouBeiPictureMoreThread(list.get(i), filePath);
+                            Thread thread = new Thread(moreThread);
+                            thread.start();
+                        }
+                    }else {
+                        for (int i = 0; i < dataResultList.size(); i++) {
+                            String showId = ((KouBeiPicture)dataResultList.get(i)).get_C_ShowID();
+                            String kbId = ((KouBeiPicture)dataResultList.get(i)).get_C_KouBeiID();
+                            String position = ((KouBeiPicture)dataResultList.get(i)).get_C_Position();
+                            String mainUrl = ((KouBeiPicture)dataResultList.get(i)).get_C_PictureUrl();
+                            T_Config_File.downloadImage(mainUrl, filePath + showId + "/", showId + "_" + kbId + "_" + position);
+                        }
+                    }
+
+//                }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update_修改已下载的口碑图片的口碑状态(String filePath){
+        try {
+            ArrayList<String> showIdList = T_Config_File.method_获取文件夹名称(filePath);
+            ArrayList<Object> dataList =new ArrayList<>();
+            for(String showId:showIdList){
+                System.out.println(showId);
+                ConfirmKouBeiPicture confirmKouBeiPicture = new ConfirmKouBeiPicture();
+                confirmKouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                confirmKouBeiPicture.set_C_ShowID(showId);
+                dataList.add(confirmKouBeiPicture);
+            }
+            new KouBeiDataBase().insert_已下载的口碑帖子里的图片数据(dataList);
+//            downLoad_下载口碑中的图片(filePath);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

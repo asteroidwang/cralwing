@@ -24,7 +24,7 @@ public class PictureUrlThread implements Runnable {
         for (Object bean : list) {
             try {
                 String mainUrl = ((PictureUrl) bean).get_C_GaoQingImgUrl().equals("无高清图") ? ((PictureUrl) bean).get_C_ImgUrl() : ((PictureUrl) bean).get_C_GaoQingImgUrl();
-                String tempFilePath = ((PictureUrl) bean).get_C_BrandId() + "/" + ((PictureUrl) bean).get_C_ModelId() + "/" + ((PictureUrl) bean).get_C_VersionId() + "/" + ((PictureUrl) bean).get_C_ImgType() + "/";
+                String tempFilePath = ((PictureUrl) bean).get_C_BrandId()+"/"+((PictureUrl)bean).get_C_FactoryId() + "/" + ((PictureUrl) bean).get_C_ModelId() + "/" + ((PictureUrl) bean).get_C_VersionId() + "/" + ((PictureUrl) bean).get_C_ImgType() + "/";
                 String fileName = ((PictureUrl) bean).get_C_ImgId();
                 if (T_Config_File.downloadImage(mainUrl, savePath + tempFilePath, fileName+".jpg")) {
                     T_Config_File.method_重复写文件_根据路径创建文件夹(savePath.replace("图片/", ""), "已下载的图片Url.txt", mainUrl + "\n");
