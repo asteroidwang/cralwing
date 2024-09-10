@@ -26,4 +26,9 @@ public class T_Config_Picture extends T_Config_Father {
         String sql = "select count(*) from "+tableName+ " where C_IsFinish = 0";
         return get_获取表中数据数量_有查询条件(sql);
     }
+
+    public  int get_获取表中已下载的图片具体页面数据总数(){
+        String sql = "select count(*) from "+tableName+ " where C_IsFinish = 0";
+        return get_获取表中数据数量_有查询条件(sql);
+    }
 }
