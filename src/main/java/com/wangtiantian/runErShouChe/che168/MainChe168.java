@@ -136,6 +136,7 @@ public class MainChe168 {
         if (dataList.size() < 32) {
             for (Object o : dataList) {
                 String mainUrl = ((Che168_FenYeUrl) o).get_C_FenYeUrl();
+                System.out.println(mainUrl);
                 String cityPinYin = mainUrl.split("/")[3];
                 String fileName = cityPinYin + "_" + ((Che168_FenYeUrl) o).get_C_Page() + ".txt";
                 if (method_访问二手车url获取网页源码(mainUrl, "GBK", filePath, fileName)) {

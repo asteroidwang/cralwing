@@ -60,7 +60,7 @@ public class T_Config_Price extends T_Config_Father {
         method_i_d_u(sql);
     }
     public void update_修改已下载的车辆价格信息的状态(){
-        String sql ="update "+tableName+" set C_IsFinish = 1 where concat(C_DealerId,'_',C_ModelId) in (select distinct concat(C_DealerId,'_',C_ModelId) from T_ConfirmCarPriceFile_20240902)";
+        String sql ="update "+tableName+" set C_IsFinish = 1 where concat(C_DealerId,'_',C_ModelId) in (select distinct concat(C_DealerId,'_',C_ModelId) from T_ConfirmCarPriceFile_20240909)";
         method_i_d_u(sql);
     }
 
