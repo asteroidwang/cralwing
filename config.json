@@ -136,10 +136,12 @@
           {
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
             "tableName": "T_ReplyKouBei_Second"
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
             "tableName": "T_KouBeiPictureUrl"
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.koubei.ConfirmKouBeiPicture",
             "tableName": "T_ConfirmKouBeiPicture"
           }
@@ -186,6 +188,22 @@
           {
             "entity": "com.wangtiantian.entity.ershouche.che168.Che168_FenYeUrl",
             "tableName": "T_che168_FenYeUrl"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CityData",
+            "tableName": "T_yiche_CityData"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_FenYeUrl",
+            "tableName": "T_yiche_FenYeUrl"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CarInfo",
+            "tableName": "T_yiche_CarInfo"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CityData",
+            "tableName": "T_renrenche_CityData"
           }
         ]
       },
