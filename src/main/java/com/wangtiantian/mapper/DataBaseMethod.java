@@ -143,7 +143,7 @@ public class DataBaseMethod {
         String model_lastTableName = "T_汽车之家_车型表_" + tempTime;
         String versionId_lastTableName = "T_汽车之家_版本id表_" + tempTime;
         String bag_lastTableName = "T_汽车之家_选装包_" + tempTime;
-        String updateContent = content.replace(brand_lastTableName, brandTableName).replace(factory_lastTableName, factoryTableName).replace(model_lastTableName, modelTableName).replace(version_lastTableName, versionTableName).replace(versionId_lastTableName, versionIdTableName).replace(bag_lastTableName, bagTableName);
+        String updateContent = content.replace(brand_lastTableName, brandTableName).replace(factory_lastTableName, factoryTableName).replace(model_lastTableName, modelTableName).replace(version_lastTableName, versionTableName).replace(versionId_lastTableName, versionIdTableName).replace(bag_lastTableName, bagTableName).replace("T_汽车之家_参数表_"+tempTime,"T_汽车之家_参数表_"+currentTime).replace("T_汽车之家_配置表_"+tempTime,"T_汽车之家_配置表_"+currentTime);
         T_Config_File.method_写文件_根据路径创建文件夹("", "config.json", updateContent);
     }
 }

@@ -30,9 +30,9 @@ public class MainConfigData {
 //        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240826" + "/";
 
         // 创建表
-        // mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-         mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-         mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+         mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+        // mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+        // mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
         // mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
         // mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
         // mainConfigData.method_下载配置数据(filePath + "params/");
@@ -439,7 +439,7 @@ public class MainConfigData {
     // 5.版本ids入库 下载配置数据
     public void method_下载配置数据(String filePath) {
         try {
-//            dataBaseMethod.insert_批量插入版本ids();
+            dataBaseMethod.insert_批量插入版本ids();
             ArrayList<Object> paramsList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 0);
             ArrayList<Object> configList = dataBaseMethod.method_根据数据类型获取未下载的数据("config", 0);
             ArrayList<Object> bagList = dataBaseMethod.method_根据数据类型获取未下载的数据("bag", 0);
@@ -553,6 +553,7 @@ public class MainConfigData {
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             String bagContent = T_Config_File.method_读取文件内容(filePath + "bag/" + i + "_bag.txt");
+            System.out.println(i);
             params.addAll(method_解析params(paramsContent.substring(9, paramsContent.length() - 1)));
             config.addAll(method_解析config(configContent.substring(10, configContent.length() - 1)));
             bag.addAll(method_解析bag(bagContent.substring(7, bagContent.length() - 1)));
@@ -570,17 +571,24 @@ public class MainConfigData {
         bag.addAll(setBag);
 
         dataBaseMethod.method_批量插入配置数据(params, "params");
-        dataBaseMethod.method_批量插入配置数据(config, "config");
-        dataBaseMethod.method_批量插入配置数据(bag, "bag");
+//        dataBaseMethod.method_批量插入配置数据(config, "config");
+//        dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
 
     public static ArrayList<Object> method_解析params(String content) {
+//        System.out.println(content);
         ArrayList<Object> dataList = new ArrayList<>();
         try {
             HashMap<String, String> mapList = T_ZiDuan_Params_Config.params_字段();
-            com.alibaba.fastjson.JSONObject jsonRoot = JSON.parseObject(content);
-            com.alibaba.fastjson.JSONArray mainContent = jsonRoot.getJSONObject("result").getJSONArray("paramtypeitems");
+            JSONObject jsonRoot = null;
+            try {
+                jsonRoot = JSON.parseObject(content);
+            }catch (Exception e){
+                System.out.println(content);
+            }
+//            JSONObject jsonRoot = JSON.parseObject(content);
+            JSONArray mainContent = jsonRoot.getJSONObject("result").getJSONArray("paramtypeitems");
             ArrayList<Bean_Params> pidList = new ArrayList<>();
             if (mainContent.size() != 0 && mainContent != null) {
                 com.alibaba.fastjson.JSONArray pidparamItems = mainContent.getJSONObject(0).getJSONArray("paramitems").getJSONObject(0).getJSONArray("valueitems");

@@ -1,7 +1,7 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.1.10:1433;loginTimeout=1000;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.1.7:1433;loginTimeout=1000;databaseName=",
     "userName": "sa",
     "password": "7777",
     "dbItems": [
@@ -11,35 +11,35 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.Bean_Brand",
-            "tableName": "T_汽车之家_品牌表_20240901"
+            "tableName": "T_汽车之家_品牌表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Factory",
-            "tableName": "T_汽车之家_厂商表_20240901"
+            "tableName": "T_汽车之家_厂商表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Model",
-            "tableName": "T_汽车之家_车型表_20240901"
+            "tableName": "T_汽车之家_车型表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Version",
-            "tableName": "T_汽车之家_版本表_20240901"
+            "tableName": "T_汽车之家_版本表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.configData.Bean_VersionIds",
-            "tableName": "T_汽车之家_版本id表_20240901"
+            "tableName": "T_汽车之家_版本id表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Params",
-            "tableName": "T_汽车之家_参数表_20240901"
+            "tableName": "T_汽车之家_参数表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Config",
-            "tableName": "T_汽车之家_配置表_20240901"
+            "tableName": "T_汽车之家_配置表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Bag",
-            "tableName": "T_汽车之家_选装包_20240901"
+            "tableName": "T_汽车之家_选装包_20240910"
           },
           {
             "entity": "entity.BeanColor",
@@ -136,10 +136,12 @@
           {
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
             "tableName": "T_ReplyKouBei_Second"
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
             "tableName": "T_KouBeiPictureUrl"
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.koubei.ConfirmKouBeiPicture",
             "tableName": "T_ConfirmKouBeiPicture"
           }
@@ -263,23 +265,23 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.Bean_Brand",
-            "tableName": "T_汽车之家_品牌表_20240901"
+            "tableName": "T_汽车之家_品牌表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Factory",
-            "tableName": "T_汽车之家_厂商表_20240901"
+            "tableName": "T_汽车之家_厂商表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Model",
-            "tableName": "T_汽车之家_车型表_20240901"
+            "tableName": "T_汽车之家_车型表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Version",
-            "tableName": "T_汽车之家_版本表_20240901"
+            "tableName": "T_汽车之家_版本表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.configData.Bean_VersionIds",
-            "tableName": "T_汽车之家_版本id表_20240901"
+            "tableName": "T_汽车之家_版本id表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Params",
@@ -291,7 +293,7 @@
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Bag",
-            "tableName": "T_汽车之家_选装包_20240901"
+            "tableName": "T_汽车之家_选装包_20240910"
           },
           {
             "entity": "entity.BeanColor",
