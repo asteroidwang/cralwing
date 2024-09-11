@@ -15,7 +15,8 @@ import java.util.Date;
 
 public class MainRenRenChe {
     public static void main(String[] args) {
-        String filePath ="/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
+//        String filePath ="/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
+        String filePath ="/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
         MainRenRenChe renRenChe = new MainRenRenChe();
         // 1
         // renRenChe.method_下载城市数据并入库(filePath);

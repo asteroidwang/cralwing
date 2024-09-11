@@ -198,15 +198,4 @@ public class T_Config_File {
             }
         }
     }
-    public static List<String> method_流式获取文件名称(String filePath) {
-        List<String> fileNames = new ArrayList<>();
-        try {
-            Stream<Path> paths = Files.walk(Paths.get(filePath));
-            fileNames = paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return fileNames;
-    }
 }
