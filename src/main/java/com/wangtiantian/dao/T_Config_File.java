@@ -7,9 +7,15 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class T_Config_File {
     //读取文件内容
@@ -106,7 +112,27 @@ public class T_Config_File {
         }
         return data;
     }
+    public static List<String> method_流式获取文件名称(String filePath) {
+        List<String> fileNames = new ArrayList<>();
+        try {
+            Stream<Path> paths = Files.walk(Paths.get(filePath));
+            fileNames = paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fileNames;
+    }
 
+    public static List<String> method_流式获取文件夹名称(String filePath) {
+        List<String> fileNames = new ArrayList<>();
+        try {
+            Stream<Path> paths = Files.walk(Paths.get(filePath));
+            fileNames = paths.filter(Files::isDirectory).map(Path::toString).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fileNames;
+    }
     public static Boolean method_判断文件是否存在(String file) {
         return new File(file).exists();
     }
@@ -148,7 +174,7 @@ public class T_Config_File {
             if (!file.exists()) {
                 file.mkdirs();
             }
-            URL url = new URL(imageUrl);
+            URL url = new URL(imageUrl.replace("..","."));
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();
             OutputStream outputStream = new FileOutputStream(filePath + fileName);

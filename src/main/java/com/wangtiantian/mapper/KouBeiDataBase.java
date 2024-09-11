@@ -154,6 +154,6 @@ public class KouBeiDataBase {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 8);
         kouBeiDataDao.insertForeach(dataList);
         T_Config_KouBei kouBeiDataDao2 = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
-        kouBeiDataDao2.method_i_d_u("update T_KouBeiPictureUrl set C_IsFinish = 1 where C_ShowID in (select distinct C_ShowId from T_ConfirmKouBeiPicture)");
+        kouBeiDataDao2.method_i_d_u("update T_KouBeiPictureUrl set C_IsFinish = 1 where concat(C_ShowId,'_',C_Position) in (select distinct concat(C_ShowId,'_',C_Position) from T_ConfirmKouBeiPicture)");
     }
 }
