@@ -283,7 +283,6 @@ public class T_Config_Father {
             }
             String tempString = valueBuffer.toString();
             String sql = "insert into " + tableName + columnList + " values" + tempString.substring(0, tempString.length() - 1);
-//            System.out.println(sql);
             method_i_d_u(sql);
             System.out.println(tableName + "分批入库一次");
         }

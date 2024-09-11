@@ -1,5 +1,7 @@
 package com.wangtiantian.dao;
 
+import java.util.ArrayList;
+
 public class T_Config_ErShouChe extends T_Config_Father{
     public T_Config_ErShouChe(int chooseDataBaseType, int chooseDataBase, int chooseTable) {
         super(chooseDataBaseType, chooseDataBase, chooseTable);
@@ -12,4 +14,25 @@ public class T_Config_ErShouChe extends T_Config_Father{
         String sql ="update "+tableName+ " set C_IsFinish = 1 where C_FenYeUrl='"+url+"'";
         method_i_d_u(sql);
     }
+
+    public ArrayList<Object> method_查询易车未下载首页的城市数据() {
+        String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0 and C_CityLevel = 1";
+        return method_有条件的查询(sql);
+    }
+
+    public void update_修改已下载的首页数据的下载状态(String cityId){
+        String sql ="update "+tableName+ " set C_IsFinish = 1 where C_CityId='"+cityId+"'";
+        method_i_d_u(sql);
+    }
+
+    public ArrayList<Object> get_根据城市拼音获取其他数据(String pinYin){
+        String sql = "SELECT * FROM " + tableName + " where  C_CityLevel = 1 and C_EngName = '"+pinYin+"'";
+        return method_有条件的查询(sql);
+    }
+
+    public void yiche_update_修改已下载详情页面的车辆状态(String ucarId,String cityName){
+        String sql ="update "+tableName+ " set C_IsFinish = 1 where C_uCarId='"+ucarId+"' and C_cityName ='"+cityName+"'";
+        method_i_d_u(sql);
+    }
+
 }
