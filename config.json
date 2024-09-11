@@ -1,7 +1,7 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.1.7:1433;loginTimeout=1000;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.1.7:1433;databaseName=",
     "userName": "sa",
     "password": "7777",
     "dbItems": [
@@ -136,12 +136,10 @@
           {
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
             "tableName": "T_ReplyKouBei_Second"
-          },
-          {
+          },{
             "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
             "tableName": "T_KouBeiPictureUrl"
-          },
-          {
+          },{
             "entity": "com.wangtiantian.entity.koubei.ConfirmKouBeiPicture",
             "tableName": "T_ConfirmKouBeiPicture"
           }
@@ -188,22 +186,6 @@
           {
             "entity": "com.wangtiantian.entity.ershouche.che168.Che168_FenYeUrl",
             "tableName": "T_che168_FenYeUrl"
-          },
-          {
-            "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CityData",
-            "tableName": "T_yiche_CityData"
-          },
-          {
-            "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_FenYeUrl",
-            "tableName": "T_yiche_FenYeUrl"
-          },
-          {
-            "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CarInfo",
-            "tableName": "T_yiche_CarInfo"
-          },
-          {
-            "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CityData",
-            "tableName": "T_renrenche_CityData"
           }
         ]
       },
@@ -213,39 +195,39 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.ModelDealerPrice.ModelDealerPriceFenYe",
-            "tableName": "T_ModelDealerFenYeUrl_20240909"
+            "tableName": "T_ModelDealerFenYeUrl_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.ModelDealerData",
-            "tableName": "T_DealerData_20240909"
+            "tableName": "T_DealerData_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.SaleModData",
-            "tableName": "T_ConfirmCarPriceFile_20240909"
+            "tableName": "T_ConfirmCarPriceFile_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
-            "tableName": "T_CarPrice_20240909"
+            "tableName": "T_CarPrice_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.Bean_DealerFenYeUrl",
-            "tableName": "T_DealerFenYeUrl_20240909"
+            "tableName": "T_DealerFenYeUrl_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
-            "tableName": "T_CarPrice_20240909"
+            "tableName": "T_CarPrice_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFile",
-            "tableName": "T_ConfirmCarPriceFile_20240909"
+            "tableName": "T_ConfirmCarPriceFile_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.ConfirmCarPriceFileModel",
-            "tableName": "T_ConfirmCarPriceFileModel_20240909"
+            "tableName": "T_ConfirmCarPriceFileModel_20240902"
           },
           {
             "entity": "com.wangtiantian.entity.price.CarPrice",
-            "tableName": "T_CarPrice_Model_20240909"
+            "tableName": "T_CarPrice_Model_20240902"
           }
         ]
       }
@@ -335,6 +317,8 @@
       },
       {
         "dbName": "carPrice",
+        "userName": "sa",
+        "password": "Abc20010318aa",
         "primary": "C_ID",
         "db_table": [
           {

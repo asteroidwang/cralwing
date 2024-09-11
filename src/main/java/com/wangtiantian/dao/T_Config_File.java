@@ -11,6 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,6 +85,18 @@ public class T_Config_File {
         for (int i = 0; i < files.length; i++) {
             fileNames.add(files[i].getName());
         }
+        return fileNames;
+    }
+
+    public static List<String> method_流式获取文件名称(String filePath) {
+        List<String> fileNames = new ArrayList<>();
+        try {
+            Stream<Path> paths = Files.walk(Paths.get(filePath));
+          fileNames =  paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return fileNames;
     }
 
