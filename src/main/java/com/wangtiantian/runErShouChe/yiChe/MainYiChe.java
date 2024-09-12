@@ -350,7 +350,7 @@ public class MainYiChe {
         ArrayList<Object> dataList = new ArrayList<>();
         for (String fileName : fileList) {
             YiChe_ConfirmDetails che_confirmDetails = new YiChe_ConfirmDetails();
-            che_confirmDetails.set_C_CityPinYin(fileName.replace(".txt", "").split("_")[1]);
+            che_confirmDetails.set_C_CityPinYin(fileName.replace(".txt", "").replace(filePath,"").split("_")[1]);
             che_confirmDetails.set_C_ucarId(fileName.replace(".txt", "").split("_")[0]);
             che_confirmDetails.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             dataList.add(che_confirmDetails);
