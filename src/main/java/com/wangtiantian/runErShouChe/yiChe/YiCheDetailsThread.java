@@ -27,7 +27,7 @@ public class YiCheDetailsThread implements Runnable {
             String cityName = ((YiChe_CarInfo)list.get(i)).get_C_cityName();
             String mainUrl ="https://yiche.taocheche.com/detail/"+carId+"?city="+cityPinYin;
             if(T_Config_File.method_访问url获取网页源码普通版(mainUrl,"UTF-8",filePath,carId+"_"+cityPinYin+".txt")){
-                new ErShouCheDataBase().yiche_update_修改已下载详情页面的车辆状态(carId,cityName);
+//                new ErShouCheDataBase().yiche_update_修改已下载详情页面的车辆状态(carId,cityName);
             }
         }
     }
