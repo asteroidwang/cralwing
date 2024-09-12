@@ -68,7 +68,6 @@ public class T_Config_Father {
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
-            System.out.println("数据库连接已断开");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,7 +175,6 @@ public class T_Config_Father {
             resultSet.close();
             stmt.close();
             conn.close();
-            System.out.println("数据库连接已断开");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -239,7 +237,7 @@ public class T_Config_Father {
             while (resultSet.next()) {
                 num = (int) resultSet.getObject(1);
             }
-            System.out.println("数据库连接已断开");
+
             resultSet.close();
             stmt.close();
             conn.close();
@@ -261,7 +259,7 @@ public class T_Config_Father {
             while (resultSet.next()) {
                 num = (int) resultSet.getObject(1);
             }
-            System.out.println("数据库连接已断开");
+
             resultSet.close();
             stmt.close();
             conn.close();
@@ -330,7 +328,7 @@ public class T_Config_Father {
             while (resultSet.next()) {
                 num = (int) resultSet.getObject(1);
             }
-            System.out.println("数据库连接已断开");
+
             resultSet.close();
             stmt.close();
             conn.close();

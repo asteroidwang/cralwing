@@ -94,7 +94,6 @@ public class MainRenRenChe {
                     method_下载城市分页数据的首页(filePath);
                 }
             }
-
         }
         if (erShouCheDataBase.rrc_get_获取未下载首页分页的城市().size() > 0) {
             method_下载城市分页数据的首页(filePath);
@@ -203,10 +202,8 @@ public class MainRenRenChe {
         }
         if (mainDoc != null && mainDoc.toString().contains("款")) {
             T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.toString());
-            System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             return true;
         } else {
-
             return false;
         }
     }
