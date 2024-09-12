@@ -833,11 +833,31 @@ public class KouBeiMethod {
         try {
             int numCount = kouBeiDataBase.get_口碑图片总数();
             System.out.println(numCount);
-            int kk=0;
-//                for (int kk = 0; kk < numCount / 10000; kk++) {
+            if (numCount < 10000) {
+                ArrayList<Object> dataResultList = kouBeiDataBase.get_获取口碑图片的url数据(0);
+                System.out.println(dataResultList.size());
+                if (dataResultList.size() > 36) {
+                    List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataResultList.subList(i * (dataResultList.size() + 5) / 6, Math.min((i + 1) * (dataResultList.size() + 5) / 6, dataResultList.size())))
+                            .collect(Collectors.toList());
+                    for (int i = 0; i < list.size(); i++) {
+                        KouBeiPictureMoreThread moreThread = new KouBeiPictureMoreThread(list.get(i), filePath);
+                        Thread thread = new Thread(moreThread);
+                        thread.start();
+                    }
+                } else {
+                    for (int i = 0; i < dataResultList.size(); i++) {
+                        String showId = ((KouBeiPicture) dataResultList.get(i)).get_C_ShowID();
+                        String kbId = ((KouBeiPicture) dataResultList.get(i)).get_C_KouBeiID();
+                        String position = ((KouBeiPicture) dataResultList.get(i)).get_C_Position();
+                        String mainUrl = ((KouBeiPicture) dataResultList.get(i)).get_C_PictureUrl().replace("..",".");
+                        T_Config_File.downloadImage(mainUrl, filePath + showId + "/", showId + "_" + kbId + "_" + position);
+                    }
+                }
+            } else {
+                for (int kk = 0; kk < numCount / 10000; kk++) {
                     ArrayList<Object> dataResultList = kouBeiDataBase.get_获取口碑图片的url数据(kk * 10000);
                     System.out.println(dataResultList.size());
-                    if (dataResultList.size()>36){
+                    if (dataResultList.size() > 36) {
                         List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataResultList.subList(i * (dataResultList.size() + 5) / 6, Math.min((i + 1) * (dataResultList.size() + 5) / 6, dataResultList.size())))
                                 .collect(Collectors.toList());
                         for (int i = 0; i < list.size(); i++) {
@@ -845,17 +865,19 @@ public class KouBeiMethod {
                             Thread thread = new Thread(moreThread);
                             thread.start();
                         }
-                    }else {
+                    } else {
                         for (int i = 0; i < dataResultList.size(); i++) {
-                            String showId = ((KouBeiPicture)dataResultList.get(i)).get_C_ShowID();
-                            String kbId = ((KouBeiPicture)dataResultList.get(i)).get_C_KouBeiID();
-                            String position = ((KouBeiPicture)dataResultList.get(i)).get_C_Position();
-                            String mainUrl = ((KouBeiPicture)dataResultList.get(i)).get_C_PictureUrl();
+                            String showId = ((KouBeiPicture) dataResultList.get(i)).get_C_ShowID();
+                            String kbId = ((KouBeiPicture) dataResultList.get(i)).get_C_KouBeiID();
+                            String position = ((KouBeiPicture) dataResultList.get(i)).get_C_Position();
+                            String mainUrl = ((KouBeiPicture) dataResultList.get(i)).get_C_PictureUrl().replace("..",".");
+                            System.out.println(mainUrl);
                             T_Config_File.downloadImage(mainUrl, filePath + showId + "/", showId + "_" + kbId + "_" + position);
                         }
                     }
 
-//                }
+                }
+            }
 
 
         } catch (Exception e) {
@@ -863,20 +885,42 @@ public class KouBeiMethod {
         }
     }
 
-    public void update_修改已下载的口碑图片的口碑状态(String filePath){
+    public void update_修改已下载的口碑图片的口碑状态(String filePath) {
         try {
-            ArrayList<String> showIdList = T_Config_File.method_获取文件夹名称(filePath);
-            ArrayList<Object> dataList =new ArrayList<>();
-            for(String showId:showIdList){
-                System.out.println(showId);
-                ConfirmKouBeiPicture confirmKouBeiPicture = new ConfirmKouBeiPicture();
-                confirmKouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                confirmKouBeiPicture.set_C_ShowID(showId);
-                dataList.add(confirmKouBeiPicture);
+            List<String> showIdList = T_Config_File.method_流式获取文件夹名称(filePath);
+            ArrayList<Object> dataList = new ArrayList<>();
+            for (String path : showIdList) {
+                ArrayList<String> fileList = T_Config_File.method_获取文件名称(path);
+                for (String fileName : fileList) {
+                    String showId = fileName.split("_")[0];
+                    String kouBeiId = fileName.split("_")[1];
+                    String position = fileName.split("_")[2];
+                    ConfirmKouBeiPicture confirmKouBeiPicture = new ConfirmKouBeiPicture();
+                    confirmKouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    confirmKouBeiPicture.set_C_ShowID(showId);
+                    confirmKouBeiPicture.set_C_Position(position);
+                    dataList.add(confirmKouBeiPicture);
+                    if (dataList.size()>100000){
+                        new KouBeiDataBase().insert_已下载的口碑帖子里的图片数据(dataList);
+                        dataList.clear();
+                    }
+                }
             }
-            new KouBeiDataBase().insert_已下载的口碑帖子里的图片数据(dataList);
+            if (dataList.size()>0){
+                new KouBeiDataBase().insert_已下载的口碑帖子里的图片数据(dataList);
+            }
 //            downLoad_下载口碑中的图片(filePath);
-        }catch (Exception e){
+//            ArrayList<String> showIdList = T_Config_File.method_获取文件夹名称(filePath);
+//            ArrayList<Object> dataList = new ArrayList<>();
+//            for (String showId : showIdList) {
+//                ConfirmKouBeiPicture confirmKouBeiPicture = new ConfirmKouBeiPicture();
+//                confirmKouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//                confirmKouBeiPicture.set_C_ShowID(showId);
+//                dataList.add(confirmKouBeiPicture);
+//            }
+//            new KouBeiDataBase().insert_已下载的口碑帖子里的图片数据(dataList);
+//            downLoad_下载口碑中的图片(filePath);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

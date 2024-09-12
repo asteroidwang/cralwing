@@ -37,7 +37,9 @@ public class MainKouBei {
         // 20240809 优化代码
 //        String macFilePathMini = "/Users/wangtiantian/MyDisk/汽车之家/口碑数据/20240809/";
         String macFilePathAir = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/口碑评价数据/20240809/";
-        String winFilePath = "E:/汽车之家/口碑评价数据/20240804/";
+//        String winFilePath = "E:/汽车之家/口碑评价数据/20240804/";
+//        String winFilePath = "F:/汽车之家/";
+        String winFilePath = "D:/爬取网页源数据/汽车之家/口碑评价数据/20240804/";
         String currentFilePath = "";
         String systemName = System.getProperty("os.name").toLowerCase();
         KouBeiMethod kouBeiMethod = new KouBeiMethod();
@@ -59,7 +61,7 @@ public class MainKouBei {
         // new KouBeiMethod().confirm_确认已下载的二级评论数据(currentFilePath+"二级评论数据/");
         // new KouBeiMethod().method_解析二级评论数据(currentFilePath+"二级评论数据/");
         // new KouBeiMethod().method_获取口碑数据中的图片Url入库();
-         new KouBeiMethod().downLoad_下载口碑中的图片(currentFilePath+"口碑图片/");
-//        new KouBeiMethod().update_修改已下载的口碑图片的口碑状态(currentFilePath+"口碑图片/");
+         new KouBeiMethod().downLoad_下载口碑中的图片(currentFilePath+"口碑图片1/");
+        new KouBeiMethod().update_修改已下载的口碑图片的口碑状态(currentFilePath+"口碑图片1/");
     }
 }

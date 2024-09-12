@@ -22,7 +22,8 @@ import java.util.stream.IntStream;
 
 public class MainYiChe {
     public static void main(String[] args) {
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/yiche/20240911/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/yiche/20240911/";
+        String filePath = "D:/爬取网页源数据/yiche/20240911/";
         MainYiChe mainYiChe = new MainYiChe();
         // 1
         // mainYiChe.method_下载城市数据并入库(filePath);

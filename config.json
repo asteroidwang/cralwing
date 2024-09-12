@@ -1,7 +1,7 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.1.7:1433;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.1.7:1433;loginTimeout=1000;databaseName=",
     "userName": "sa",
     "password": "7777",
     "dbItems": [
