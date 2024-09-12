@@ -309,8 +309,6 @@ public class MainYiChe {
                     }
                 }
             }
-
-
         }
         if (dataList.size() > 0) {
             erShouCheDataBase.yiche_insert_车辆基本信息数据入库(dataList);
