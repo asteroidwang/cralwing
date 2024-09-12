@@ -77,7 +77,7 @@ public class MainRenRenChe {
             String cityId = ((RenRenChe_CityData) cityDataList.get(i)).get_C_CityId();
             String mainUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn1/?reentries=%7B%22reentry_id%22%3A%22a242c2ba-f37d-48db-bd04-116a27baf712%22%7D";
             try {
-                Thread.sleep(1000 * 30);
+                Thread.sleep(1000 * 60);
             } catch (Exception e) {
                 e.printStackTrace();
             }
