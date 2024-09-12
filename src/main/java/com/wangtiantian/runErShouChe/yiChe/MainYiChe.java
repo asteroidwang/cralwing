@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.ershouche.yiChe.YiChe_CarInfo;
 import com.wangtiantian.entity.ershouche.yiChe.YiChe_CityData;
+import com.wangtiantian.entity.ershouche.yiChe.YiChe_ConfirmDetails;
 import com.wangtiantian.entity.ershouche.yiChe.YiChe_FenYeUrl;
 import com.wangtiantian.mapper.ErShouCheDataBase;
 import com.wangtiantian.runErShouChe.che168.Che168AllFenYeThread;
@@ -41,7 +42,10 @@ public class MainYiChe {
         // mainYiChe.parse_解析所有车辆基本信息(filePath + "各个城市分页数据/");
 
         // 6
-        mainYiChe.method_获取易车二手车的车辆详情页面(filePath+"车辆详情页页面/");
+        // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面/");
+
+        // 7
+        mainYiChe.method_修改已下载的易车二手车的车辆详情页面的下载状态(filePath + "车辆详情页页面/");
 
     }
 
@@ -305,8 +309,6 @@ public class MainYiChe {
                     }
                 }
             }
-
-
         }
         if (dataList.size() > 0) {
             erShouCheDataBase.yiche_insert_车辆基本信息数据入库(dataList);
@@ -314,10 +316,10 @@ public class MainYiChe {
     }
 
     // 获取易车二手车的车辆详情页面
-    public void method_获取易车二手车的车辆详情页面(String filePath){
+    public void method_获取易车二手车的车辆详情页面(String filePath) {
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
         ArrayList<Object> carInfoList = erShouCheDataBase.yiche_get_车辆基本信息数据();
-        if (carInfoList.size()>36){
+        if (carInfoList.size() > 36) {
             List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> carInfoList.subList(i * (carInfoList.size() + 5) / 6, Math.min((i + 1) * (carInfoList.size() + 5) / 6, carInfoList.size())))
                     .collect(Collectors.toList());
             for (int i = 0; i < list.size(); i++) {
@@ -325,21 +327,36 @@ public class MainYiChe {
                 Thread thread = new Thread(moreThread);
                 thread.start();
             }
-        }else {
+        } else {
             for (int i = 0; i < carInfoList.size(); i++) {
-                String carId = ((YiChe_CarInfo)carInfoList.get(i)).get_C_uCarId();
-                String cityPinYin =((YiChe_CarInfo)carInfoList.get(i)).get_C_FileName().split("_")[0];
-                String cityName = ((YiChe_CarInfo)carInfoList.get(i)).get_C_cityName();
-                String mainUrl ="https://yiche.taocheche.com/detail/"+carId+"?city="+cityPinYin;
-                if(T_Config_File.method_访问url获取网页源码普通版(mainUrl,"UTF-8",filePath,carId+"_"+cityPinYin+".txt")){
-                    erShouCheDataBase.yiche_update_修改已下载详情页面的车辆状态(carId,cityName);
+                String carId = ((YiChe_CarInfo) carInfoList.get(i)).get_C_uCarId();
+                String cityPinYin = ((YiChe_CarInfo) carInfoList.get(i)).get_C_FileName().split("_")[0];
+                String cityName = ((YiChe_CarInfo) carInfoList.get(i)).get_C_cityName();
+                String mainUrl = "https://yiche.taocheche.com/detail/" + carId + "?city=" + cityPinYin;
+                if (T_Config_File.method_访问url获取网页源码普通版(mainUrl, "UTF-8", filePath, carId + "_" + cityPinYin + ".txt")) {
+                    erShouCheDataBase.yiche_update_修改已下载详情页面的车辆状态(carId, cityName);
                 }
             }
         }
 
-        if (erShouCheDataBase.yiche_get_车辆基本信息数据().size()>0){
+        if (erShouCheDataBase.yiche_get_车辆基本信息数据().size() > 0) {
             method_获取易车二手车的车辆详情页面(filePath);
         }
+    }
+
+    // 修改已下载的易车二手车的车辆详情页面的下载状态
+    public void method_修改已下载的易车二手车的车辆详情页面的下载状态(String filePath) {
+        List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
+        ArrayList<Object> dataList = new ArrayList<>();
+        for (String fileName : fileList) {
+            YiChe_ConfirmDetails che_confirmDetails = new YiChe_ConfirmDetails();
+            che_confirmDetails.set_C_CityPinYin(fileName.replace(".txt", "").replace(filePath,"").split("_")[1]);
+            che_confirmDetails.set_C_ucarId(fileName.replace(".txt", "").split("_")[0]);
+            che_confirmDetails.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            dataList.add(che_confirmDetails);
+        }
+        new ErShouCheDataBase().yiche_insert_确认车辆基本信息数据下载数据入库(dataList);
+
     }
 
     // 带请求头的下载城市分页首页

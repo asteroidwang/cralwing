@@ -64,7 +64,6 @@ public class KouBeiDataBase {
 
     public ArrayList<Object> find_查找所有口碑帖子数据下载图片(int begin) {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 2);
-//       return kouBeiDataDao.method_查询未下载的数据();
         return kouBeiDataDao.method_分页查询未下载的数据10000条每次(begin);
 
     }
@@ -156,4 +155,5 @@ public class KouBeiDataBase {
         T_Config_KouBei kouBeiDataDao2 = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
         kouBeiDataDao2.method_i_d_u("update T_KouBeiPictureUrl set C_IsFinish = 1 where concat(C_ShowId,'_',C_Position) in (select distinct concat(C_ShowId,'_',C_Position) from T_ConfirmKouBeiPicture)");
     }
+
 }

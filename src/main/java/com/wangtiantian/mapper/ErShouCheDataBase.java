@@ -102,6 +102,15 @@ public class ErShouCheDataBase {
         cityDataDao.insertForeach(dataList);
     }
 
+    // 车辆基本信息数据入库
+    public void yiche_insert_确认车辆基本信息数据下载数据入库(ArrayList<Object> dataList) {
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 8);
+        cityDataDao.insertForeach(dataList);
+        T_Config_ErShouChe dataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 4);
+        dataDao.yiche_update_修改已下载详情页面的数据状态();
+    }
+
+
     public ArrayList<Object> yiche_get_车辆基本信息数据() {
         T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 4);
         return cityDataDao.get_查找未下载的数据();
@@ -135,6 +144,18 @@ public class ErShouCheDataBase {
     public void rrc_insert_入库城市分页Url数据(ArrayList<Object> dataList) {
         T_Config_ErShouChe carInoDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 6);
         carInoDao.insertForeach(dataList);
+    }
+
+    // 获取未下载的分页数据
+    public ArrayList<Object> rrc_get_获取未下载分页的url数据() {
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 6);
+        return cityDataDao.method_查询未下载的数据();
+    }
+
+    // 修改已下载分页首页的城市下载状态
+    public void rrc_update_修改已下载的分页数据的下载状态(String url) {
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 6);
+        cityDataDao.update_修改已下载的分页数据城的下载状态(url);
     }
 
     // 入库车辆基本信息数据

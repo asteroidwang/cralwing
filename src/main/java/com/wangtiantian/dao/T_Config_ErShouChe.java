@@ -35,4 +35,9 @@ public class T_Config_ErShouChe extends T_Config_Father{
         method_i_d_u(sql);
     }
 
+    public void yiche_update_修改已下载详情页面的数据状态(){
+        String sql ="update "+tableName+ " set C_IsFinish = 1 where   concat(C_uCarId,'_',substring(C_FileName,1,charindex('_',C_FileName)-1)) in (select concat(C_uCarId,'_',C_CityPinYin) from T_yiche_ConfirmDetails)";
+        method_i_d_u(sql);
+    }
+
 }

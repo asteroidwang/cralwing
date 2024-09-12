@@ -18,17 +18,21 @@ import java.util.Date;
 
 public class MainRenRenChe {
     public static void main(String[] args) {
-//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
-        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
+        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
+//        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
         MainRenRenChe renRenChe = new MainRenRenChe();
         // 1
         // renRenChe.method_下载城市数据并入库(filePath);
 
         // 2
-        renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
+        // renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
 
         // 3
         // renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
+
+        // 4
+         renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
+
 
         // final
         // renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
@@ -101,6 +105,7 @@ public class MainRenRenChe {
         }
     }
 
+    // 解析城市分页的首页数据并入库分页url数据
     public void parse_解析城市分页的首页数据(String filePath) {
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
         ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
@@ -136,6 +141,39 @@ public class MainRenRenChe {
             erShouCheDataBase.rrc_insert_入库城市分页Url数据(dataList);
         }
 
+    }
+
+    // 下载城市其他分页数据
+    public void method_下载城市除首页的其他分页数据(String filePath) {
+        int failNum = 0;
+        ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
+        ArrayList<Object> fenYeUrlList = erShouCheDataBase.rrc_get_获取未下载分页的url数据();
+        for (int i = 0; i < fenYeUrlList.size(); i++) {
+            String cityPinYin = ((RenRenChe_FenYeUrl) fenYeUrlList.get(i)).get_C_CityPinYin();
+            int page = ((RenRenChe_FenYeUrl)fenYeUrlList.get(i)).get_C_Page();
+            String mainUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn"+page+"/?reentries=%7B%22reentry_id%22%3A%22a242c2ba-f37d-48db-bd04-116a27baf712%22%7D";
+            try {
+                Thread.sleep(1000 * 60);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (method_访问url获取Json普通版(mainUrl, filePath, cityPinYin + "_"+page+".txt")) {
+                erShouCheDataBase.rrc_update_修改已下载的分页数据的下载状态(mainUrl);
+            } else {
+                failNum++;
+                if (failNum > 3) {
+                    try {
+                        Thread.sleep(1000 * 60 * 5);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    method_下载城市除首页的其他分页数据(filePath);
+                }
+            }
+        }
+        if (erShouCheDataBase.rrc_get_获取未下载分页的url数据().size()>0){
+            method_下载城市除首页的其他分页数据(filePath);
+        }
     }
 
     // final解析城市分页数据获取车辆基本信息
