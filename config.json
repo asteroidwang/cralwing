@@ -212,6 +212,10 @@
           {
             "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CarInfo",
             "tableName": "T_renrenche_CarInfo"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_ConfirmDetails",
+            "tableName": "T_yiche_ConfirmDetails"
           }
         ]
       },

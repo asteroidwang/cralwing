@@ -15,6 +15,10 @@ public class T_Config_KouBei extends T_Config_Father {
         return method_有条件的查询("select * from  " + tableName + " where C_IsFinish = 0 ");
     }
 
+    public ArrayList<Object> getUrl未下载的ShowID() {
+        return method_有条件的查询("select C_ShowID,C_KouBeiUrl from  " + tableName + " where C_IsFinish = 0 ");
+    }
+
     public ArrayList<Object> getUrlPageCount不为0() {
         return method_有条件的查询("select * from  " + tableName + " where C_IsFinish = 0 and C_CountPage!=0");
     }
