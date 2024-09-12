@@ -3,6 +3,7 @@ package com.wangtiantian.runKouBei;
 import com.wangtiantian.dao.T_Config_Father;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.dao.T_Config_KouBei;
+import com.wangtiantian.entity.koubei.KouBeiData;
 import com.wangtiantian.entity.koubei.KouBeiInfo;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
