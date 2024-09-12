@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -209,6 +210,15 @@ public class T_Config_File {
                 System.out.println("删除失败");
             }
         }
+    }
+    public  static  String method_转化url编码(String encodedString) {
+        try {
+           encodedString= URLEncoder.encode(encodedString, "UTF-8");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return encodedString;
     }
 
 }

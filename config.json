@@ -183,39 +183,52 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.ershouche.che168.Che168_CityData",
-            "tableName": "T_che168_CityData"
+            "tableName": "T_che168_CityData",
+            "total": 0
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.che168.Che168_FenYeUrl",
-            "tableName": "T_che168_FenYeUrl"
+            "tableName": "T_che168_FenYeUrl",
+            "total": 1
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CityData",
-            "tableName": "T_yiche_CityData"
+            "tableName": "T_yiche_CityData",
+            "total": 2
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_FenYeUrl",
-            "tableName": "T_yiche_FenYeUrl"
+            "tableName": "T_yiche_FenYeUrl",
+            "total": 3
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CarInfo",
-            "tableName": "T_yiche_CarInfo"
+            "tableName": "T_yiche_CarInfo",
+            "total": 4
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CityData",
-            "tableName": "T_renrenche_CityData"
+            "tableName": "T_renrenche_CityData",
+            "total": 5
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_FenYeUrl",
-            "tableName": "T_renrenche_FenYeUrl"
+            "tableName": "T_renrenche_FenYeUrl",
+            "total": 6
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CarInfo",
-            "tableName": "T_renrenche_CarInfo"
+            "tableName": "T_renrenche_CarInfo",
+            "total": 7
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_ConfirmDetails",
-            "tableName": "T_yiche_ConfirmDetails"
+            "tableName": "T_yiche_ConfirmDetails",
+            "total": 8
+          },{
+            "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CityData",
+            "tableName": "T_che300_CityData",
+            "total": 9
           }
         ]
       },
