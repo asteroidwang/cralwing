@@ -204,6 +204,14 @@
           {
             "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CityData",
             "tableName": "T_renrenche_CityData"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_FenYeUrl",
+            "tableName": "T_renrenche_FenYeUrl"
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CarInfo",
+            "tableName": "T_renrenche_CarInfo"
           }
         ]
       },
