@@ -18,17 +18,17 @@ import java.util.Date;
 
 public class MainRenRenChe {
     public static void main(String[] args) {
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
-//        String filePath ="/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
+        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
         MainRenRenChe renRenChe = new MainRenRenChe();
         // 1
         // renRenChe.method_下载城市数据并入库(filePath);
 
         // 2
-        // renRenChe.method_下载城市分页数据的首页(filePath+"各城市分页的首页数据/");
+        renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
 
         // 3
-        renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
+        // renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
 
         // final
         // renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
@@ -69,6 +69,7 @@ public class MainRenRenChe {
 
     // 下载城市分页数据的首页
     public void method_下载城市分页数据的首页(String filePath) {
+        int failNum = 0;
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
         ArrayList<Object> cityDataList = erShouCheDataBase.rrc_get_获取未下载首页分页的城市();
         for (int i = 0; i < cityDataList.size(); i++) {
@@ -82,7 +83,18 @@ public class MainRenRenChe {
             }
             if (method_访问url获取Json普通版(mainUrl, filePath, cityPinYin + "_1.txt")) {
                 erShouCheDataBase.rrc_update_修改已下载的首页数据的下载状态(cityId);
+            } else {
+                failNum++;
+                if (failNum > 3) {
+                    try {
+                        Thread.sleep(1000 * 60 * 5);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    method_下载城市分页数据的首页(filePath);
+                }
             }
+
         }
         if (erShouCheDataBase.rrc_get_获取未下载首页分页的城市().size() > 0) {
             method_下载城市分页数据的首页(filePath);
@@ -100,9 +112,9 @@ public class MainRenRenChe {
                 String numCar = mainDoc.select(".tab_car-number").text().replace("全部车源", "").replace("）", "").replace("（", "");
                 Elements mainItems = mainDoc.select("#list").select("li");
                 int page = Integer.parseInt(numCar.replace("辆", "")) / mainItems.size();
-                for (int i = 1; i <page+3 ; i++) {
-                    String cityPinYin = fileName.replace(".txt","").split("_")[0];
-                    String fenYeUrl ="https://www.renrenche.com/"+cityPinYin+"/ershouche/pn"+i+"/?reentries={%22reentry_id%22:%22310385bf-7ac2-43f9-b1f3-9aebfab13543%22}";
+                for (int i = 1; i < page + 3; i++) {
+                    String cityPinYin = fileName.replace(".txt", "").split("_")[0];
+                    String fenYeUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn" + i + "/?reentries={%22reentry_id%22:%22310385bf-7ac2-43f9-b1f3-9aebfab13543%22}";
                     RenRenChe_FenYeUrl renRenCheFenYeUrl = new RenRenChe_FenYeUrl();
                     renRenCheFenYeUrl.set_C_FenYeUrl(fenYeUrl);
                     renRenCheFenYeUrl.set_C_CityPinYin(cityPinYin);
@@ -112,15 +124,15 @@ public class MainRenRenChe {
                     renRenCheFenYeUrl.set_C_IsFinish(0);
                     renRenCheFenYeUrl.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     dataList.add(renRenCheFenYeUrl);
-                    if (dataList.size()>100){
-                       erShouCheDataBase.rrc_insert_入库城市分页Url数据(dataList);
-                       dataList.clear();
+                    if (dataList.size() > 100) {
+                        erShouCheDataBase.rrc_insert_入库城市分页Url数据(dataList);
+                        dataList.clear();
                     }
                 }
             }
 
         }
-        if (dataList.size()>0){
+        if (dataList.size() > 0) {
             erShouCheDataBase.rrc_insert_入库城市分页Url数据(dataList);
         }
 
@@ -144,13 +156,13 @@ public class MainRenRenChe {
                     Elements tagsList = mainItems.get(i).select(".tags.h-clearfix").select("span");
                     StringBuffer tagsListBuffer = new StringBuffer();
                     for (int j = 0; j < tagsList.size(); j++) {
-                        tagsListBuffer.append(tagsList.get(j).text()+"###");
+                        tagsListBuffer.append(tagsList.get(j).text() + "###");
                     }
                     String infoParams = mainItems.get(i).select(".info_params").text();
                     String infoPrices = mainItems.get(i).select(".info--price").text();
-                    String price = get_转化价格数据(infoPrices.substring(0, infoPrices.length() - 1))+"万";
-                    String shangPaiTime =infoParams.split(" ")[0];
-                    String mileNumber = infoParams.split(" ")[1].replace("·","");
+                    String price = get_转化价格数据(infoPrices.substring(0, infoPrices.length() - 1)) + "万";
+                    String shangPaiTime = infoParams.split(" ")[0];
+                    String mileNumber = infoParams.split(" ")[1].replace("·", "");
                     RenRenChe_CarInfo renRenChe_carInfo = new RenRenChe_CarInfo();
                     renRenChe_carInfo.set_C_infoPostTime(infoPostTime);
                     renRenChe_carInfo.set_C_carName(carName);
@@ -164,7 +176,7 @@ public class MainRenRenChe {
                     renRenChe_carInfo.set_C_IsFinish(0);
                     renRenChe_carInfo.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                     dataList.add(renRenChe_carInfo);
-                    if (dataList.size()>100){
+                    if (dataList.size() > 100) {
                         erShouCheDataBase.rrc_insert_入库车辆的基本信息数据(dataList);
                         dataList.clear();
                     }
@@ -172,7 +184,7 @@ public class MainRenRenChe {
             }
 
         }
-        if (dataList.size()>0){
+        if (dataList.size() > 0) {
             erShouCheDataBase.rrc_insert_入库车辆的基本信息数据(dataList);
         }
     }
@@ -194,6 +206,7 @@ public class MainRenRenChe {
             System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             return true;
         } else {
+
             return false;
         }
     }
