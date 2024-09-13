@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class ErShouCheDataBase {
     //选择数据库和连接的数据类型
-    private static int chooseDataBase = 4;
-    private static int chooseDataBaseType = 0;
+    private static int chooseDataBase = 0;
+    private static int chooseDataBaseType = 1;
 
     // che168
     // 插入城市数据
@@ -181,5 +181,27 @@ public class ErShouCheDataBase {
         T_Config_ErShouChe carInoDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 7);
         carInoDao.insertForeach(dataList);
     }
+    /***************
+     *
+     * ******************/
+    // 车300
+    // 入库城市数据
+    public void che300_insert_入库城市数据(ArrayList<Object> dataList) {
+        T_Config_ErShouChe carInoDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 9);
+        carInoDao.insertForeach(dataList);
+    }
+    // 获取未下载的分页数据
+    public ArrayList<Object> che300_get_获取未下载首页的数据() {
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 9);
+        return cityDataDao.method_查询未下载的数据();
+    }
+    public void che300_update_修改已下载的分页数据的下载状态(String cityId) {
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 9);
+        cityDataDao.update_修改完成下载任务的城市状态(cityId);
+    }
 
+    public void che300_insert_入库车辆基本信息数据(ArrayList<Object> dataList){
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 10);
+        cityDataDao.insertForeach(dataList);
+    }
 }

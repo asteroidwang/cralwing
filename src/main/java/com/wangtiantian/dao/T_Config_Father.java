@@ -39,17 +39,18 @@ public class T_Config_Father {
         dbName = mainDataBase.getString("dbName");
         packBag = tableObject.getString("entity");
         tableName = tableObject.getString("tableName");
-        if (dbDriver.contains("mysql")) {
-            dbString = dbURL + dbName + jsonRoot.getString("charset");
-            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
-        } else {
+//        if (dbDriver.contains("mysql")) {
+//            dbString = dbURL + dbName + jsonRoot.getString("charset");
+//            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
+//        } else {
             dbString = dbURL + dbName;
             System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
-        }
+//        }
     }
 
     public void method_连接数据库() {
         try {
+//            System.out.println(dbDriver);
             Class.forName(dbDriver);
             if (null == conn || conn.isClosed()) {
                 conn = DriverManager.getConnection(dbString, userName, password);
