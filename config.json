@@ -284,7 +284,7 @@
   },
   {
     "driver": "com.mysql.cj.jdbc.Driver",
-    "dbURL" : "jdbc:mysql://localhost:3306/",
+    "dbURL": "jdbc:mysql://localhost:3306/",
     "userName": "root",
     "password": "7777",
     "dbItems": [
@@ -336,10 +336,16 @@
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_ConfirmDetails",
             "tableName": "T_yiche_ConfirmDetails",
             "total": 8
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CityData",
             "tableName": "t_che300_citydata",
             "total": 9
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CarInfo",
+            "tableName": "t_che300_carinfo",
+            "total": 10
           }
         ]
       }
