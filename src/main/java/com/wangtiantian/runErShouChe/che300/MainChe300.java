@@ -12,10 +12,12 @@ import org.jsoup.nodes.Document;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 public class MainChe300 {
     public static void main(String[] args) {
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/che300/20240912/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/che300/20240912/";
+        String filePath = "D:/ZEDATA_2024/二手车数据/che300/20240912/";
         MainChe300 mainChe300 = new MainChe300();
         // mainChe300.method_下载城市数据并解析入库(filePath);
 
@@ -92,6 +94,9 @@ public class MainChe300 {
                 Document mainDoc = null;
                 try {
                     mainDoc = Jsoup.connect(mainUrl).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").header("cookie", cookie).ignoreContentType(true).get();
+                    Random random = new Random();
+                    int intR = 1+random.nextInt(5);
+                    Thread.sleep(intR*500);
                 } catch (Exception e) {
                     System.out.println(cityName);
                 }
