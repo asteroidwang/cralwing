@@ -2,8 +2,10 @@ package com.wangtiantian.mapper;
 
 import com.wangtiantian.dao.T_Config_ErShouChe;
 import com.wangtiantian.dao.T_Config_Price;
+import com.wangtiantian.entity.ershouche.renrenche.RenRenChe_CityData;
 import com.wangtiantian.entity.ershouche.yiChe.YiChe_FenYeUrl;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ErShouCheDataBase {
@@ -140,6 +142,22 @@ public class ErShouCheDataBase {
         cityDataDao.update_修改已下载的首页数据的下载状态(cityId);
     }
 
+    //
+    public void get_文件命名错误数据(){
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 5);
+        ArrayList<Object> dataList = cityDataDao.get_文件命名错误数据();
+        for (int i = 0; i < dataList.size(); i++) {
+            String zhengque = ((RenRenChe_CityData)dataList.get(i)).get_C_listName();
+            String xz=((RenRenChe_CityData)dataList.get(i)).get_C_quanpin();
+            File oldFile = new File("/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/各城市分页的首页数据/"+xz+"_1.txt");
+            File newFile = new File("/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/各城市分页的首页数据/"+zhengque+"_1.txt");
+            if (oldFile.renameTo(newFile)) {
+                System.out.println("文件重命名成功！");
+            } else {
+                System.out.println("文件重命名失败！");
+            }
+        }
+    }
     // 入库城市分页数据url
     public void rrc_insert_入库城市分页Url数据(ArrayList<Object> dataList) {
         T_Config_ErShouChe carInoDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 6);
