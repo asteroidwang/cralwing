@@ -18,8 +18,8 @@ import java.util.Date;
 
 public class MainRenRenChe {
     public static void main(String[] args) {
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
-//        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
+        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
         MainRenRenChe renRenChe = new MainRenRenChe();
         // 1
         // renRenChe.method_下载城市数据并入库(filePath);
@@ -27,6 +27,9 @@ public class MainRenRenChe {
         // 2
         // renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
 
+        // 补充
+
+        // new ErShouCheDataBase().get_文件命名错误数据();
         // 3
         // renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
 
@@ -77,7 +80,7 @@ public class MainRenRenChe {
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
         ArrayList<Object> cityDataList = erShouCheDataBase.rrc_get_获取未下载首页分页的城市();
         for (int i = 0; i < cityDataList.size(); i++) {
-            String cityPinYin = ((RenRenChe_CityData) cityDataList.get(i)).get_C_quanpin();
+            String cityPinYin = ((RenRenChe_CityData) cityDataList.get(i)).get_C_listName();
             String cityId = ((RenRenChe_CityData) cityDataList.get(i)).get_C_CityId();
             String mainUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn1/?reentries=%7B%22reentry_id%22%3A%22a242c2ba-f37d-48db-bd04-116a27baf712%22%7D";
             System.out.println(mainUrl);
@@ -116,7 +119,10 @@ public class MainRenRenChe {
                 Document mainDoc = Jsoup.parse(content);
                 String numCar = mainDoc.select(".tab_car-number").text().replace("全部车源", "").replace("）", "").replace("（", "");
                 Elements mainItems = mainDoc.select("#list").select("li");
-                int page = Integer.parseInt(numCar.replace("辆", "")) / mainItems.size();
+                int page =1;
+                if (mainItems.size()>0){
+                    page =Integer.parseInt(numCar.replace("辆", "").equals("")?"50":numCar.replace("辆", "")) / mainItems.size();
+                }
                 for (int i = 1; i < page + 3; i++) {
                     String cityPinYin = fileName.replace(".txt", "").split("_")[0];
                     String fenYeUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn" + i + "/?reentries={%22reentry_id%22:%22310385bf-7ac2-43f9-b1f3-9aebfab13543%22}";
@@ -150,14 +156,15 @@ public class MainRenRenChe {
         ArrayList<Object> fenYeUrlList = erShouCheDataBase.rrc_get_获取未下载分页的url数据();
         for (int i = 0; i < fenYeUrlList.size(); i++) {
             String cityPinYin = ((RenRenChe_FenYeUrl) fenYeUrlList.get(i)).get_C_CityPinYin();
-            int page = ((RenRenChe_FenYeUrl)fenYeUrlList.get(i)).get_C_Page();
-            String mainUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn"+page+"/?reentries=%7B%22reentry_id%22%3A%22a242c2ba-f37d-48db-bd04-116a27baf712%22%7D";
+            int page = ((RenRenChe_FenYeUrl) fenYeUrlList.get(i)).get_C_Page();
+            String mainUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn" + page + "/?reentries=%7B\"reentry_id\"%3A\"46282ce3-85a3-4670-8cfa-59b5e24cbd6c\"%7D";
+            System.out.println(mainUrl);
             try {
                 Thread.sleep(1000 * 60);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (method_访问url获取Json普通版(mainUrl, filePath, cityPinYin + "_"+page+".txt")) {
+            if (method_访问url获取Json普通版(mainUrl, filePath, cityPinYin + "_" + page + ".txt")) {
                 erShouCheDataBase.rrc_update_修改已下载的分页数据的下载状态(mainUrl);
             } else {
                 failNum++;
@@ -171,7 +178,7 @@ public class MainRenRenChe {
                 }
             }
         }
-        if (erShouCheDataBase.rrc_get_获取未下载分页的url数据().size()>0){
+        if (erShouCheDataBase.rrc_get_获取未下载分页的url数据().size() > 0) {
             method_下载城市除首页的其他分页数据(filePath);
         }
     }
