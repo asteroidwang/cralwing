@@ -182,4 +182,8 @@ public class ErShouCheDataBase {
         cityDataDao.update_修改完成下载任务的城市状态(cityId);
     }
 
+    public void che300_insert_入库车辆基本信息数据(ArrayList<Object> dataList){
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 10);
+        cityDataDao.insertForeach(dataList);
+    }
 }
