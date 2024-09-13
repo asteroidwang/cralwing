@@ -40,4 +40,13 @@ public class T_Config_ErShouChe extends T_Config_Father{
         method_i_d_u(sql);
     }
 
+    public ArrayList<Object> get_文件命名错误数据(){
+        String sql ="select * from "+tableName+" where C_quanpin != C_listName";
+        return method_有条件的查询(sql);
+    }
+    public void update_修改完成下载任务的城市状态(String cityId){
+        String sql ="update "+tableName+ " set C_IsFinish = 1 where C_city_id='"+cityId+"'";
+        method_i_d_u(sql);
+    }
+
 }
