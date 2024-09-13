@@ -225,10 +225,16 @@
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_ConfirmDetails",
             "tableName": "T_yiche_ConfirmDetails",
             "total": 8
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CityData",
             "tableName": "T_che300_CityData",
             "total": 9
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CarInfo",
+            "tableName": "T_che300_CarInfo",
+            "total": 10
           }
         ]
       },
