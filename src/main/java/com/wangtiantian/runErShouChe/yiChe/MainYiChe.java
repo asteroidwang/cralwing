@@ -12,6 +12,8 @@ import com.wangtiantian.mapper.ErShouCheDataBase;
 import com.wangtiantian.runErShouChe.che168.Che168AllFenYeThread;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -24,7 +26,7 @@ import java.util.stream.IntStream;
 public class MainYiChe {
     public static void main(String[] args) {
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/yiche/20240911/";
-        String filePath = "D:/爬取网页源数据/yiche/20240911/";
+        String filePath = "D:\\爬取网页源数据\\yiche\\20240911\\";
         MainYiChe mainYiChe = new MainYiChe();
         // 1
         // mainYiChe.method_下载城市数据并入库(filePath);
@@ -42,10 +44,13 @@ public class MainYiChe {
         // mainYiChe.parse_解析所有车辆基本信息(filePath + "各个城市分页数据/");
 
         // 6
-        // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面/");
+        // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面\\");
 
         // 7
-        mainYiChe.method_修改已下载的易车二手车的车辆详情页面的下载状态(filePath + "车辆详情页页面/");
+        // mainYiChe.method_修改已下载的易车二手车的车辆详情页面的下载状态(filePath + "车辆详情页页面\\");
+
+        // 8
+        mainYiChe.parse_解析已下载的易车二手车的车辆详情页面的下载状态(filePath+"车辆详情页页面\\");
 
     }
 
@@ -319,6 +324,7 @@ public class MainYiChe {
     public void method_获取易车二手车的车辆详情页面(String filePath) {
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
         ArrayList<Object> carInfoList = erShouCheDataBase.yiche_get_车辆基本信息数据();
+        System.out.println(carInfoList.size());
         if (carInfoList.size() > 36) {
             List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> carInfoList.subList(i * (carInfoList.size() + 5) / 6, Math.min((i + 1) * (carInfoList.size() + 5) / 6, carInfoList.size())))
                     .collect(Collectors.toList());
@@ -357,6 +363,23 @@ public class MainYiChe {
         }
         new ErShouCheDataBase().yiche_insert_确认车辆基本信息数据下载数据入库(dataList);
 
+    }
+
+    // 解析已下载的易车二手车的车辆详情页面的下载状态
+    public void parse_解析已下载的易车二手车的车辆详情页面的下载状态(String filePath){
+        try {
+            List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
+            for(String filePathName:fileList){
+                String fileName = filePathName.replace(filePath,"").replace(".txt","");
+                String content = T_Config_File.method_读取文件内容(filePathName);
+//                System.out.println(content);
+                Document mainDoc = Jsoup.parse(content);
+                Elements mainItems = mainDoc.select(".Parameter_vertical__vPqT4").get(0).select(".Parameter_verticalTop__wfIGj");
+                System.out.println(mainItems.get(0));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     // 带请求头的下载城市分页首页
