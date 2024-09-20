@@ -365,6 +365,11 @@
             "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CityData",
             "tableName": "t_che300_citydata",
             "total": 9
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CarInfo",
+            "tableName": "t_che300_carinfo",
+            "total": 10
           }
         ]
       }
