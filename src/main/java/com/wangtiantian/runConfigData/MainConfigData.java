@@ -26,11 +26,12 @@ public class MainConfigData {
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).replace("-", "");
-        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
-//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240826" + "/";
+//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
+//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240910" + "/";
+        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/20240910/";
 
         // 创建表
-         mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+        // mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
         // mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
         // mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
         // mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
@@ -38,7 +39,7 @@ public class MainConfigData {
         // mainConfigData.method_下载配置数据(filePath + "params/");
         // mainConfigData.method_解析列名(filePath);
         // mainConfigData.method_取列名(filePath);
-        // mainConfigData.method_解析配置数据(filePath);
+        mainConfigData.method_解析配置数据(filePath);
     }
 
     // 创建爬取汽车之家配置数据所需要的表
@@ -547,13 +548,14 @@ public class MainConfigData {
         ArrayList<Object> params = new ArrayList<>();
         ArrayList<Object> config = new ArrayList<>();
         ArrayList<Object> bag = new ArrayList<>();
-        int groupCount = dataBaseMethod.get_版本表中组数();
+//        int groupCount = dataBaseMethod.get_版本表中组数();
+        int groupCount = 8219;
 //        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
         for (int i = 1; i < groupCount + 1; i++) {
+//        int i = 8219;
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             String bagContent = T_Config_File.method_读取文件内容(filePath + "bag/" + i + "_bag.txt");
-            System.out.println(i);
             params.addAll(method_解析params(paramsContent.substring(9, paramsContent.length() - 1)));
             config.addAll(method_解析config(configContent.substring(10, configContent.length() - 1)));
             bag.addAll(method_解析bag(bagContent.substring(7, bagContent.length() - 1)));
@@ -570,8 +572,8 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-        dataBaseMethod.method_批量插入配置数据(params, "params");
-//        dataBaseMethod.method_批量插入配置数据(config, "config");
+//        dataBaseMethod.method_批量插入配置数据(params, "params");
+        dataBaseMethod.method_批量插入配置数据(config, "config");
 //        dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
@@ -584,7 +586,7 @@ public class MainConfigData {
             JSONObject jsonRoot = null;
             try {
                 jsonRoot = JSON.parseObject(content);
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(content);
             }
 //            JSONObject jsonRoot = JSON.parseObject(content);
@@ -616,19 +618,13 @@ public class MainConfigData {
                                     for (int j = 0; j < paramObject.getJSONArray("sublist").size(); j++) {
                                         String optionType = paramObject.getJSONArray("sublist").getJSONObject(j).getString("optiontype");
                                         String value_sub = paramObject.getJSONArray("sublist").getJSONObject(j).getString("subvalue");
-                                        String sunName = paramObject.getJSONArray("sublist").getJSONObject(j).getString("subname");
-                                        value += value_sub + "[optiontype:" + optionType + "]" + sunName + "####";
+                                        String subPrice = paramObject.getJSONArray("sublist").getJSONObject(j).getString("price").equals("0") ? "" : "[" + paramObject.getJSONArray("sublist").getJSONObject(j).getString("price") + "元]";
+                                        value += "[optiontype:" + optionType + "]" + value_sub + subPrice + "####";
                                     }
                                 }
                                 if (pidList.get(i).get_C_PID().equals(PID)) {
                                     Class c = pidList.get(i).getClass();
-                                    Field field = null;
-                                    try {
-                                        field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
-                                    } catch (Exception e) {
-                                        System.out.println(mapList.get(typeName + "__" + columnName) + "\t" + typeName + "__" + columnName);
-                                    }
-
+                                    Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
                                     field.set(pidList.get(i), value);
                                 }
@@ -681,11 +677,11 @@ public class MainConfigData {
                                 if (subList.size() != 0) {
                                     for (int iiiii = 0; iiiii < subList.size(); iiiii++) {
                                         com.alibaba.fastjson.JSONObject subObject = subList.getJSONObject(iiiii);
-                                        subValue.append(subObject.getString("subname")).append("[sv:" + subObject.getString("subvalue") + "]");
+                                        subValue.append("[sv:" + subObject.getString("subvalue") + "]" + subObject.getString("subname"));
                                         if (subObject.getString("price").equals("0")) {
                                             subValue.append("####");
                                         } else {
-                                            subValue.append(subObject.getString("price")).append("####");
+                                            subValue.append("[" + subObject.getString("price") + "元]####");
                                         }
                                     }
                                 }

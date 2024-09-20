@@ -153,69 +153,7 @@ public class MainRenRenChe {
     public void method_下载城市除首页的其他分页数据(String filePath) {
         int failNum = 0;
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
-//        ArrayList<Object> fenYeUrlList = erShouCheDataBase.rrc_get_获取未下载分页的url数据();
-//        for (int i = 0; i < fenYeUrlList.size(); i++) {
-//            String cityPinYin = ((RenRenChe_FenYeUrl) fenYeUrlList.get(i)).get_C_CityPinYin();
-//            int page = ((RenRenChe_FenYeUrl) fenYeUrlList.get(i)).get_C_Page();
-//            String mainUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn" + page + "/?reentries=%7B\"reentry_id\"%3A\"46282ce3-85a3-4670-8cfa-59b5e24cbd6c\"%7D";
-//            System.out.println(mainUrl);
-//            try {
-//                Thread.sleep(1000 * 60);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            if (method_访问url获取Json普通版(mainUrl, filePath, cityPinYin + "_" + page + ".txt")) {
-//                erShouCheDataBase.rrc_update_修改已下载的分页数据的下载状态(mainUrl);
-//            } else {
-//                failNum++;
-//                if (failNum > 3) {
-//                    try {
-//                        Thread.sleep(1000 * 60 * 5);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    method_下载城市除首页的其他分页数据(filePath);
-//                }
-//            }
-        ArrayList<Object> cityDataList = erShouCheDataBase.rrc_get_获取未下载首页分页的城市();
-        for (int i = 0; i < cityDataList.size(); i++) {
-            String cityJx = ((RenRenChe_CityData) cityDataList.get(i)).get_C_listName();
-//            String content = T_Config_File.method_读取文件内容(filePath)
-            RenRenChePlayWright renRenChePlayWright = new RenRenChePlayWright();
-            String content = renRenChePlayWright.Method_playwright("https://www.renrenche.com/jining/ershouche");
-            System.out.println(content);
 
-        }
-        if (erShouCheDataBase.rrc_get_获取未下载分页的url数据().size() > 0) {
-            method_下载城市除首页的其他分页数据(filePath);
-        }
-//        ArrayList<Object> fenYeUrlList = erShouCheDataBase.rrc_get_获取未下载分页的url数据();
-//        for (int i = 0; i < fenYeUrlList.size(); i++) {
-//            String cityPinYin = ((RenRenChe_FenYeUrl) fenYeUrlList.get(i)).get_C_CityPinYin();
-//            int page = ((RenRenChe_FenYeUrl)fenYeUrlList.get(i)).get_C_Page();
-//            String mainUrl = "https://www.renrenche.com/" + cityPinYin + "/ershouche/pn"+page+"/?reentries=%7B%22reentry_id%22%3A%22a242c2ba-f37d-48db-bd04-116a27baf712%22%7D";
-//            try {
-//                Thread.sleep(1000 * 60);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            if (method_访问url获取Json普通版(mainUrl, filePath, cityPinYin + "_"+page+".txt")) {
-//                erShouCheDataBase.rrc_update_修改已下载的分页数据的下载状态(mainUrl);
-//            } else {
-//                failNum++;
-//                if (failNum > 3) {
-//                    try {
-//                        Thread.sleep(1000 * 60 * 5);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    method_下载城市除首页的其他分页数据(filePath);
-//                }
-//            }
-//        }
-//        if (erShouCheDataBase.rrc_get_获取未下载分页的url数据().size()>0){
-//            method_下载城市除首页的其他分页数据(filePath);
-//        }
     }
 
     // final解析城市分页数据获取车辆基本信息

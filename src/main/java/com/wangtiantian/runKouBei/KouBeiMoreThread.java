@@ -52,6 +52,7 @@ public class KouBeiMoreThread {
 //                kouBeiDataBase.method修改具体口碑页面的下载状态(url.toString().substring(0, url.length() - 1));
 //            }
             ArrayList<Object> dataList = kouBeiDataBase.getUrl未下载的ShowID();
+            System.out.println(dataList.size());
             List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
                     .collect(Collectors.toList());
 

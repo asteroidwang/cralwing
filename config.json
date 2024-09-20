@@ -1,7 +1,7 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://127.0.0.1:1433;loginTimeout=1000;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.1.7:1433;loginTimeout=1000;databaseName=",
     "userName": "sa",
     "password": "7777",
     "dbItems": [
@@ -111,39 +111,63 @@
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.koubei.ModelKouBei",
-            "tableName": "T_ModelKouBei_20240804"
+            "tableName": "T_ModelKouBei_20240804",
+            "total": 0
           },
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiInfo",
-            "tableName": "T_KouBeiInfo_20240804"
+            "tableName": "T_KouBeiInfo_20240804",
+            "total": 1
           },
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiData",
-            "tableName": "T_KouBeiData_20240804"
+            "tableName": "T_KouBeiData_20240804",
+            "total": 2
           },
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiTest",
-            "tableName": "T_Test"
+            "tableName": "T_Test",
+            "total": 3
           },
           {
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
-            "tableName": "T_ReplyKouBei"
+            "tableName": "T_ReplyKouBei",
+            "total": 4
           },
           {
             "entity": "com.wangtiantian.entity.koubei.ConfirmReplySecond",
-            "tableName": "T_ConfirmReplySecond"
+            "tableName": "T_ConfirmReplySecond",
+            "total": 5
           },
           {
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
-            "tableName": "T_ReplyKouBei_Second"
+            "tableName": "T_ReplyKouBei_Second",
+            "total": 6
           },
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
-            "tableName": "T_KouBeiPictureUrl"
+            "tableName": "T_KouBeiPictureUrl",
+            "total": 7
           },
           {
             "entity": "com.wangtiantian.entity.koubei.ConfirmKouBeiPicture",
-            "tableName": "T_ConfirmKouBeiPicture"
+            "tableName": "T_ConfirmKouBeiPicture",
+            "total": 8
+          },
+          {
+            "entity": "com.wangtiantian.entity.koubei.ConfirmKouBeiData",
+            "tableName": " T_追加口碑源文件",
+            "total": 9
+          },
+          {
+            "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
+            "tableName": " T_KouBeiPictureUrl_追加口碑",
+            "total": 10
+          },
+          {
+            "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
+            "tableName": " T_KouBeiData_追加口碑",
+            "total": 11
           }
         ]
       },
@@ -284,7 +308,7 @@
   },
   {
     "driver": "com.mysql.cj.jdbc.Driver",
-    "dbURL" : "jdbc:mysql://localhost:3306/",
+    "dbURL": "jdbc:mysql://localhost:3306/",
     "userName": "root",
     "password": "7777",
     "dbItems": [
@@ -336,7 +360,8 @@
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_ConfirmDetails",
             "tableName": "T_yiche_ConfirmDetails",
             "total": 8
-          },{
+          },
+          {
             "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CityData",
             "tableName": "t_che300_citydata",
             "total": 9
@@ -347,45 +372,45 @@
   },
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://192.168.1.11:1433;loginTimeout=90;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.253:1433;loginTimeout=90;databaseName=",
     "userName": "sa",
-    "password": "Abc20010318aa",
+    "password": "Zeda#Server#2022@123",
     "dbItems": [
       {
-        "dbName": "autoHome",
+        "dbName": "afterMarket",
         "primary": "C_ID",
         "db_table": [
           {
             "entity": "com.wangtiantian.entity.Bean_Brand",
-            "tableName": "T_汽车之家_品牌表_20240901"
+            "tableName": "T_汽车之家_品牌表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Factory",
-            "tableName": "T_汽车之家_厂商表_20240901"
+            "tableName": "T_汽车之家_厂商表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Model",
-            "tableName": "T_汽车之家_车型表_20240901"
+            "tableName": "T_汽车之家_车型表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Version",
-            "tableName": "T_汽车之家_版本表_20240901"
+            "tableName": "T_汽车之家_版本表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.configData.Bean_VersionIds",
-            "tableName": "T_汽车之家_版本id表_20240901"
+            "tableName": "T_汽车之家_版本id表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Params",
-            "tableName": "T_汽车之家_参数表_20240826"
+            "tableName": "T_汽车之家_参数表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Config",
-            "tableName": "T_汽车之家_配置表_20240826"
+            "tableName": "T_汽车之家_配置表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Bag",
-            "tableName": "T_汽车之家_选装包_20240901"
+            "tableName": "T_汽车之家_选装包_20240910"
           },
           {
             "entity": "entity.BeanColor",
