@@ -26,22 +26,22 @@ import java.util.stream.IntStream;
 public class MainYiChe {
     public static void main(String[] args) {
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/yiche/20240911/";
-        String filePath = "D:\\爬取网页源数据\\yiche\\20240911\\";
+        String filePath = "D:\\爬取网页源数据\\yiche\\20240925\\";
         MainYiChe mainYiChe = new MainYiChe();
         // 1
         // mainYiChe.method_下载城市数据并入库(filePath);
 
         // 2
-        // mainYiChe.method_下载所有城市的首页数据(filePath + "各个城市分页数据/");
+        // mainYiChe.method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
 
         // 3
-        // mainYiChe.parse_解析所有城市的首页数据(filePath + "各个城市分页数据/");
+        // mainYiChe.parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
 
         // 4
-        // mainYiChe.method_下载其余分页url数据(filePath + "各个城市分页数据/");
+        // mainYiChe.method_下载其余分页url数据(filePath + "各个城市分页数据\\");
 
         // 5
-        // mainYiChe.parse_解析所有车辆基本信息(filePath + "各个城市分页数据/");
+         mainYiChe.parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
 
         // 6
         // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面\\");
@@ -50,7 +50,7 @@ public class MainYiChe {
         // mainYiChe.method_修改已下载的易车二手车的车辆详情页面的下载状态(filePath + "车辆详情页页面\\");
 
         // 8
-        mainYiChe.parse_解析已下载的易车二手车的车辆详情页面的下载状态(filePath+"车辆详情页页面\\");
+        // mainYiChe.parse_解析已下载的易车二手车的车辆详情页面的下载状态(filePath+"车辆详情页页面\\");
 
     }
 
@@ -372,10 +372,11 @@ public class MainYiChe {
             for(String filePathName:fileList){
                 String fileName = filePathName.replace(filePath,"").replace(".txt","");
                 String content = T_Config_File.method_读取文件内容(filePathName);
-//                System.out.println(content);
+                System.out.println(fileName);
+                System.out.println(content);
                 Document mainDoc = Jsoup.parse(content);
-                Elements mainItems = mainDoc.select(".Parameter_vertical__vPqT4").get(0).select(".Parameter_verticalTop__wfIGj");
-                System.out.println(mainItems.get(0));
+                Element mainItems = mainDoc.select(".Parameter_vertical__vPqT4").get(0);
+                System.out.println(mainItems);
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -193,17 +193,17 @@
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CityData",
-            "tableName": "T_yiche_CityData",
+            "tableName": "T_yiche_CityData_0925",
             "total": 2
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_FenYeUrl",
-            "tableName": "T_yiche_FenYeUrl",
+            "tableName": "T_yiche_FenYeUrl_0925",
             "total": 3
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_CarInfo",
-            "tableName": "T_yiche_CarInfo",
+            "tableName": "T_yiche_CarInfo_0925",
             "total": 4
           },
           {
@@ -223,7 +223,7 @@
           },
           {
             "entity": "com.wangtiantian.entity.ershouche.yiChe.YiChe_ConfirmDetails",
-            "tableName": "T_yiche_ConfirmDetails",
+            "tableName": "T_yiche_ConfirmDetails_0925",
             "total": 8
           },
           {
