@@ -26,19 +26,19 @@ public class MainConfigData {
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).replace("-", "");
-//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
 //        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240910" + "/";
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/20240910/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/20240910/";
 
         // 创建表
-        // mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-        // mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-        // mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-        // mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
-        // mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-        // mainConfigData.method_下载配置数据(filePath + "params/");
-        // mainConfigData.method_解析列名(filePath);
-        // mainConfigData.method_取列名(filePath);
+        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+        mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
+        mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+        mainConfigData.method_下载配置数据(filePath + "params/");
+        mainConfigData.method_解析列名(filePath);
+        mainConfigData.method_取列名(filePath);
         mainConfigData.method_解析配置数据(filePath);
     }
 
@@ -548,8 +548,8 @@ public class MainConfigData {
         ArrayList<Object> params = new ArrayList<>();
         ArrayList<Object> config = new ArrayList<>();
         ArrayList<Object> bag = new ArrayList<>();
-//        int groupCount = dataBaseMethod.get_版本表中组数();
-        int groupCount = 8219;
+        int groupCount = dataBaseMethod.get_版本表中组数();
+//        int groupCount = 8219;
 //        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
         for (int i = 1; i < groupCount + 1; i++) {
 //        int i = 8219;
@@ -572,9 +572,9 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-//        dataBaseMethod.method_批量插入配置数据(params, "params");
+        dataBaseMethod.method_批量插入配置数据(params, "params");
         dataBaseMethod.method_批量插入配置数据(config, "config");
-//        dataBaseMethod.method_批量插入配置数据(bag, "bag");
+        dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
 
