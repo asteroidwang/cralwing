@@ -20,12 +20,12 @@ import java.util.List;
 public class MainChe300 {
     public static void main(String[] args) {
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/che300/20240912/";
-        String filePath = "D:/ZEDATA_2024/二手车数据/che300/20240912/";
+        String filePath = "D:\\ZEDATA_2024\\二手车数据\\che300\\20240912\\";
         MainChe300 mainChe300 = new MainChe300();
         // mainChe300.method_下载城市数据并解析入库(filePath);
 
         // mainChe300.method_下载各个城市的首页数据(filePath + "各个城市分页数据/");
-        mainChe300.parse_各个城市的分页数据(filePath + "各个城市分页数据/");
+        mainChe300.parse_各个城市的分页数据(filePath + "各个城市分页数据\\");
     }
 
     // 1.城市数据
@@ -99,8 +99,8 @@ public class MainChe300 {
                 try {
                     mainDoc = Jsoup.connect(mainUrl).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36").header("cookie", cookie).ignoreContentType(true).get();
                     Random random = new Random();
-                    int intR = 1+random.nextInt(5);
-                    Thread.sleep(intR*500);
+                    int intR = 1 + random.nextInt(5);
+                    Thread.sleep(intR * 500);
                 } catch (Exception e) {
                     System.out.println(cityName);
                 }
@@ -124,6 +124,7 @@ public class MainChe300 {
         for (String fileNamePath : fileList) {
             String fileName = fileNamePath.replace(filePath, "");
             if (!fileName.equals(".DS_Store")) {
+//                System.out.println(fileNamePath+"\t"+fileName+"\t"+filePath);
                 String cityName = fileName.split("_")[0];
                 String cityId = fileName.split("_")[1];
                 String pageCount = fileName.split("_")[2].replace(".txt", "");
@@ -137,41 +138,43 @@ public class MainChe300 {
                 }
                 for (int i = 0; i < mainItems.size(); i++) {
                     String detailsUrl = mainItems.get(i).select(".carItem").attr("href");
-                    String carImg = mainItems.get(i).select(".list_img").attr("src");
-                    String carName = mainItems.get(i).select(".carItemMsgTitle").select("span").text();
-                    String carItemMsgMile = mainItems.get(i).select(".carItemMsgMile").select("span").text();
-                    String[] temp = carItemMsgMile.split(" \\| ");
-                    String shangPaiTime = temp[0];
-                    String mileNum = temp[1];
-                    String carResource = temp[2];
-                    String carPrice = mainItems.get(i).select(".price-vpr").select(".eval-price").text();
-                    String priceItemString = mainItems.get(i).select(".price-vpr").text().substring(mainItems.get(i).select(".price-vpr").text().indexOf("万") + 1);
-                    String gujia = priceItemString.substring(0, priceItemString.indexOf("万") < -1 ? priceItemString.indexOf("性价比") : priceItemString.indexOf("万") + 1);
-                    String xingjiabi = "";
-                    if (priceItemString.contains("性价比")) {
-                        xingjiabi = priceItemString.substring(priceItemString.indexOf("性价比"));
-                    }
-                    Che300_CarInfo che300_carInfo = new Che300_CarInfo();
-                    che300_carInfo.set_C_Page(Integer.parseInt(pageCount));
-                    che300_carInfo.set_C_CarPrice(carPrice);
-                    che300_carInfo.set_C_CityName(cityName);
-                    che300_carInfo.set_C_上牌时间(shangPaiTime);
-                    che300_carInfo.set_C_公里数(mileNum);
-                    che300_carInfo.set_C_CarResource(carResource);
-                    che300_carInfo.set_C_CityId(cityId);
-                    che300_carInfo.set_C_CarPrice(carPrice);
-                    che300_carInfo.set_C_VersionName(carName);
-                    che300_carInfo.set_C_DetailsUrl(detailsUrl);
-                    che300_carInfo.set_C_CarImg(carImg);
-                    che300_carInfo.set_C_PublishTime("");
-                    che300_carInfo.set_C_估价(gujia);
-                    che300_carInfo.set_C_性价比(xingjiabi);
-                    che300_carInfo.set_C_IsFinish(0);
-                    che300_carInfo.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                    dataList.add(che300_carInfo);
-                    if (dataList.size() > 100) {
-                        erShouCheDataBase.che300_insert_入库车辆基本信息数据(dataList);
-                        dataList.clear();
+                    if (!detailsUrl.equals("")) {
+                        String carImg = mainItems.get(i).select(".list_img").attr("src");
+                        String carName = mainItems.get(i).select(".carItemMsgTitle").select("span").text();
+                        String carItemMsgMile = mainItems.get(i).select(".carItemMsgMile").select("span").text();
+                        String[] temp = carItemMsgMile.split(" \\| ");
+                        String shangPaiTime = temp[0];
+                        String mileNum = temp[1];
+                        String carResource = temp[2];
+                        String carPrice = mainItems.get(i).select(".price-vpr").select(".eval-price").text();
+                        String priceItemString = mainItems.get(i).select(".price-vpr").text().substring(mainItems.get(i).select(".price-vpr").text().indexOf("万") + 1);
+                        String gujia = priceItemString.substring(0, priceItemString.indexOf("万") < -1 ? priceItemString.indexOf("性价比") : priceItemString.indexOf("万") + 1);
+                        String xingjiabi = "";
+                        if (priceItemString.contains("性价比")) {
+                            xingjiabi = priceItemString.substring(priceItemString.indexOf("性价比"));
+                        }
+                        Che300_CarInfo che300_carInfo = new Che300_CarInfo();
+                        che300_carInfo.set_C_Page(Integer.parseInt(pageCount));
+                        che300_carInfo.set_C_CarPrice(carPrice);
+                        che300_carInfo.set_C_CityName(cityName);
+                        che300_carInfo.set_C_上牌时间(shangPaiTime);
+                        che300_carInfo.set_C_公里数(mileNum);
+                        che300_carInfo.set_C_CarResource(carResource);
+                        che300_carInfo.set_C_CityId(cityId);
+                        che300_carInfo.set_C_CarPrice(carPrice);
+                        che300_carInfo.set_C_VersionName(carName);
+                        che300_carInfo.set_C_DetailsUrl(detailsUrl);
+                        che300_carInfo.set_C_CarImg(carImg);
+                        che300_carInfo.set_C_PublishTime("");
+                        che300_carInfo.set_C_估价(gujia);
+                        che300_carInfo.set_C_性价比(xingjiabi);
+                        che300_carInfo.set_C_IsFinish(0);
+                        che300_carInfo.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                        dataList.add(che300_carInfo);
+                        if (dataList.size() > 10000) {
+                            erShouCheDataBase.che300_insert_入库车辆基本信息数据(dataList);
+                            dataList.clear();
+                        }
                     }
                 }
             }
