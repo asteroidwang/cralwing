@@ -11,7 +11,7 @@ public class MainModelPrice {
         // 1
         // modelPriceMethod.method_根据车型id获取经销商数据并获取经销商首页数据();
         // 2     4
-        // modelPriceMethod.method_下载首页数据(filePath + "车型页面的经销商数据分页/");
+         modelPriceMethod.method_下载首页数据(filePath + "车型页面的经销商数据分页/");
         // 3
         // modelPriceMethod.parse_解析车型经销商首页数据(filePath+"车型页面的经销商数据分页/");
         // 5

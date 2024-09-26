@@ -182,7 +182,7 @@ public class T_Config_File {
             if (!file.exists()) {
                 file.mkdirs();
             }
-            URL url = new URL(imageUrl.replace("..","."));
+            URL url = new URL(imageUrl);
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();
             OutputStream outputStream = new FileOutputStream(filePath + fileName);

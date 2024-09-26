@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class ErShouCheDataBase {
     //选择数据库和连接的数据类型
-    private static int chooseDataBase = 0;
-    private static int chooseDataBaseType = 1;
+    private static int chooseDataBase = 4;
+    private static int chooseDataBaseType = 0;
 
     // che168
     // 插入城市数据

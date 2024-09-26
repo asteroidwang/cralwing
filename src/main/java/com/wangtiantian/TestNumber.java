@@ -20,14 +20,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TestNumber {
-    public static void main(String[] args) {
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/经销商数据/20240827/";
-        ModelPriceMethod modelPriceMethod = new ModelPriceMethod();
-        modelPriceMethod.method_解析所有经销商分页数据(filePath + "车型页面的经销商数据分页/");
-    }
+public class TestNumber extends TimerTask {
+    private String taskName;
 
+    public  TestNumber(String taskName){
+        this.taskName = taskName;
+    }
+    @Override
+    public void run() {
+        System.out.println(new Date()+"\t任务"+taskName+"在执行");
+    }
 }

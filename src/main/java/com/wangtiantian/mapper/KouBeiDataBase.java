@@ -6,6 +6,7 @@ import com.wangtiantian.dao.T_Config_Price;
 import com.wangtiantian.entity.koubei.*;
 import com.wangtiantian.entity.price.SaleModData;
 
+import javax.jws.Oneway;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,9 +144,17 @@ public class KouBeiDataBase {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
         return kouBeiDataDao.get_一级评论未完成的数量();
     }
+    public int get_追评口碑图片总数() {
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 10);
+        return kouBeiDataDao.get_一级评论未完成的数量();
+    }
 
     public ArrayList<Object> get_获取口碑图片的url数据(int begin) {
         T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
+        return modDataDao.method_分页查询未下载的数据10000条每次(begin);
+    }
+    public ArrayList<Object> get_获取追评口碑图片的url数据(int begin) {
+        T_Config_KouBei modDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 10);
         return modDataDao.method_分页查询未下载的数据10000条每次(begin);
     }
 
@@ -153,7 +162,28 @@ public class KouBeiDataBase {
         T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 8);
         kouBeiDataDao.insertForeach(dataList);
         T_Config_KouBei kouBeiDataDao2 = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 7);
-        kouBeiDataDao2.method_i_d_u("update T_KouBeiPictureUrl set C_IsFinish = 1 where concat(C_ShowId,'_',C_Position) in (select distinct concat(C_ShowId,'_',C_Position) from T_ConfirmKouBeiPicture)");
+        kouBeiDataDao2.method_i_d_u("update T_KouBeiPictureUrl_追加口碑 set C_IsFinish = 1 where concat(C_ShowId,'_',C_Position) in (select distinct concat(C_ShowId,'_',C_Position) from T_ConfirmKouBeiPicture)");
     }
+
+
+    public void insert_已下载的口碑数据的状态确认(ArrayList<Object> dataList){
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 9);
+        kouBeiDataDao.insertForeach(dataList);
+        T_Config_KouBei kouBeiDataDao2 = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 9);
+        kouBeiDataDao2.method_i_d_u("update  T_KouBeiInfo_20240804 set C_IsFinish = 1 where C_ShowID in (select distinct C_ShowID from T_追加口碑源文件) ");
+    }
+
+
+    public void insert_追加口碑的数据(ArrayList<Object> dataList){
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 11);
+        kouBeiDataDao.insertForeach(dataList);
+    }
+
+    public void insert_追加口碑图片的数据(ArrayList<Object> dataList){
+        T_Config_KouBei kouBeiDataDao = new T_Config_KouBei(chooseDataBaseType, chooseDataBase, 10);
+        kouBeiDataDao.insertForeach(dataList);
+    }
+
+
 
 }
