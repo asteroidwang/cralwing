@@ -3,6 +3,7 @@ package com.wangtiantian.runErShouChe.yiChe;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.wangtiantian.Main;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.ershouche.yiChe.YiChe_CarInfo;
 import com.wangtiantian.entity.ershouche.yiChe.YiChe_CityData;
@@ -20,39 +21,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class MainYiChe {
-    public static void main(String[] args) {
-//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/yiche/20240911/";
-        String filePath = "D:\\爬取网页源数据\\yiche\\20240925\\";
-        MainYiChe mainYiChe = new MainYiChe();
-        // 1
-        // mainYiChe.method_下载城市数据并入库(filePath);
+public class MainYiChe extends TimerTask {
 
-        // 2
-        // mainYiChe.method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
-
-        // 3
-        // mainYiChe.parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
-
-        // 4
-        // mainYiChe.method_下载其余分页url数据(filePath + "各个城市分页数据\\");
-
-        // 5
-         mainYiChe.parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
-
-        // 6
-        // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面\\");
-
-        // 7
-        // mainYiChe.method_修改已下载的易车二手车的车辆详情页面的下载状态(filePath + "车辆详情页页面\\");
-
-        // 8
-        // mainYiChe.parse_解析已下载的易车二手车的车辆详情页面的下载状态(filePath+"车辆详情页页面\\");
-
-    }
 
     // 1.下载城市数据并入库
     public void method_下载城市数据并入库(String filePath) {
@@ -158,12 +133,13 @@ public class MainYiChe {
     }
 
     // 4.下载其余分页url数据
-    public void method_下载其余分页url数据(String filePath) {
+    public Boolean method_下载其余分页url数据(String filePath) {
         try {
             ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
             ArrayList<Object> cityDataList = erShouCheDataBase.yiche_get_获取未下载的城市分页url();
             System.out.println(cityDataList.size());
             if (cityDataList.size() > 36) {
+                CountDownLatch latch = new CountDownLatch(cityDataList.size());
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> cityDataList.subList(i * (cityDataList.size() + 5) / 6, Math.min((i + 1) * (cityDataList.size() + 5) / 6, cityDataList.size())))
                         .collect(Collectors.toList());
                 for (int i = 0; i < cityDataList.size(); i++) {
@@ -171,6 +147,8 @@ public class MainYiChe {
                     Thread thread = new Thread(moreThread);
                     thread.start();
                 }
+                latch.await();
+                return true;
             } else {
                 for (Object cityItem : cityDataList) {
                     String cityPinYin = ((YiChe_FenYeUrl) cityItem).get_C_EngName();
@@ -184,15 +162,15 @@ public class MainYiChe {
                         new ErShouCheDataBase().yiche_update_修改已下载的分页数据下载状态(mainUrl);
                     }
                 }
+                return true;
             }
-            if (erShouCheDataBase.yiche_get_获取未下载的城市分页url().size() > 0) {
-                method_下载其余分页url数据(filePath);
-            }
+//            if (erShouCheDataBase.yiche_get_获取未下载的城市分页url().size() > 0) {
+//                method_下载其余分页url数据(filePath);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
+        return true;
     }
 
     // final 解析所有车辆基本信息
@@ -356,7 +334,7 @@ public class MainYiChe {
         ArrayList<Object> dataList = new ArrayList<>();
         for (String fileName : fileList) {
             YiChe_ConfirmDetails che_confirmDetails = new YiChe_ConfirmDetails();
-            che_confirmDetails.set_C_CityPinYin(fileName.replace(".txt", "").replace(filePath,"").split("_")[1]);
+            che_confirmDetails.set_C_CityPinYin(fileName.replace(".txt", "").replace(filePath, "").split("_")[1]);
             che_confirmDetails.set_C_ucarId(fileName.replace(".txt", "").split("_")[0]);
             che_confirmDetails.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             dataList.add(che_confirmDetails);
@@ -366,11 +344,11 @@ public class MainYiChe {
     }
 
     // 解析已下载的易车二手车的车辆详情页面的下载状态
-    public void parse_解析已下载的易车二手车的车辆详情页面的下载状态(String filePath){
+    public void parse_解析已下载的易车二手车的车辆详情页面的下载状态(String filePath) {
         try {
             List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
-            for(String filePathName:fileList){
-                String fileName = filePathName.replace(filePath,"").replace(".txt","");
+            for (String filePathName : fileList) {
+                String fileName = filePathName.replace(filePath, "").replace(".txt", "");
                 String content = T_Config_File.method_读取文件内容(filePathName);
                 System.out.println(fileName);
                 System.out.println(content);
@@ -378,7 +356,7 @@ public class MainYiChe {
                 Element mainItems = mainDoc.select(".Parameter_vertical__vPqT4").get(0);
                 System.out.println(mainItems);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -423,5 +401,47 @@ public class MainYiChe {
         }
     }
 
+    private String taskName;
 
+    public MainYiChe(String taskName) {
+        this.taskName = taskName;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(new Date() + "\t任务" + taskName + "在执行");
+        String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String filePath = "D:\\爬取网页源数据\\yiche\\"+currentTime+"\\";
+        // 1
+        method_下载城市数据并入库(filePath);
+
+        // 2
+        method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
+
+        // 3
+        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
+
+        // 4
+        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
+
+        // 5
+        if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
+            parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
+        }
+
+
+        // 6
+        // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面\\");
+
+        // 7
+        // mainYiChe.method_修改已下载的易车二手车的车辆详情页面的下载状态(filePath + "车辆详情页页面\\");
+
+        // 8
+        // mainYiChe.parse_解析已下载的易车二手车的车辆详情页面的下载状态(filePath+"车辆详情页页面\\");
+
+    }
+//    public static void main(String[] args) {
+////        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/yiche/20240911/";
+//
+//    }
 }
