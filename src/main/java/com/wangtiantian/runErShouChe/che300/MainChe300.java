@@ -22,10 +22,10 @@ public class MainChe300 {
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/che300/20240912/";
         String filePath = "D:\\ZEDATA_2024\\二手车数据\\che300\\20240926\\";
         MainChe300 mainChe300 = new MainChe300();
-        // mainChe300.method_下载城市数据并解析入库(filePath);
+         mainChe300.method_下载城市数据并解析入库(filePath);
 
-        // mainChe300.method_下载各个城市的首页数据(filePath + "各个城市分页数据\\");
-        // mainChe300.parse_各个城市的分页数据(filePath + "各个城市分页数据\\");
+         mainChe300.method_下载各个城市的首页数据(filePath + "各个城市分页数据\\");
+         mainChe300.parse_各个城市的分页数据(filePath + "各个城市分页数据\\");
     }
 
     // 1.城市数据
