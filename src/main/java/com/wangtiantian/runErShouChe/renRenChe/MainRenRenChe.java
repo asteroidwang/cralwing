@@ -39,7 +39,7 @@ public class MainRenRenChe {
 
 
         // final
-        // renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
+         renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
 
     }
 
