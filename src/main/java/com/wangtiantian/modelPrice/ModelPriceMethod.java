@@ -420,7 +420,7 @@ public class ModelPriceMethod {
             String dealerId = ((ModelDealerData) o).get_C_DealerId();
             String modId = ((ModelDealerData) o).get_C_ModelId();
             String content = T_Config_File.method_读取文件内容(filePath + dealerId + "_" + modId + ".txt");
-            System.out.println(content);
+//            System.out.println(content);
             JSONObject mainJson = null;
             try {
                 mainJson = JSONObject.parseObject(content);
@@ -431,38 +431,51 @@ public class ModelPriceMethod {
             }
             if (mainJson != null) {
                 JSONArray jsonRoot = mainJson.getJSONArray("result");
-                for (int i = 0; i < jsonRoot.size(); i++) {
-                    String groupName = ((JSONObject) jsonRoot.get(i)).getString("groupName");
-                    JSONArray dataArray = ((JSONObject) jsonRoot.get(i)).getJSONArray("list");
-                    for (int j = 0; j < dataArray.size(); j++) {
-                        JSONObject jsonObject = ((JSONObject) dataArray.get(j));
-                        CarPrice carPrice = new CarPrice();
-                        carPrice.set_C_DealerMaxPrice(jsonObject.getString("dealerMaxPrice"));
-                        carPrice.set_C_DealerMinPrice(jsonObject.getString("dealerMinPrice"));
-                        carPrice.set_C_FctMaxPrice(jsonObject.getString("fctMaxPrice"));
-                        carPrice.set_C_FctMinPrice(jsonObject.getString("fctMinPrice"));
-                        carPrice.set_C_NewsPrice(jsonObject.getString("newsPrice"));
-                        carPrice.set_C_GroupName(groupName);
-                        carPrice.set_C_NewsID(jsonObject.getString("newsId"));
-                        carPrice.set_C_PriceTime(jsonObject.getString("priceTime"));
-                        carPrice.set_C_DealerID(jsonObject.getString("dealerId"));
-                        carPrice.set_C_ImageUrl(jsonObject.getString("imageUrl"));
-                        carPrice.set_C_PromotionType(jsonObject.getString("promotionType"));
-                        carPrice.set_C_SaleState(jsonObject.getString("saleState"));
-                        carPrice.set_C_ModelName(jsonObject.getString("seriesName"));
-                        carPrice.set_C_ModelID(jsonObject.getString("seriesId"));
-                        carPrice.set_C_VersionID(jsonObject.getString("specId"));
-                        carPrice.set_C_VersionName(jsonObject.getString("specName"));
-                        carPrice.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                        dataList.add(carPrice);
-                        System.out.println(dataList.size());
+                if (jsonRoot!=null){
+                    for (int i = 0; i < jsonRoot.size(); i++) {
+                        String groupName = ((JSONObject) jsonRoot.get(i)).getString("groupName");
+                        JSONArray dataArray = ((JSONObject) jsonRoot.get(i)).getJSONArray("list");
+                        for (int j = 0; j < dataArray.size(); j++) {
+                            JSONObject jsonObject = ((JSONObject) dataArray.get(j));
+                            CarPrice carPrice = new CarPrice();
+                            carPrice.set_C_DealerMaxPrice(jsonObject.getString("dealerMaxPrice"));
+                            carPrice.set_C_DealerMinPrice(jsonObject.getString("dealerMinPrice"));
+                            carPrice.set_C_FctMaxPrice(jsonObject.getString("fctMaxPrice"));
+                            carPrice.set_C_FctMinPrice(jsonObject.getString("fctMinPrice"));
+                            carPrice.set_C_NewsPrice(jsonObject.getString("newsPrice"));
+                            carPrice.set_C_GroupName(groupName);
+                            carPrice.set_C_NewsID(jsonObject.getString("newsId"));
+                            carPrice.set_C_PriceTime(jsonObject.getString("priceTime"));
+                            carPrice.set_C_DealerID(jsonObject.getString("dealerId"));
+                            carPrice.set_C_ImageUrl(jsonObject.getString("imageUrl"));
+                            carPrice.set_C_PromotionType(jsonObject.getString("promotionType"));
+                            carPrice.set_C_SaleState(jsonObject.getString("saleState"));
+                            carPrice.set_C_ModelName(jsonObject.getString("seriesName"));
+                            carPrice.set_C_ModelID(jsonObject.getString("seriesId"));
+                            carPrice.set_C_VersionID(jsonObject.getString("specId"));
+                            carPrice.set_C_VersionName(jsonObject.getString("specName"));
+                            carPrice.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                            dataList.add(carPrice);
+//                            System.out.println(dataList.size());
+                            if (dataList.size()>100000){
+                                HashSet<Object> set = new HashSet<>(dataList);
+                                dataList.clear();
+                                dataList.addAll(set);
+                                new ModelDealerPriceDataBase().insert_carPriceDataModel(dataList);
+                                dataList.clear();
+                            }
+                        }
                     }
                 }
+
             }
         }
-        HashSet<Object> set = new HashSet<>(dataList);
-        dataList.clear();
-        dataList.addAll(set);
-        new ModelDealerPriceDataBase().insert_carPriceDataModel(dataList);
+        if (dataList.size()>0){
+            HashSet<Object> set = new HashSet<>(dataList);
+            dataList.clear();
+            dataList.addAll(set);
+            new ModelDealerPriceDataBase().insert_carPriceDataModel(dataList);
+        }
+
     }
 }

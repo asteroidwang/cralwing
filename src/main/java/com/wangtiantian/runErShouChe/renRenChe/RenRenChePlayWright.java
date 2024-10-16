@@ -20,7 +20,7 @@ public class RenRenChePlayWright {
                     .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
                     .setViewportSize(2880, 1800));
             Page page = browser.newPage();
-
+            page.setDefaultTimeout(300000);
 
             Map<String, String> headers = new HashMap<>();
 //            headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
