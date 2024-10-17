@@ -72,7 +72,7 @@ public class CarPriceMethod {
                     bean_dealerFenYeUrl.set_C_IsFinish(0);
                     bean_dealerFenYeUrl.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                     result.add(bean_dealerFenYeUrl);
-//                    Document mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "gb2312", mainUrl);
+//                    Document mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "GBK", mainUrl);
 //                    Elements mainItems = mainDoc.select(".dealer-list-wrap").select(".list-box").select(".list-item");
 //                    T_Config_File.method_重复写文件_根据路径创建文件夹(filePath + "经销商信息/", "aaa.txt", ((CityData) o).get_C_CityName() + "\t" + mainItems.size() + "\t" + mainUrl + "\n");
 //                    if (mainItems.size() == 0) {
@@ -248,7 +248,7 @@ public class CarPriceMethod {
 //                String mainUrl = "https://dealer.autohome.com.cn/" + ((DealerData) o).get_C_DealerID() + "/price.html";
 //                Document mainDoc = null;
 //                try {
-//                    mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "gb2312", mainUrl);
+//                    mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "GBK", mainUrl);
 //                    T_Config_File.method_写文件_根据路径创建文件夹(filePath, ((DealerData) o).get_C_DealerName() + "_" + ((DealerData) o).get_C_DealerID() + ".txt", mainDoc.toString());
 //                    new PriceDataBase().updateCarPriceStatus(((DealerData) o).get_C_DealerID());
 //                } catch (Exception e) {

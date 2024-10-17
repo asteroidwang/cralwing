@@ -25,6 +25,10 @@ public class ErShouCheDataBase {
         T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 0);
         return cityDataDao.method_查询未下载的数据();
     }
+    public ArrayList<Object> get_CityData_已经下载() {
+        T_Config_ErShouChe cityDataDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 0);
+        return cityDataDao.get_查找已下载的数据();
+    }
 
     // 修改已下载分页第一页的城市下载状态
     public void update_修改已下载的城市状态(String pinyin) {

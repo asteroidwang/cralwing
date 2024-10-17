@@ -98,14 +98,14 @@ public class T_ZiDuan_Params_Config {
         mapList.put("基本参数__实测100-0km/h制动(m)","C_基本参数__实测100_0km_h制动_m");
         mapList.put("基本参数__实测油耗(L/100km)","C_基本参数__实测油耗_L_100km");
         mapList.put("基本参数__WLTC综合油耗(L/100km)","C_基本参数__WLTC综合油耗_L_100km");
-        mapList.put("车身__接近角(°)","C_车身__接近角");
-        mapList.put("车身__离去角(°)","C_车身__离去角");
+        mapList.put("车身__接近角(°)","C_车身__接近角_");
+        mapList.put("车身__离去角(°)","C_车身__离去角_");
         mapList.put("发动机__发动机布局","C_发动机__发动机布局");
         mapList.put("基本参数__WLTC纯电续航里程(km)","C_基本参数__WLTC纯电续航里程_km");
         mapList.put("基本参数__CLTC纯电续航里程(km)","C_基本参数__CLTC纯电续航里程_km");
         mapList.put("基本参数__电池快充时间(小时)","C_基本参数__电池快充时间_小时");
         mapList.put("基本参数__电池慢充时间(小时)","C_基本参数__电池慢充时间_小时");
-        mapList.put("基本参数__电池快充电量范围(%)","C_基本参数__电池快充电量范围");
+        mapList.put("基本参数__电池快充电量范围(%)","C_基本参数__电池快充电量范围_");
         mapList.put("基本参数__电能当量燃料消耗量(L/100km)","C_基本参数__电能当量燃料消耗量_L_100km");
         mapList.put("电动机__电动机总马力(Ps)","C_电动机__电动机总马力_Ps");
         mapList.put("电动机__前电动机最大功率(kW)","C_电动机__前电动机最大功率_kW");
@@ -122,16 +122,16 @@ public class T_ZiDuan_Params_Config {
         mapList.put("电动机__快充功能","C_电动机__快充功能");
         mapList.put("电动机__电池快充时间(小时)","C_电动机__电池快充时间_小时");
         mapList.put("电动机__电池慢充时间(小时)","C_电动机__电池慢充时间_小时");
-        mapList.put("电动机__电池快充电量范围(%)","C_电动机__电池快充电量范围");
+        mapList.put("电动机__电池快充电量范围(%)","C_电动机__电池快充电量范围_");
         mapList.put("车身__最小离地间隙(mm)","C_车身__最小离地间隙_mm");
-        mapList.put("基本参数__电池慢充电量范围(%)","C_基本参数__电池慢充电量范围");
+        mapList.put("基本参数__电池慢充电量范围(%)","C_基本参数__电池慢充电量范围_");
         mapList.put("基本参数__官方0-50km/h加速(s)","C_基本参数__官方0_50km_h加速_s");
         mapList.put("车身__空载最小离地间隙(mm)","C_车身__空载最小离地间隙_mm");
         mapList.put("电动机__前电动机品牌","C_电动机__前电动机品牌");
         mapList.put("电动机__后电动机品牌","C_电动机__后电动机品牌");
         mapList.put("电动机__前电动机型号","C_电动机__前电动机型号");
         mapList.put("电动机__后电动机型号","C_电动机__后电动机型号");
-        mapList.put("电动机__电池慢充电量范围(%)","C_电动机__电池慢充电量范围");
+        mapList.put("电动机__电池慢充电量范围(%)","C_电动机__电池慢充电量范围_");
         mapList.put("电动机__慢充接口位置","C_电动机__慢充接口位置");
         mapList.put("电动机__快充接口位置","C_电动机__快充接口位置");
         mapList.put("基本参数__最低荷电状态油耗(L/100km)","C_基本参数__最低荷电状态油耗_L_100km");
@@ -140,7 +140,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("电动机__快充功率(kW)","C_电动机__快充功率_kW");
         mapList.put("基本参数__首任车主质保政策","C_基本参数__首任车主质保政策");
         mapList.put("电动机__换电","C_电动机__换电");
-        mapList.put("电动机__对外放电最低允许值(%)","C_电动机__对外放电最低允许值");
+        mapList.put("电动机__对外放电最低允许值(%)","C_电动机__对外放电最低允许值_");
         mapList.put("电动机__充电站（座）","C_电动机__充电站_座");
         mapList.put("电动机__CLTC综合续航(km)","C_电动机__CLTC综合续航_km");
         mapList.put("电动机__电池组质保","C_电动机__电池组质保");
@@ -149,10 +149,10 @@ public class T_ZiDuan_Params_Config {
         mapList.put("电动机__对外交流放电功率(kW)","C_电动机__对外交流放电功率_kW");
         mapList.put("电动机__充电桩（根）","C_电动机__充电桩_根");
         mapList.put("电动机__全国覆盖城市（个）","C_电动机__全国覆盖城市_个");
-        mapList.put("车身__最大爬坡度(%)","C_车身__最大爬坡度");
-        mapList.put("车身__最大爬坡角度(°)","C_车身__最大爬坡角度");
+        mapList.put("车身__最大爬坡度(%)","C_车身__最大爬坡度_");
+        mapList.put("车身__最大爬坡角度(°)","C_车身__最大爬坡角度_");
         mapList.put("车轮制动__备胎放置方式","C_车轮制动__备胎放置方式");
-        mapList.put("车身__纵向通过角(°)","C_车身__纵向通过角");
+        mapList.put("车身__纵向通过角(°)","C_车身__纵向通过角_");
         mapList.put("车身__最大涉水深度(mm)","C_车身__最大涉水深度_mm");
         mapList.put("基本参数__准拖挂车总质量(kg)","C_基本参数__准拖挂车总质量_kg");
         mapList.put("车身__前备厢容积(L)","C_车身__前备厢容积_L");
@@ -172,6 +172,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("基本参数__CLTC综合油耗(L/100km)","C_基本参数__CLTC综合油耗_L_100km");
         mapList.put("电动机__WLTP纯电续航里程(km)","C_电动机__WLTP纯电续航里程_km");
         mapList.put("基本参数__最低荷电状态油耗(L/100km)CLTC","C_基本参数__最低荷电状态油耗_L_100km_CLTC");
+        mapList.put("基本参数__官方100-0km/h制动(m)","C_基本参数__官方100_0km_h制动_m");
         mapList.put("车身__氢瓶容积(L)","C_车身__氢瓶容积_L");
         mapList.put("电动机__对外直流放电功率(kW)","C_电动机__对外直流放电功率_kW");
         mapList.put("基本参数__EPA纯电续航里程(km)","C_基本参数__EPA纯电续航里程_km");
@@ -179,7 +180,6 @@ public class T_ZiDuan_Params_Config {
         mapList.put("电动机__充电峰值电压（V）","C_电动机__充电峰值电压_V");
         mapList.put("电动机__电驱系统质保","C_电动机__电驱系统质保");
         mapList.put("电动机__电控系统质保","C_电动机__电控系统质保");
-        mapList.put("基本参数__官方100-0km/h制动(m)","C_基本参数__官方100_0km_h制动_m");
         return mapList;
     }
 
@@ -398,6 +398,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("驾驶硬件__激光雷达数量","C_驾驶硬件__激光雷达数量");
         mapList.put("驾驶硬件__激光雷达线数","C_驾驶硬件__激光雷达线数");
         mapList.put("驾驶硬件__激光雷达点云数量","C_驾驶硬件__激光雷达点云数量");
+        mapList.put("驾驶硬件__前方最大探测距离","C_驾驶硬件__前方最大探测距离");
         mapList.put("驾驶功能__高精地图","C_驾驶功能__高精地图");
         mapList.put("驾驶功能__记忆泊车","C_驾驶功能__记忆泊车");
         mapList.put("驾驶功能__匝道自动驶出(入)","C_驾驶功能__匝道自动驶出_入");
@@ -432,7 +433,6 @@ public class T_ZiDuan_Params_Config {
         mapList.put("四驱/越野__拖挂钩","C_四驱_越野__拖挂钩");
         mapList.put("驾驶硬件__车内摄像头数量","C_驾驶硬件__车内摄像头数量");
         mapList.put("驾驶硬件__激光雷达10%反射率探测距离","C_驾驶硬件__激光雷达10_反射率探测距离");
-        mapList.put("驾驶硬件__前方最大探测距离","C_驾驶硬件__前方最大探测距离");
         mapList.put("天窗/玻璃__光感天幕","C_天窗_玻璃__光感天幕");
         mapList.put("屏幕/系统__后排液晶屏幕类型","C_屏幕_系统__后排液晶屏幕类型");
         mapList.put("屏幕/系统__后排液晶屏幕分辨率","C_屏幕_系统__后排液晶屏幕分辨率");
@@ -477,6 +477,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("屏幕/系统__屏幕刷新率[Hz]","C_屏幕_系统__屏幕刷新率_Hz");
         mapList.put("四驱/越野__拖车取电口","C_四驱_越野__拖车取电口");
         mapList.put("驾驶功能__代客泊车","C_驾驶功能__代客泊车");
+        mapList.put("音响/车内灯光__车外扬声器数量","C_音响_车内灯光__车外扬声器数量");
         return mapList;
     }
 }

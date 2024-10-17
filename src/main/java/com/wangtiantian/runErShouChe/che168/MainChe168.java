@@ -20,12 +20,14 @@ import java.util.stream.IntStream;
 
 public class MainChe168 {
     public static void main(String[] args) {
-        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/che168/20240820/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/che168/20240820/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/二手车数据/che168/20241010/";
         MainChe168 mainChe168 = new MainChe168();
         // mainChe168.get_城市数据(filePath);
         // mainChe168.method_先下载每个城市的第一页二手车数据获取总页数(filePath+"各城市二手车分页/");
-        // mainChe168.parse_解析第一页的数据获取总页数(filePath + "各城市二手车分页/");
-         mainChe168.downLoad_下载分页数据(filePath + "各城市二手车分页/");
+//         mainChe168.parse_解析第一页的数据获取总页数(filePath + "各城市二手车分页/");
+//         mainChe168.downLoad_下载分页数据(filePath + "各城市二手车分页/");
+         mainChe168.parse_解析分页数据获取二手车数据(filePath + "各城市二手车分页/");
     }
 
     // 获取城市数据
@@ -94,17 +96,22 @@ public class MainChe168 {
     // 2.解析第一页的数据获取总页数
     public void parse_解析第一页的数据获取总页数(String filePath) {
         try {
-            ArrayList<Object> dataList = new ErShouCheDataBase().get_CityData();
+            ArrayList<Object> dataList = new ErShouCheDataBase().get_CityData_已经下载();
             ArrayList<Object> result = new ArrayList<>();
             for (int i =0;i<dataList.size();i++){
                 String pinyin = ((Che168_CityData) dataList.get(i)).get_C_CityPinYin();
                 String content = T_Config_File.method_读取文件内容(filePath + pinyin + "_1.txt");
                 Document mainDoc = Jsoup.parse(content);
                 Elements countItems = mainDoc.select(".list-menu").select(".tab-nav").select("li");
-                String countNum = countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "");
+//                String countNum = countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "");
+                String countNum ="0";
+                if (!countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "").equals("")){
+                    countNum = countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "");
+                }
                 if (countNum.equals("全部车源")) {
                     countNum = "0";
                 }
+
                 for (int ii = 1; ii < Integer.parseInt(countNum) / 56 + 2; ii++) {
                     int isFinish = 0;
                     if (ii == 1) {

@@ -44,7 +44,7 @@ public class T_Config_Father {
 //            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
 //        } else {
             dbString = dbURL + dbName;
-            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
+//            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
 //        }
     }
 
@@ -107,7 +107,8 @@ public class T_Config_Father {
         ArrayList<Object> result = new ArrayList<>();
         try {
             method_连接数据库();
-            String sql = "select * from " + tableName + " order by C_ID";
+//            String sql = "select * from " + tableName + " order by C_ID";
+            String sql = "select * from " + tableName;
             ResultSet resultSet = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = resultSet.getMetaData();
             while (resultSet.next()) {
@@ -247,6 +248,24 @@ public class T_Config_Father {
         }
         return num;
     }
+    public int get_获取表中组数() {
+        int num = 0;
+        try {
+            method_连接数据库();
+            String sql = "select max(C_Group) from " + tableName;
+            ResultSet resultSet = stmt.executeQuery(sql);
+            while (resultSet.next()) {
+                num = (int) resultSet.getObject(1);
+            }
+
+            resultSet.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return num;
+    }
 
     public ArrayList<Object> get_查找未下载的数据() {
         return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 ");
@@ -343,4 +362,23 @@ public class T_Config_Father {
             return true;
         }
     }
+
+    public ArrayList<String> method_单列数据的查询(String sql) {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            method_连接数据库();
+            ResultSet resultSet = stmt.executeQuery(sql);
+            while (resultSet.next()) {
+
+                result.add(resultSet.getObject(1).toString());
+            }
+            resultSet.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

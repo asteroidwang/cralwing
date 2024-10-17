@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class MainConfigData {
-    private DataBaseMethod dataBaseMethod = new DataBaseMethod();
+//    private DataBaseMethod new DataBaseMethod() = new DataBaseMethod();
 
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
@@ -45,7 +45,7 @@ public class MainConfigData {
     // 创建爬取汽车之家配置数据所需要的表
     public void method_创建所有爬取汽车之家配置数据需要的表(String currentTime) {
         // 获取当前时间
-        dataBaseMethod.method_创建爬取汽车之家配置数据所需要的表(currentTime);
+        new DataBaseMethod().method_创建爬取汽车之家配置数据所需要的表(currentTime);
     }
 
     // 1.下载品牌厂商车型数据
@@ -142,9 +142,9 @@ public class MainConfigData {
             modData.clear();
             modData.addAll(modelSet);
 
-            dataBaseMethod.method_入库品牌数据(brandData);
-            dataBaseMethod.method_入库厂商数据(fctData);
-            dataBaseMethod.method_入库车型数据(modData);
+            new DataBaseMethod().method_入库品牌数据(brandData);
+            new DataBaseMethod().method_入库厂商数据(fctData);
+            new DataBaseMethod().method_入库车型数据(modData);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,7 +166,7 @@ public class MainConfigData {
     public void method_下载含有版本数据的文件_非图片路径(String filePath) {
         try {
             // 1.在售
-            ArrayList<Object> onSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("在售", 0);
+            ArrayList<Object> onSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("在售", 0);
             if (onSaleList.size() < 32) {
                 for (Object bean : onSaleList) {
                     String modId = ((Bean_Model) bean).get_C_ModelID();
@@ -174,7 +174,7 @@ public class MainConfigData {
 
                     url = "https://www.autohome.com.cn/" + modId + "/#pvareaid=3454427";
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_在售.txt")) {
-                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "在售", 1);
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "在售", 1);
                     }
                 }
             } else {
@@ -187,7 +187,7 @@ public class MainConfigData {
                 }
             }
             // 2.停售
-            ArrayList<Object> noSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("停售", 0);
+            ArrayList<Object> noSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("停售", 0);
             if (noSaleList.size() < 32) {
                 for (Object bean : noSaleList) {
                     String modId = ((Bean_Model) bean).get_C_ModelID();
@@ -195,7 +195,7 @@ public class MainConfigData {
 
                     url = "https://www.autohome.com.cn/" + modId + "/sale.html#pvareaid=3311673";
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_停售.txt")) {
-                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "停售", 1);
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "停售", 1);
                     }
                 }
             } else {
@@ -215,7 +215,7 @@ public class MainConfigData {
     public void method_下载含有版本数据的文件_图片路径(String filePath) {
         try {
             // 1.在售
-            ArrayList<Object> onSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("图片页面在售", 0);
+            ArrayList<Object> onSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("图片页面在售", 0);
             if (onSaleList.size() < 32) {
                 for (Object bean : onSaleList) {
                     String modId = ((Bean_Model) bean).get_C_ModelID();
@@ -223,7 +223,7 @@ public class MainConfigData {
 
                     url = "https://car.autohome.com.cn/pic/series/" + modId + ".html#pvareaid=3454438";
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面在售.txt")) {
-                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "图片页面在售", 1);
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "图片页面在售", 1);
                     }
 
                 }
@@ -239,7 +239,7 @@ public class MainConfigData {
 
 
             // 2.停售
-            ArrayList<Object> noSaleList = dataBaseMethod.method_查找车型表中未下载的含版本数据的数据("图片页面停售", 0);
+            ArrayList<Object> noSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("图片页面停售", 0);
             if (noSaleList.size() < 32) {
                 for (Object bean : noSaleList) {
                     String modId = ((Bean_Model) bean).get_C_ModelID();
@@ -247,7 +247,7 @@ public class MainConfigData {
 
                     url = "https://car.autohome.com.cn/pic/series-t/" + modId + ".html";
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面停售.txt")) {
-                        dataBaseMethod.method_修改车型表中下载的id状态(modId, "图片页面停售", 1);
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "图片页面停售", 1);
                     }
                 }
             } else {
@@ -287,7 +287,7 @@ public class MainConfigData {
             HashSet<Object> set = new HashSet<>(versionData);
             versionData.clear();
             versionData.addAll(set);
-            dataBaseMethod.method_入库版本数据(versionData);
+            new DataBaseMethod().method_入库版本数据(versionData);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -359,7 +359,7 @@ public class MainConfigData {
                 String verID = verIDTemp_left.replace(verIDTempRight, "");
                 String verName = willSaleItems.get(i).select(".name").text();
                 String verURL = "https://www.autohome.com.cn" + willSaleItems.get(i).select(".name").attr("href");
-                Document verDoc = Jsoup.parse(new URL(verURL).openStream(), "gb2312", verURL);
+                Document verDoc = Jsoup.parse(new URL(verURL).openStream(), "GBK", verURL);
                 Elements verEl = verDoc.select(".athm-sub-nav__channel.athm-js-sticky").select("li");
                 String verIDNumber_L = verEl.get(0).select("a").attr("href").replace("/spec/", "");
                 String verIDNumber_R = verIDNumber_L.substring(verIDNumber_L.indexOf("/"));
@@ -440,53 +440,58 @@ public class MainConfigData {
     // 5.版本ids入库 下载配置数据
     public void method_下载配置数据(String filePath) {
         try {
-            dataBaseMethod.insert_批量插入版本ids();
-            ArrayList<Object> paramsList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 0);
-            ArrayList<Object> configList = dataBaseMethod.method_根据数据类型获取未下载的数据("config", 0);
-            ArrayList<Object> bagList = dataBaseMethod.method_根据数据类型获取未下载的数据("bag", 0);
+//            new DataBaseMethod().insert_批量插入版本ids();
+            ArrayList<Object> paramsList = new DataBaseMethod().method_根据数据类型获取未下载的数据("params", 0);
+            ArrayList<Object> configList = new DataBaseMethod().method_根据数据类型获取未下载的数据("config", 0);
+            ArrayList<Object> bagList = new DataBaseMethod().method_根据数据类型获取未下载的数据("bag", 0);
 
-            if (paramsList.size() <= 6) {
+            if (paramsList.size() <= 36) {
                 for (Object o : paramsList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
                     int group = ((Bean_VersionIds) o).get_C_Group();
                     if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/v3/Param_ListBySpecIdList.ashx?speclist=" + ids + "&_appid=test&_=1723037336504&_callback=__param1", "gb2312", filePath, group + "_params.txt")) {
-                        dataBaseMethod.update_修改车辆配置的数据文件下载状态(group, "params", 1);
+                        new DataBaseMethod().update_修改车辆配置的数据文件下载状态(group, "params", 1);
                     }
                 }
             } else {
-                List<List<Object>> paramsData = IntStream.range(0, 6).mapToObj(i -> paramsList.subList(i * (paramsList.size() + 5) / 6, Math.min((i + 1) * (paramsList.size() + 5) / 6, paramsList.size())))
-                        .collect(Collectors.toList());
-                for (int i = 0; i < paramsData.size(); i++) {
-                    ConfigMoreThread params = new ConfigMoreThread(paramsData.get(i), filePath, 0);
-                    Thread thread = new Thread(params);
-                    thread.start();
-                }
-            }
 
-            if (configList.size() <= 6) {
+                    List<List<Object>> paramsData = IntStream.range(0, 6).mapToObj(i -> paramsList.subList(i * (paramsList.size() + 5) / 6, Math.min((i + 1) * (paramsList.size() + 5) / 6, paramsList.size())))
+                            .collect(Collectors.toList());
+                    for (int i = 0; i < paramsData.size(); i++) {
+                        ConfigMoreThread params = new ConfigMoreThread(paramsData.get(i), filePath, 0);
+                        Thread thread = new Thread(params);
+                        thread.start();
+                    }
+                }
+
+
+
+            if (configList.size() <= 32) {
                 for (Object o : configList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
                     int group = ((Bean_VersionIds) o).get_C_Group();
                     if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/v2/Config_ListBySpecIdList.ashx?speclist=" + ids + "&_=1723037336505&_callback=__config3", "gb2312", filePath.replace("params", "config"), group + "_config.txt")) {
-                        dataBaseMethod.update_修改车辆配置的数据文件下载状态(group, "config", 1);
+                        new DataBaseMethod().update_修改车辆配置的数据文件下载状态(group, "config", 1);
                     }
                 }
             } else {
-                List<List<Object>> configData = IntStream.range(0, 6).mapToObj(i -> configList.subList(i * (configList.size() + 5) / 6, Math.min((i + 1) * (configList.size() + 5) / 6, configList.size())))
-                        .collect(Collectors.toList());
-                for (int i = 0; i < configData.size(); i++) {
-                    ConfigMoreThread config = new ConfigMoreThread(configData.get(i), filePath.replace("params", "config"), 1);
-                    Thread thread = new Thread(config);
-                    thread.start();
-                }
-            }
 
-            if (bagList.size() <= 6) {
+                    List<List<Object>> configData = IntStream.range(0, 6).mapToObj(i -> configList.subList(i * (configList.size() + 5) / 6, Math.min((i + 1) * (configList.size() + 5) / 6, configList.size())))
+                            .collect(Collectors.toList());
+                    for (int i = 0; i < configData.size(); i++) {
+                        ConfigMoreThread config = new ConfigMoreThread(configData.get(i), filePath.replace("params", "config"), 1);
+                        Thread thread = new Thread(config);
+                        thread.start();
+                    }
+                }
+
+
+            if (bagList.size() <= 36) {
                 for (Object o : bagList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
                     int group = ((Bean_VersionIds) o).get_C_Group();
                     if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/Config_BagBySpecIdListV2.ashx?speclist=" + ids + "&_=1723037336505&_callback=__bag4", "gb2312", filePath.replace("params", "bag"), group + "_bag.txt")) {
-                        dataBaseMethod.update_修改车辆配置的数据文件下载状态(group, "bag", 1);
+                        new DataBaseMethod().update_修改车辆配置的数据文件下载状态(group, "bag", 1);
                     }
                 }
             } else {
@@ -505,14 +510,14 @@ public class MainConfigData {
 
     // 解析配置数据获取列名
     public void method_解析列名(String filePath) {
-//        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
-        int groupCount = dataBaseMethod.get_版本表中组数();
+//        ArrayList<Object> groupList = new DataBaseMethod().method_根据数据类型获取未下载的数据("params", 1);
+        int groupCount = new DataBaseMethod().get_版本表中组数();
         System.out.println(groupCount);
         for (int i = 1; i < groupCount; i++) {
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
-            method_解析params_列名(paramsContent.substring(9, paramsContent.length() - 1), filePath);
-            method_解析config_列名(configContent.substring(10, configContent.length() - 1), filePath);
+            method_解析params_列名(paramsContent.substring(9, paramsContent.length() - 1), filePath, i);
+            method_解析config_列名(configContent.substring(10, configContent.length() - 1), filePath, i);
         }
     }
 
@@ -548,7 +553,11 @@ public class MainConfigData {
         ArrayList<Object> params = new ArrayList<>();
         ArrayList<Object> config = new ArrayList<>();
         ArrayList<Object> bag = new ArrayList<>();
-        int groupCount = dataBaseMethod.get_版本表中组数();
+        int groupCount = new DataBaseMethod().get_版本表中组数();
+//        int groupCount = 8219;
+//        ArrayList<Object> groupList = new DataBaseMethod().method_根据数据类型获取未下载的数据("params", 1);
+
+//        int groupCount = dataBaseMethod.get_版本表中组数();
 //        int groupCount = 8219;
 //        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
         for (int i = 1; i < groupCount + 1; i++) {
@@ -572,9 +581,12 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-        dataBaseMethod.method_批量插入配置数据(params, "params");
-        dataBaseMethod.method_批量插入配置数据(config, "config");
-        dataBaseMethod.method_批量插入配置数据(bag, "bag");
+        new DataBaseMethod().method_批量插入配置数据(params, "params");
+        new DataBaseMethod().method_批量插入配置数据(config, "config");
+        new DataBaseMethod().method_批量插入配置数据(bag, "bag");
+//        dataBaseMethod.method_批量插入配置数据(params, "params");
+//        dataBaseMethod.method_批量插入配置数据(config, "config");
+//        dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
 
@@ -593,9 +605,9 @@ public class MainConfigData {
             JSONArray mainContent = jsonRoot.getJSONObject("result").getJSONArray("paramtypeitems");
             ArrayList<Bean_Params> pidList = new ArrayList<>();
             if (mainContent.size() != 0 && mainContent != null) {
-                com.alibaba.fastjson.JSONArray pidparamItems = mainContent.getJSONObject(0).getJSONArray("paramitems").getJSONObject(0).getJSONArray("valueitems");
+                JSONArray pidparamItems = mainContent.getJSONObject(0).getJSONArray("paramitems").getJSONObject(0).getJSONArray("valueitems");
                 for (int i = 0; i < pidparamItems.size(); i++) {
-                    com.alibaba.fastjson.JSONObject pidObject = pidparamItems.getJSONObject(i);
+                    JSONObject pidObject = pidparamItems.getJSONObject(i);
                     String pid = pidObject.getString("specid");
                     Bean_Params params = new Bean_Params();
                     params.set_C_PID(pid);
@@ -603,15 +615,15 @@ public class MainConfigData {
                 }
                 for (int i = 0; i < pidList.size(); i++) {
                     for (int ii = 0; ii < mainContent.size(); ii++) {
-                        com.alibaba.fastjson.JSONObject mainObject = mainContent.getJSONObject(ii);
+                        JSONObject mainObject = mainContent.getJSONObject(ii);
                         String typeName = mainObject.getString("name");
-                        com.alibaba.fastjson.JSONArray paramItems = mainObject.getJSONArray("paramitems");
+                        JSONArray paramItems = mainObject.getJSONArray("paramitems");
                         for (int iii = 0; iii < paramItems.size(); iii++) {
-                            com.alibaba.fastjson.JSONObject paramItemsObject = paramItems.getJSONObject(iii);
+                            JSONObject paramItemsObject = paramItems.getJSONObject(iii);
                             String columnName = paramItemsObject.getString("name");
-                            com.alibaba.fastjson.JSONArray paramItemArray = paramItemsObject.getJSONArray("valueitems");
+                            JSONArray paramItemArray = paramItemsObject.getJSONArray("valueitems");
                             for (int iiii = 0; iiii < paramItemArray.size(); iiii++) {
-                                com.alibaba.fastjson.JSONObject paramObject = paramItemArray.getJSONObject(iiii);
+                                JSONObject paramObject = paramItemArray.getJSONObject(iiii);
                                 String PID = paramObject.getString("specid");
                                 String value = paramObject.getString("value");
                                 if (value.equals("")) {
@@ -619,7 +631,12 @@ public class MainConfigData {
                                         String optionType = paramObject.getJSONArray("sublist").getJSONObject(j).getString("optiontype");
                                         String value_sub = paramObject.getJSONArray("sublist").getJSONObject(j).getString("subvalue");
                                         String subPrice = paramObject.getJSONArray("sublist").getJSONObject(j).getString("price").equals("0") ? "" : "[" + paramObject.getJSONArray("sublist").getJSONObject(j).getString("price") + "元]";
-                                        value += "[optiontype:" + optionType + "]" + value_sub + subPrice + "####";
+                                        if (optionType.equals("1")) {
+                                            optionType = "●";
+                                        } else if (optionType.equals("2")) {
+                                            optionType = "○";
+                                        }
+                                        value += optionType + value_sub + subPrice + "####";
                                     }
                                 }
                                 if (pidList.get(i).get_C_PID().equals(PID)) {
@@ -645,15 +662,15 @@ public class MainConfigData {
         ArrayList<Object> dataList = new ArrayList<>();
         try {
             HashMap<String, String> mapList = T_ZiDuan_Params_Config.config_字段();
-            com.alibaba.fastjson.JSONObject jsonRoot = JSON.parseObject(content).getJSONObject("result");
-            com.alibaba.fastjson.JSONArray mainJson = jsonRoot.getJSONArray("configtypeitems");
+            JSONObject jsonRoot = JSON.parseObject(content).getJSONObject("result");
+            JSONArray mainJson = jsonRoot.getJSONArray("configtypeitems");
             ArrayList<Bean_Config> configList = new ArrayList<>();
             //得到所需pid
             if (mainJson != null && mainJson.size() != 0) {
-                com.alibaba.fastjson.JSONObject pidListObject = mainJson.getJSONObject(0).getJSONArray("configitems").getJSONObject(0);
-                com.alibaba.fastjson.JSONArray pidArray = pidListObject.getJSONArray("valueitems");
+                JSONObject pidListObject = mainJson.getJSONObject(0).getJSONArray("configitems").getJSONObject(0);
+                JSONArray pidArray = pidListObject.getJSONArray("valueitems");
                 for (int i = 0; i < pidArray.size(); i++) {
-                    com.alibaba.fastjson.JSONObject pidObject = pidArray.getJSONObject(i);
+                    JSONObject pidObject = pidArray.getJSONObject(i);
                     String pid = pidObject.getString("specid");
                     Bean_Config config = new Bean_Config();
                     config.set_C_PID(pid);
@@ -661,23 +678,30 @@ public class MainConfigData {
                 }
                 for (int i = 0; i < configList.size(); i++) {
                     for (int ii = 0; ii < mainJson.size(); ii++) {
-                        com.alibaba.fastjson.JSONObject mainObject = mainJson.getJSONObject(ii);
+                        JSONObject mainObject = mainJson.getJSONObject(ii);
                         String typeName = mainObject.getString("name");
-                        com.alibaba.fastjson.JSONArray configItems = mainObject.getJSONArray("configitems");
+                        JSONArray configItems = mainObject.getJSONArray("configitems");
                         for (int iii = 0; iii < configItems.size(); iii++) {
-                            com.alibaba.fastjson.JSONObject configItemObject = configItems.getJSONObject(iii);
+                            JSONObject configItemObject = configItems.getJSONObject(iii);
                             String columnName = configItemObject.getString("name");
-                            com.alibaba.fastjson.JSONArray valueItems = configItemObject.getJSONArray("valueitems");
+                            JSONArray valueItems = configItemObject.getJSONArray("valueitems");
                             for (int iiii = 0; iiii < valueItems.size(); iiii++) {
-                                com.alibaba.fastjson.JSONObject valueItemsObject = valueItems.getJSONObject(iiii);
+                                JSONObject valueItemsObject = valueItems.getJSONObject(iiii);
                                 String value = valueItemsObject.getString("value");
                                 String PID = valueItemsObject.getString("specid");
-                                com.alibaba.fastjson.JSONArray subList = valueItemsObject.getJSONArray("sublist");
+                                JSONArray subList = valueItemsObject.getJSONArray("sublist");
                                 StringBuffer subValue = new StringBuffer();
                                 if (subList.size() != 0) {
                                     for (int iiiii = 0; iiiii < subList.size(); iiiii++) {
-                                        com.alibaba.fastjson.JSONObject subObject = subList.getJSONObject(iiiii);
-                                        subValue.append("[sv:" + subObject.getString("subvalue") + "]" + subObject.getString("subname"));
+                                        JSONObject subObject = subList.getJSONObject(iiiii);
+                                        String svType = subObject.getString("subvalue");
+                                        if (svType.equals("1")) {
+                                            svType = "●";
+                                        } else if (svType.equals("2")) {
+                                            svType = "○";
+                                        }
+//                                        subValue.append("[sv:" + subObject.getString("subvalue") + "]" + subObject.getString("subname"));
+                                        subValue.append(svType + subObject.getString("subname"));
                                         if (subObject.getString("price").equals("0")) {
                                             subValue.append("####");
                                         } else {
@@ -696,7 +720,7 @@ public class MainConfigData {
                                     Class c = configList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
-                                    field.set(configList.get(i), value);
+                                    field.set(configList.get(i), value.replace("[sv:1]","●").replace("[sv:2]","○").replace("####",""));
                                 }
                             }
                         }
@@ -713,18 +737,18 @@ public class MainConfigData {
     public static ArrayList<Object> method_解析bag(String content) {
         ArrayList<Object> dataList = new ArrayList<>();
         try {
-            com.alibaba.fastjson.JSONObject jsonRoot = JSON.parseObject(content);
-            com.alibaba.fastjson.JSONArray mainJson = jsonRoot.getJSONObject("result").getJSONArray("bagtypeitems");
+            JSONObject jsonRoot = JSON.parseObject(content);
+            JSONArray mainJson = jsonRoot.getJSONObject("result").getJSONArray("bagtypeitems");
             for (int i = 0; i < mainJson.size(); i++) {
-                com.alibaba.fastjson.JSONObject mainObject = mainJson.getJSONObject(i);
-                com.alibaba.fastjson.JSONArray bagItems = mainObject.getJSONArray("bagitems");
+                JSONObject mainObject = mainJson.getJSONObject(i);
+                JSONArray bagItems = mainObject.getJSONArray("bagitems");
                 for (int ii = 0; ii < bagItems.size(); ii++) {
-                    com.alibaba.fastjson.JSONObject bagItem = bagItems.getJSONObject(ii);
+                    JSONObject bagItem = bagItems.getJSONObject(ii);
                     String specid = bagItem.getString("specid");
-                    com.alibaba.fastjson.JSONArray valueItems = bagItem.getJSONArray("valueitems");
+                    JSONArray valueItems = bagItem.getJSONArray("valueitems");
                     if (valueItems.size() != 0) {
                         for (int iii = 0; iii < valueItems.size(); iii++) {
-                            com.alibaba.fastjson.JSONObject valueItem = valueItems.getJSONObject(iii);
+                            JSONObject valueItem = valueItems.getJSONObject(iii);
                             Bean_Bag bag = new Bean_Bag();
                             bag.set_C_PID(specid);
                             bag.set_C_PriceDesc(valueItem.getString("pricedesc"));
@@ -745,30 +769,39 @@ public class MainConfigData {
         return dataList;
     }
 
-    public static void method_解析params_列名(String content, String filePath) {
+    public static void method_解析params_列名(String content, String filePath, int name) {
         try {
-            JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
-            JSONArray mainContent = jsonRoot.getJSONArray("paramtypeitems");
-            ArrayList<Bean_Params> pidList = new ArrayList<>();
-            if (mainContent.size() != 0 && mainContent != null) {
-                JSONArray pidparamItems = mainContent.getJSONObject(0).getJSONArray("paramitems").getJSONObject(0).getJSONArray("valueitems");
-                for (int i = 0; i < pidparamItems.size(); i++) {
-                    com.alibaba.fastjson.JSONObject pidObject = pidparamItems.getJSONObject(i);
-                    String pid = pidObject.getString("specid");
-                    Bean_Params params = new Bean_Params();
-                    params.set_C_PID(pid);
-                    pidList.add(params);
-                }
-                for (int i = 0; i < pidList.size(); i++) {
-                    for (int ii = 0; ii < mainContent.size(); ii++) {
-                        JSONObject mainObject = mainContent.getJSONObject(ii);
-                        String typeName = mainObject.getString("name");
-                        JSONArray paramItems = mainObject.getJSONArray("paramitems");
-                        for (int iii = 0; iii < paramItems.size(); iii++) {
-                            JSONObject paramItemsObject = paramItems.getJSONObject(iii);
-                            String columnName = paramItemsObject.getString("name");
-                            JSONArray paramItemArray = paramItemsObject.getJSONArray("valueitems");
-                            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "列名"), "params_ColumnName.txt", typeName + "__" + columnName + "\n");
+            JSONObject jsonRoot = null;
+            try {
+                jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
+            } catch (Exception e) {
+                System.out.println(name);
+            }
+            if (null != jsonRoot) {
+
+
+                JSONArray mainContent = jsonRoot.getJSONArray("paramtypeitems");
+                ArrayList<Bean_Params> pidList = new ArrayList<>();
+                if (mainContent.size() != 0 && mainContent != null) {
+                    JSONArray pidparamItems = mainContent.getJSONObject(0).getJSONArray("paramitems").getJSONObject(0).getJSONArray("valueitems");
+                    for (int i = 0; i < pidparamItems.size(); i++) {
+                        JSONObject pidObject = pidparamItems.getJSONObject(i);
+                        String pid = pidObject.getString("specid");
+                        Bean_Params params = new Bean_Params();
+                        params.set_C_PID(pid);
+                        pidList.add(params);
+                    }
+                    for (int i = 0; i < pidList.size(); i++) {
+                        for (int ii = 0; ii < mainContent.size(); ii++) {
+                            JSONObject mainObject = mainContent.getJSONObject(ii);
+                            String typeName = mainObject.getString("name");
+                            JSONArray paramItems = mainObject.getJSONArray("paramitems");
+                            for (int iii = 0; iii < paramItems.size(); iii++) {
+                                JSONObject paramItemsObject = paramItems.getJSONObject(iii);
+                                String columnName = paramItemsObject.getString("name");
+                                JSONArray paramItemArray = paramItemsObject.getJSONArray("valueitems");
+                                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "列名"), "params_ColumnName.txt", typeName + "__" + columnName + "\n");
+                            }
                         }
                     }
                 }
@@ -778,34 +811,41 @@ public class MainConfigData {
         }
     }
 
-    public static void method_解析config_列名(String content, String filePath) {
+    public static void method_解析config_列名(String content, String filePath, int name) {
         try {
-            JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
-            JSONArray mainJson = jsonRoot.getJSONArray("configtypeitems");
-            ArrayList<Bean_Config> configList = new ArrayList<>();
-            T_Config_AutoHome autoHome = new T_Config_AutoHome(0, 1, 2);
-            //得到所需pid
+            JSONObject jsonRoot = null;
+            try {
+                jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
+            } catch (Exception e) {
+                System.out.println(name);
+            }
+            if (null != jsonRoot) {
+                JSONArray mainJson = jsonRoot.getJSONArray("configtypeitems");
+                ArrayList<Bean_Config> configList = new ArrayList<>();
+                T_Config_AutoHome autoHome = new T_Config_AutoHome(0, 1, 2);
+                //得到所需pid
 //        System.out.println(mainJson);
-            if (mainJson != null && mainJson.size() != 0) {
-                com.alibaba.fastjson.JSONObject pidListObject = mainJson.getJSONObject(0).getJSONArray("configitems").getJSONObject(0);
-                JSONArray pidArray = pidListObject.getJSONArray("valueitems");
-                for (int i = 0; i < pidArray.size(); i++) {
-                    com.alibaba.fastjson.JSONObject pidObject = pidArray.getJSONObject(i);
-                    String pid = pidObject.getString("specid");
-                    Bean_Config config = new Bean_Config();
-                    config.set_C_PID(pid);
-                    configList.add(config);
-                }
-                for (int i = 0; i < configList.size(); i++) {
-                    for (int ii = 0; ii < mainJson.size(); ii++) {
-                        JSONObject mainObject = mainJson.getJSONObject(ii);
-                        String typeName = mainObject.getString("name");
-                        JSONArray configItems = mainObject.getJSONArray("configitems");
-                        for (int iii = 0; iii < configItems.size(); iii++) {
-                            JSONObject configItemObject = configItems.getJSONObject(iii);
-                            String columnName = configItemObject.getString("name");
-                            JSONArray valueItems = configItemObject.getJSONArray("valueitems");
-                            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "列名"), "config_ColumnName.txt", typeName + "__" + columnName + "\n");
+                if (mainJson != null && mainJson.size() != 0) {
+                    JSONObject pidListObject = mainJson.getJSONObject(0).getJSONArray("configitems").getJSONObject(0);
+                    JSONArray pidArray = pidListObject.getJSONArray("valueitems");
+                    for (int i = 0; i < pidArray.size(); i++) {
+                        JSONObject pidObject = pidArray.getJSONObject(i);
+                        String pid = pidObject.getString("specid");
+                        Bean_Config config = new Bean_Config();
+                        config.set_C_PID(pid);
+                        configList.add(config);
+                    }
+                    for (int i = 0; i < configList.size(); i++) {
+                        for (int ii = 0; ii < mainJson.size(); ii++) {
+                            JSONObject mainObject = mainJson.getJSONObject(ii);
+                            String typeName = mainObject.getString("name");
+                            JSONArray configItems = mainObject.getJSONArray("configitems");
+                            for (int iii = 0; iii < configItems.size(); iii++) {
+                                JSONObject configItemObject = configItems.getJSONObject(iii);
+                                String columnName = configItemObject.getString("name");
+                                JSONArray valueItems = configItemObject.getJSONArray("valueitems");
+                                T_Config_File.method_重复写文件_根据路径创建文件夹(filePath.replace("params", "列名"), "config_ColumnName.txt", typeName + "__" + columnName + "\n");
+                            }
                         }
                     }
                 }
