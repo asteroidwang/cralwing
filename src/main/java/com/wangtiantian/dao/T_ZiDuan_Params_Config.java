@@ -61,7 +61,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("发动机__最大净功率(kW)","C_发动机__最大净功率_kW");
         mapList.put("发动机__发动机特有技术","C_发动机__发动机特有技术");
         mapList.put("发动机__能源类型","C_发动机__能源类型");
-        mapList.put("发动机__推荐燃油标号","C_发动机__推荐燃油标号");
+        mapList.put("发动机__燃油标号","C_发动机__燃油标号");
         mapList.put("发动机__供油方式","C_发动机__供油方式");
         mapList.put("发动机__缸盖材料","C_发动机__缸盖材料");
         mapList.put("发动机__缸体材料","C_发动机__缸体材料");
@@ -172,6 +172,8 @@ public class T_ZiDuan_Params_Config {
         mapList.put("基本参数__CLTC综合油耗(L/100km)","C_基本参数__CLTC综合油耗_L_100km");
         mapList.put("电动机__WLTP纯电续航里程(km)","C_电动机__WLTP纯电续航里程_km");
         mapList.put("基本参数__最低荷电状态油耗(L/100km)CLTC","C_基本参数__最低荷电状态油耗_L_100km_CLTC");
+        mapList.put("基本参数__油电综合燃料消耗量(L/100km)","C_基本参数__油电综合燃料消耗量_L_100km");
+        mapList.put("基本参数__官方100-0km/h制动(m)","C_基本参数__官方100_0km_h制动_m");
         mapList.put("车身__氢瓶容积(L)","C_车身__氢瓶容积_L");
         mapList.put("电动机__对外直流放电功率(kW)","C_电动机__对外直流放电功率_kW");
         mapList.put("基本参数__EPA纯电续航里程(km)","C_基本参数__EPA纯电续航里程_km");
@@ -179,7 +181,6 @@ public class T_ZiDuan_Params_Config {
         mapList.put("电动机__充电峰值电压（V）","C_电动机__充电峰值电压_V");
         mapList.put("电动机__电驱系统质保","C_电动机__电驱系统质保");
         mapList.put("电动机__电控系统质保","C_电动机__电控系统质保");
-        mapList.put("基本参数__官方100-0km/h制动(m)","C_基本参数__官方100_0km_h制动_m");
         return mapList;
     }
 
@@ -398,6 +399,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("驾驶硬件__激光雷达数量","C_驾驶硬件__激光雷达数量");
         mapList.put("驾驶硬件__激光雷达线数","C_驾驶硬件__激光雷达线数");
         mapList.put("驾驶硬件__激光雷达点云数量","C_驾驶硬件__激光雷达点云数量");
+        mapList.put("驾驶硬件__前方最大探测距离","C_驾驶硬件__前方最大探测距离");
         mapList.put("驾驶功能__高精地图","C_驾驶功能__高精地图");
         mapList.put("驾驶功能__记忆泊车","C_驾驶功能__记忆泊车");
         mapList.put("驾驶功能__匝道自动驶出(入)","C_驾驶功能__匝道自动驶出_入");
@@ -432,7 +434,6 @@ public class T_ZiDuan_Params_Config {
         mapList.put("四驱/越野__拖挂钩","C_四驱_越野__拖挂钩");
         mapList.put("驾驶硬件__车内摄像头数量","C_驾驶硬件__车内摄像头数量");
         mapList.put("驾驶硬件__激光雷达10%反射率探测距离","C_驾驶硬件__激光雷达10_反射率探测距离");
-        mapList.put("驾驶硬件__前方最大探测距离","C_驾驶硬件__前方最大探测距离");
         mapList.put("天窗/玻璃__光感天幕","C_天窗_玻璃__光感天幕");
         mapList.put("屏幕/系统__后排液晶屏幕类型","C_屏幕_系统__后排液晶屏幕类型");
         mapList.put("屏幕/系统__后排液晶屏幕分辨率","C_屏幕_系统__后排液晶屏幕分辨率");
@@ -475,6 +476,7 @@ public class T_ZiDuan_Params_Config {
         mapList.put("座椅配置__前后移动扶手箱","C_座椅配置__前后移动扶手箱");
         mapList.put("被动安全__后排座椅防下滑气囊","C_被动安全__后排座椅防下滑气囊");
         mapList.put("屏幕/系统__屏幕刷新率[Hz]","C_屏幕_系统__屏幕刷新率_Hz");
+        mapList.put("音响/车内灯光__车外扬声器数量","C_音响_车内灯光__车外扬声器数量");
         mapList.put("四驱/越野__拖车取电口","C_四驱_越野__拖车取电口");
         mapList.put("驾驶功能__代客泊车","C_驾驶功能__代客泊车");
         return mapList;

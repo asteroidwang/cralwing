@@ -26,19 +26,20 @@ public class MainConfigData {
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).replace("-", "");
-        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
+//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
 //        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240910" + "/";
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/20240910/";
+        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/" + currentTime + "/";
 
         // 创建表
-        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-        mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
-        mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-        mainConfigData.method_下载配置数据(filePath + "params/");
-        mainConfigData.method_解析列名(filePath);
-        mainConfigData.method_取列名(filePath);
+//        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+//        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+//        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+//        mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
+//        mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+//        mainConfigData.method_下载配置数据(filePath + "params/");
+//        mainConfigData.method_解析列名(filePath);
+//        mainConfigData.method_取列名(filePath);
         mainConfigData.method_解析配置数据(filePath);
     }
 
@@ -173,7 +174,7 @@ public class MainConfigData {
                     String url = "";
 
                     url = "https://www.autohome.com.cn/" + modId + "/#pvareaid=3454427";
-                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_在售.txt")) {
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "GBK", filePath, modId + "_在售.txt")) {
                         dataBaseMethod.method_修改车型表中下载的id状态(modId, "在售", 1);
                     }
                 }
@@ -194,7 +195,7 @@ public class MainConfigData {
                     String url = "";
 
                     url = "https://www.autohome.com.cn/" + modId + "/sale.html#pvareaid=3311673";
-                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_停售.txt")) {
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "GBK", filePath, modId + "_停售.txt")) {
                         dataBaseMethod.method_修改车型表中下载的id状态(modId, "停售", 1);
                     }
                 }
@@ -222,7 +223,7 @@ public class MainConfigData {
                     String url = "";
 
                     url = "https://car.autohome.com.cn/pic/series/" + modId + ".html#pvareaid=3454438";
-                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面在售.txt")) {
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "GBK", filePath, modId + "_图片页面在售.txt")) {
                         dataBaseMethod.method_修改车型表中下载的id状态(modId, "图片页面在售", 1);
                     }
 
@@ -246,7 +247,7 @@ public class MainConfigData {
                     String url = "";
 
                     url = "https://car.autohome.com.cn/pic/series-t/" + modId + ".html";
-                    if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面停售.txt")) {
+                    if (T_Config_File.method_访问url获取网页源码普通版(url, "GBK", filePath, modId + "_图片页面停售.txt")) {
                         dataBaseMethod.method_修改车型表中下载的id状态(modId, "图片页面停售", 1);
                     }
                 }
@@ -359,7 +360,7 @@ public class MainConfigData {
                 String verID = verIDTemp_left.replace(verIDTempRight, "");
                 String verName = willSaleItems.get(i).select(".name").text();
                 String verURL = "https://www.autohome.com.cn" + willSaleItems.get(i).select(".name").attr("href");
-                Document verDoc = Jsoup.parse(new URL(verURL).openStream(), "gb2312", verURL);
+                Document verDoc = Jsoup.parse(new URL(verURL).openStream(), "GBK", verURL);
                 Elements verEl = verDoc.select(".athm-sub-nav__channel.athm-js-sticky").select("li");
                 String verIDNumber_L = verEl.get(0).select("a").attr("href").replace("/spec/", "");
                 String verIDNumber_R = verIDNumber_L.substring(verIDNumber_L.indexOf("/"));
@@ -449,7 +450,7 @@ public class MainConfigData {
                 for (Object o : paramsList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
                     int group = ((Bean_VersionIds) o).get_C_Group();
-                    if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/v3/Param_ListBySpecIdList.ashx?speclist=" + ids + "&_appid=test&_=1723037336504&_callback=__param1", "gb2312", filePath, group + "_params.txt")) {
+                    if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/v3/Param_ListBySpecIdList.ashx?speclist=" + ids + "&_appid=test&_=1723037336504&_callback=__param1", "GBK", filePath, group + "_params.txt")) {
                         dataBaseMethod.update_修改车辆配置的数据文件下载状态(group, "params", 1);
                     }
                 }
@@ -467,7 +468,7 @@ public class MainConfigData {
                 for (Object o : configList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
                     int group = ((Bean_VersionIds) o).get_C_Group();
-                    if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/v2/Config_ListBySpecIdList.ashx?speclist=" + ids + "&_=1723037336505&_callback=__config3", "gb2312", filePath.replace("params", "config"), group + "_config.txt")) {
+                    if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/v2/Config_ListBySpecIdList.ashx?speclist=" + ids + "&_=1723037336505&_callback=__config3", "GBK", filePath.replace("params", "config"), group + "_config.txt")) {
                         dataBaseMethod.update_修改车辆配置的数据文件下载状态(group, "config", 1);
                     }
                 }
@@ -485,7 +486,7 @@ public class MainConfigData {
                 for (Object o : bagList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
                     int group = ((Bean_VersionIds) o).get_C_Group();
-                    if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/Config_BagBySpecIdListV2.ashx?speclist=" + ids + "&_=1723037336505&_callback=__bag4", "gb2312", filePath.replace("params", "bag"), group + "_bag.txt")) {
+                    if (T_Config_File.method_访问url获取Json普通版("https://carif.api.autohome.com.cn/Car/Config_BagBySpecIdListV2.ashx?speclist=" + ids + "&_=1723037336505&_callback=__bag4", "GBK", filePath.replace("params", "bag"), group + "_bag.txt")) {
                         dataBaseMethod.update_修改车辆配置的数据文件下载状态(group, "bag", 1);
                     }
                 }
@@ -551,7 +552,7 @@ public class MainConfigData {
         int groupCount = dataBaseMethod.get_版本表中组数();
 //        int groupCount = 8219;
 //        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
-        for (int i = 1; i < groupCount + 1; i++) {
+        for (int i = 1; i < groupCount+1; i++) {
 //        int i = 8219;
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
@@ -626,7 +627,7 @@ public class MainConfigData {
                                     Class c = pidList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
-                                    field.set(pidList.get(i), value);
+                                    field.set(pidList.get(i), value.replace("[optiontype:1]","●").replace("[optiontype:2]","○").replace("####","").replace("[optiontype:0]",""));
                                 }
                             }
                         }
@@ -696,7 +697,7 @@ public class MainConfigData {
                                     Class c = configList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
-                                    field.set(configList.get(i), value);
+                                    field.set(configList.get(i), value.replace("[sv:1]","●").replace("[sv:2]","○").replace("####",""));
                                 }
                             }
                         }

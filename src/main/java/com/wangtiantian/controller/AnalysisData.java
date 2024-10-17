@@ -529,7 +529,7 @@ public class AnalysisData {
                                     }
 
                                     field.setAccessible(true);
-                                    field.set(configList.get(i), value);
+                                    field.set(configList.get(i), value.replace("[sv:1]","●").replace("[sv:2]","○").replace("####",""));
                                 }
                             }
                         }

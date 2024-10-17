@@ -58,7 +58,7 @@ public class T_Config_File {
             writer.flush();
             writer.close();
             fos.close();
-            System.out.println("下载一次\t" + filePath + fileName+"\t"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            System.out.println("下载一次\t" + filePath + fileName + "\t" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         } catch (Exception e) {
             System.out.println(e.toString());
         }
@@ -86,7 +86,9 @@ public class T_Config_File {
         File file = new File(filePath);
         File[] files = file.listFiles(File::isFile);
         for (int i = 0; i < files.length; i++) {
-            fileNames.add(files[i].getName());
+            if (!files[i].getName().equals(".DS_Store")) {
+                fileNames.add(files[i].getName());
+            }
         }
         return fileNames;
     }
@@ -95,8 +97,8 @@ public class T_Config_File {
         List<String> fileNames = new ArrayList<>();
         try {
             Stream<Path> paths = Files.walk(Paths.get(filePath));
-          fileNames =  paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
-        }catch (Exception e){
+            fileNames = paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -141,6 +143,7 @@ public class T_Config_File {
         }
         return fileNames;
     }
+
     public static Boolean method_判断文件是否存在(String file) {
         return new File(file).exists();
     }
@@ -193,7 +196,7 @@ public class T_Config_File {
             }
             inputStream.close();
             outputStream.close();
-            System.out.println("成功下载一次\t"+filePath+ fileName);
+            System.out.println("成功下载一次\t" + filePath + fileName);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -201,19 +204,20 @@ public class T_Config_File {
         }
     }
 
-    public static void delete_删除文件(String filePath){
+    public static void delete_删除文件(String filePath) {
         File file = new File(filePath);
         if (file.exists()) {
-            if (file.delete()){
+            if (file.delete()) {
                 System.out.println("已删除");
-            }else {
+            } else {
                 System.out.println("删除失败");
             }
         }
     }
-    public  static  String method_转化url编码(String encodedString) {
+
+    public static String method_转化url编码(String encodedString) {
         try {
-           encodedString= URLEncoder.encode(encodedString, "UTF-8");
+            encodedString = URLEncoder.encode(encodedString, "UTF-8");
 
         } catch (Exception e) {
             e.printStackTrace();
