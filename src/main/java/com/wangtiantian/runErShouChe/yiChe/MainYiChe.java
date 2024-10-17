@@ -134,14 +134,16 @@ public class MainYiChe extends TimerTask {
 
     // 4.下载其余分页url数据
     public Boolean method_下载其余分页url数据(String filePath) {
-        try {
+//        try {
             ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
             ArrayList<Object> cityDataList = erShouCheDataBase.yiche_get_获取未下载的城市分页url();
             System.out.println(cityDataList.size());
             if (cityDataList.size() > 36) {
-                CountDownLatch latch = new CountDownLatch(cityDataList.size());
+                try{
+
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> cityDataList.subList(i * (cityDataList.size() + 5) / 6, Math.min((i + 1) * (cityDataList.size() + 5) / 6, cityDataList.size())))
                         .collect(Collectors.toList());
+                    CountDownLatch latch = new CountDownLatch(list.size());
                 for (int i = 0; i < cityDataList.size(); i++) {
                     YiCheFenYeThread moreThread = new YiCheFenYeThread(list.get(i), filePath);
                     Thread thread = new Thread(moreThread);
@@ -149,6 +151,9 @@ public class MainYiChe extends TimerTask {
                 }
                 latch.await();
                 return true;
+                }catch (Exception e){
+                    return true;
+                }
             } else {
                 for (Object cityItem : cityDataList) {
                     String cityPinYin = ((YiChe_FenYeUrl) cityItem).get_C_EngName();
@@ -167,10 +172,9 @@ public class MainYiChe extends TimerTask {
 //            if (erShouCheDataBase.yiche_get_获取未下载的城市分页url().size() > 0) {
 //                method_下载其余分页url数据(filePath);
 //            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     // final 解析所有车辆基本信息
@@ -350,8 +354,8 @@ public class MainYiChe extends TimerTask {
             for (String filePathName : fileList) {
                 String fileName = filePathName.replace(filePath, "").replace(".txt", "");
                 String content = T_Config_File.method_读取文件内容(filePathName);
-                System.out.println(fileName);
-                System.out.println(content);
+//                System.out.println(fileName);
+//                System.out.println(content);
                 Document mainDoc = Jsoup.parse(content);
                 Element mainItems = mainDoc.select(".Parameter_vertical__vPqT4").get(0);
                 System.out.println(mainItems);
@@ -389,7 +393,7 @@ public class MainYiChe extends TimerTask {
             JSONObject jsonObject = JSON.parseObject(mainDoc.text());
             JSONObject dataJson = jsonObject.getJSONObject("data").getJSONObject("carinfo");
             if (dataJson == null && !fileName.split("_")[1].replace(".txt", "").equals("1")) {
-                System.out.println(fileName + "\t" + mainDoc.text());
+//                System.out.println(fileName + "\t" + mainDoc.text());
                 return false;
             } else {
                 T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.text());
@@ -422,7 +426,7 @@ public class MainYiChe extends TimerTask {
         parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
 
         // 4
-        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
+//        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
 
         // 5
         if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
