@@ -19,10 +19,11 @@ import java.util.Date;
 public class MainRenRenChe {
     public static void main(String[] args) {
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
-        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
+//        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/二手车数据/renrenche/20241010/";
         MainRenRenChe renRenChe = new MainRenRenChe();
         // 1
-        // renRenChe.method_下载城市数据并入库(filePath);
+//         renRenChe.method_下载城市数据并入库(filePath);
 
         // 2
         // renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
@@ -31,10 +32,10 @@ public class MainRenRenChe {
 
         // new ErShouCheDataBase().get_文件命名错误数据();
         // 3
-        // renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
+         renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
 
         // 4
-        renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
+//         renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
 
 
         // final
@@ -119,9 +120,9 @@ public class MainRenRenChe {
                 Document mainDoc = Jsoup.parse(content);
                 String numCar = mainDoc.select(".tab_car-number").text().replace("全部车源", "").replace("）", "").replace("（", "");
                 Elements mainItems = mainDoc.select("#list").select("li");
-                int page =1;
-                if (mainItems.size()>0){
-                    page =Integer.parseInt(numCar.replace("辆", "").equals("")?"50":numCar.replace("辆", "")) / mainItems.size();
+                int page = 1;
+                if (mainItems.size() > 0) {
+                    page = Integer.parseInt(numCar.replace("辆", "").equals("") ? "50" : numCar.replace("辆", "")) / mainItems.size();
                 }
                 for (int i = 1; i < page + 3; i++) {
                     String cityPinYin = fileName.replace(".txt", "").split("_")[0];
@@ -151,9 +152,60 @@ public class MainRenRenChe {
 
     // 下载城市其他分页数据
     public void method_下载城市除首页的其他分页数据(String filePath) {
-        int failNum = 0;
+        int count = 0;
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
+        ArrayList<Object> cityDataList = erShouCheDataBase.rrc_get_获取未下载首页分页的城市();
+        for (int i = 0; i < cityDataList.size(); i++) {
+            String cityJx = ((RenRenChe_CityData) cityDataList.get(i)).get_C_listName();
+            String cityId = ((RenRenChe_CityData) cityDataList.get(i)).get_C_CityId();
+            RenRenChePlayWright renRenChePlayWright = new RenRenChePlayWright();
+            String content = renRenChePlayWright.Method_playwright("https://www.renrenche.com/" + cityJx + "/ershouche");
+            count++;
+            try {
+                Thread.sleep(1000 * 60);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            T_Config_File.method_写文件_根据路径创建文件夹(filePath, cityJx + "_1.txt", content);
+            Document mainDoc = Jsoup.parse(content);
+            Elements mainItems = mainDoc.select(".next");
+            System.out.println(mainItems.size());
+            for (int j = 2; j < 9999; j++) {
+                System.out.println(mainItems.size());
+                if (mainItems.size() > 0) {
+                    if (!T_Config_File.method_判断文件是否存在(filePath + cityJx + "_" + j + ".txt")) {
+                        String url = mainItems.attr("href");
+                        String anotherContent = renRenChePlayWright.Method_playwright(url);
+                        count++;
+                        T_Config_File.method_写文件_根据路径创建文件夹(filePath, cityJx + "_" + j + ".txt", anotherContent);
+                        Document anotherDoc = Jsoup.parse(anotherContent);
+                        mainItems = anotherDoc.select(".next");
+                        if (count > 30) {
+                            try {
+                                Thread.sleep(1000 * 60 * 5);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        try {
+                            Thread.sleep(1000 * 60);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
+
+                } else {
+                    break;
+                }
+            }
+
+            erShouCheDataBase.rrc_update_修改已下载的首页数据的下载状态(cityId);
+//            System.out.println(content);
+        }
+//        if (erShouCheDataBase.rrc_get_获取未下载分页的url数据().size() > 0) {
+//            method_下载城市除首页的其他分页数据(filePath);
+//        }
     }
 
     // final解析城市分页数据获取车辆基本信息
@@ -167,7 +219,7 @@ public class MainRenRenChe {
                 Document mainDoc = Jsoup.parse(content);
                 String numCar = mainDoc.select(".tab_car-number").text().replace("全部车源", "").replace("）", "").replace("（", "");
                 Elements mainItems = mainDoc.select("#list").select("li");
-                int page = Integer.parseInt(numCar.replace("辆", "")) / 50;
+//                int page = Integer.parseInt(numCar.replace("辆", "")) / 50;
                 for (int i = 0; i < mainItems.size(); i++) {
                     String infoPostTime = mainItems.get(i).select(".info--post-time").text();
                     String carName = mainItems.get(i).select(".info_title").select(".info_link").text();
@@ -178,9 +230,17 @@ public class MainRenRenChe {
                     }
                     String infoParams = mainItems.get(i).select(".info_params").text();
                     String infoPrices = mainItems.get(i).select(".info--price").text();
-                    String price = get_转化价格数据(infoPrices.substring(0, infoPrices.length() - 1)) + "万";
-                    String shangPaiTime = infoParams.split(" ")[0];
-                    String mileNumber = infoParams.split(" ")[1].replace("·", "");
+                    String price = "0";
+                    if (infoPrices.length() > 1) {
+                        price = get_转化价格数据(infoPrices.substring(0, infoPrices.length() - 1)) + "万";
+                    }
+                    String shangPaiTime = "";
+                    String mileNumber = "";
+                    if (infoParams.length() >= 2) {
+                        shangPaiTime = infoParams.split(" ")[0];
+                        mileNumber = infoParams.split(" ")[1].replace("·", "");
+                    }
+
                     RenRenChe_CarInfo renRenChe_carInfo = new RenRenChe_CarInfo();
                     renRenChe_carInfo.set_C_infoPostTime(infoPostTime);
                     renRenChe_carInfo.set_C_carName(carName);

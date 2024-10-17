@@ -29,6 +29,11 @@ public class ModelPriceMoreThread implements Runnable {
         System.out.println("Thread " + currentThread.getName() + " (ID: " + currentThread.getId() + ") is processing group.");
         for (Object bean : list) {
             try {
+                try {
+                    Thread.sleep(1000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 String dealerId = ((ModelDealerData) bean).get_C_DealerId();
                 String modId = ((ModelDealerData) bean).get_C_ModelId();
                 String mainUrl = "https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + dealerId + "&seriesId=" + modId + "&show0Price=1";
