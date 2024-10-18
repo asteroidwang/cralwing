@@ -8,6 +8,7 @@ import com.asteroid.dao.T_CompareField;
 import com.asteroid.dao.T_Dao_Config;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,7 +42,7 @@ public class Main {
 //        new Main().method_找出有必要规范的字段();
 
         // 判断数据对比的类型
-         new Main().method_判断数据对比的类型();
+        new Main().method_判断数据对比的类型();
 
 
     }
@@ -49,11 +50,14 @@ public class Main {
     public void method_判断数据对比的类型() {
         String filePath = "/Users/asteroid/所有文件数据/对比结果/";
         T_Compare compare = new T_Compare(2, 1, 1);
-        ArrayList<String> idsList = compare.method_汽车之家和易车的版本id去重数据();
+        String idsFinish = T_Config_File.method_读取文件内容(filePath+"已匹配的版本ids.txt");
+
+        ArrayList<String> idsList = compare.method_汽车之家和易车的版本id去重数据(idsFinish.equals("")?"''":idsFinish.substring(0,idsFinish.length()-1));
         List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配的上 = new ArrayList<>();
         List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配不上 = new ArrayList<>();
         List<Map<String, Object>> dataExcelList_名称匹配不上配置匹配的上 = new ArrayList<>();
         List<Map<String, Object>> dataExcelList_名称匹配不上配置匹配不上 = new ArrayList<>();
+        int a = 0;
         for (String ids : idsList) {
             // pre定义汽车之家的相关数据
             List<Map<String, Object>> dataList = compare.method_根据id查询交集表中的数据(ids);
@@ -88,27 +92,53 @@ public class Main {
 
             Map<String, Object> mapList = new HashMap<>();
             mapList.put("汽车之家_易车的版本Id", ids);
-            mapList.put("汽车之家的版本Id", preVersionId);
-            mapList.put("易车的版本Id", nextVersionId);
-            mapList.put("汽车之家的版本名称", preVersionName);
-            mapList.put("易车的版本名称", nextVersionName);
+            mapList.put("汽车之家的版本Id", "");
+            mapList.put("易车的版本Id", "");
+            mapList.put("汽车之家的版本名称", "");
+            mapList.put("易车的版本名称", "");
+
+
+            Map<String, Object> mapListPre = new HashMap<>();
+            mapListPre.put("汽车之家_易车的版本Id", ids);
+            mapListPre.put("汽车之家的版本Id", "");
+            mapListPre.put("易车的版本Id", "");
+            mapListPre.put("汽车之家的版本名称", "");
+            mapListPre.put("易车的版本名称", "");
+            Map<String, Object> mapListMext = new HashMap<>();
+            mapListMext.put("汽车之家_易车的版本Id", ids);
+            mapListMext.put("汽车之家的版本Id", "");
+            mapListMext.put("易车的版本Id", "");
+            mapListMext.put("汽车之家的版本名称", "");
+            mapListMext.put("易车的版本名称", "");
+            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "匹配结果备份12.txt", ids + "\t" + preVersionId + "\t" + nextVersionId + "\t" + preVersionName + "\t" + nextVersionName + "\t" + noSameConfig);
+            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "已匹配的版本ids.txt", "'"+ids+"',");
             // 最起码年要对得上
             if (preYear.equals(nextYear)) {
                 if (preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配的上 配置匹配的上
                     dataExcelList_名称匹配的上配置匹配的上.add(mapList);
-                    System.out.println("dataExcelList_名称匹配的上配置匹配的上");
+//                    System.out.println("dataExcelList_名称匹配的上配置匹配的上");
                 } else if (preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) {  // 名称匹配的上 配置匹配不上
-                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap(mapList, noSameConfig));
-                    System.out.println("dataExcelList_名称匹配的上配置匹配不上");
+                    mapListPre.put("汽车之家的版本Id", preVersionId);
+                    mapListPre.put("汽车之家的版本名称", preVersionName);
+                    mapListMext.put("易车的版本Id", nextVersionId);
+                    mapListMext.put("易车的版本名称", nextVersionName);
+                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
+                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
+//                    System.out.println("dataExcelList_名称匹配的上配置匹配不上\t"+dataExcelList_名称匹配的上配置匹配不上);
                 } else if (!preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配的上
                     dataExcelList_名称匹配不上配置匹配的上.add(mapList);
-                    System.out.println("dataExcelList_名称匹配不上配置匹配的上");
-
                 } else if (!preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配不上
-                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap(mapList, noSameConfig));
-                    System.out.println("dataExcelList_名称匹配不上配置匹配不上");
+//                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap(mapList, noSameConfig));
+                    mapListPre.put("汽车之家的版本Id", preVersionId);
+                    mapListPre.put("汽车之家的版本名称", preVersionName);
+                    mapListMext.put("易车的版本Id", nextVersionId);
+                    mapListMext.put("易车的版本名称", nextVersionName);
+                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
+                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
                 }
             }
+            a++;
+            System.out.println("还有" + (idsList.size() - a) + "个");
         }
         Map<String, List<Map<String, Object>>> allExcelData = new HashMap<>();
         allExcelData.put("名称匹配的上配置匹配的上", dataExcelList_名称匹配的上配置匹配的上);
@@ -121,26 +151,110 @@ public class Main {
     }
 
 
-    private String extractYearFromVersionName(String versionName) {
+    public String extractYearFromVersionName(String versionName) {
         int yearStartIndex = versionName.indexOf("款") - 4;
         return versionName.substring(yearStartIndex, yearStartIndex + 5);
     }
 
-    private Map<String, Object> addConfigToMap(Map<String, Object> map, StringBuilder config) {
+    public Map<String, Object> addConfigToMap_汽车之家(Map<String, Object> map, StringBuilder config) {
         String[] configList = config.toString().split("\\|\\|");
         for (String item : configList) {
             int splitIndex = item.indexOf("=>");
             String columnName = item.substring(0, splitIndex);
             String[] values = item.substring(splitIndex + 2).split("->");
-            for (int j = 0; j < values.length; j++) {
-                map.put(columnName, values[j]);
+            if (values.length >= 2) {
+                map.put(columnName, values[0]);
             }
+//            map.put(columnName,values[1]);
+//            for (int j = 0; j < values.length; j++) {
+//                map.put(columnName, values[j]);
+//            }
         }
         return map;
     }
 
+    public Map<String, Object> addConfigToMap_易车(Map<String, Object> map, StringBuilder config) {
+        String[] configList = config.toString().split("\\|\\|");
+        for (String item : configList) {
+            int splitIndex = item.indexOf("=>");
+            String columnName = item.substring(0, splitIndex);
+
+            String[] values = item.substring(splitIndex + 2).split("->");
+            if (values.length >= 2) {
+                map.put(columnName, values[1]);
+            }
+
+//            map.put(columnName,values[1]);
+//            for (int j = 0; j < values.length; j++) {
+//                map.put(columnName, values[j]);
+//            }
+        }
+        return map;
+    }
 
     public static void method_写excel(Map<String, List<Map<String, Object>>> dataMapList) {
+        String filePath = "/Users/asteroid/所有文件数据/对比结果/";
+        // 创建工作簿
+        try {
+            FileOutputStream outputStream = new FileOutputStream(filePath + "output.xlsx");
+            Workbook workbook = new XSSFWorkbook(); // 用于创建 .xlsx 文件
+            System.out.println("创建excel文件");
+            //Workbook workbook = new HSSFWorkbook(); // 用于创建 .xls 文件
+            Set<String> sheetList = dataMapList.keySet();
+            List<String> sheetNames = sheetList.stream().distinct().collect(Collectors.toList());
+            // 获取了sheet页的名称以及数量，行名称
+            // 提前获取所有sheet页的表头
+            Map<String, List<String>> headerMap = new HashMap<>();
+            for (String sheetName : dataMapList.keySet()) {
+                headerMap.put(sheetName, method_获取excel表头(dataMapList.get(sheetName)));
+            }
+
+            for (String sheetName : sheetNames) {
+                List<List<Object>> sheetData = new ArrayList<>();
+                Sheet sheet = workbook.createSheet(sheetName);
+                List<String> headersList = headerMap.get(sheetName);
+//            List<List<String>> head = headersList.stream()
+//                    .map(s -> Collections.singletonList(s))
+//                    .collect(Collectors.toList());
+                Row headerRow = sheet.createRow(0);
+                int cellIndex = 0;
+                for (String header : headersList) {
+                    Cell cell = headerRow.createCell(cellIndex++);
+                    cell.setCellValue(header);
+                }
+                System.out.println(sheetName + "\t");
+
+                int rowIndex = 1;
+                List<Map<String, Object>> dataList = dataMapList.get(sheetName);
+                for (Map<String, Object> map : dataList) {
+                    Row row = sheet.createRow(rowIndex++);
+                    int columnIndex = 0;
+                    System.out.println("行\t" + rowIndex);
+                    for (String header : headersList) {
+                        Cell cell = row.createCell(columnIndex++);
+                        System.out.println("列\t" + columnIndex);
+                        cell.setCellValue(map.get(header) == null ? "" : map.get(header).toString());
+                    }
+                }
+                System.out.println(sheetName + "\t" + rowIndex);
+            }
+            try {
+                workbook.write(outputStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            } finally {
+                workbook.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public static void method_写excel_修改前(Map<String, List<Map<String, Object>>> dataMapList) {
 //        String filePath = "/Users/asteroid/所有文件数据/对比结果/";
         // 创建工作簿
 //        Workbook workbook = new XSSFWorkbook(); // 用于创建 .xlsx 文件
@@ -164,15 +278,14 @@ public class Main {
                     .collect(Collectors.toList());
 
             List<Map<String, Object>> dataList = dataMapList.get(sheetName);
+            List list = new ArrayList<>(headersList.size());
             for (Map<String, Object> map : dataList) {
-                List list = new ArrayList<>(headersList.size());
                 for (String header : headersList) {
-                    list.add(map.get(header)==null?"":map.get(header).toString());
+                    list.add(map.get(header) == null ? "" : map.get(header).toString());
                 }
                 sheetData.add(list);
             }
-            File outputFile = new File("/Users/asteroid/所有文件数据/对比结果/output_"+sheetName+".xlsx");
-
+            File outputFile = new File("/Users/asteroid/所有文件数据/对比结果/output_" + sheetName + ".xlsx");
             try (FileOutputStream fos = new FileOutputStream(outputFile)) {
                 EasyExcel.write(fos)
                         .head(head) // 通过createExcelHead方法将表头信息传递给EasyExcel
@@ -187,6 +300,53 @@ public class Main {
 
 
     }
+
+
+    public static void method_写excel_修改前_通义(Map<String, List<Map<String, Object>>> dataMapList) {
+        System.out.println("创建excel文件");
+
+        // 提前获取所有sheet页的表头
+        Map<String, List<String>> headerMap = new HashMap<>();
+        for (String sheetName : dataMapList.keySet()) {
+            headerMap.put(sheetName, method_获取excel表头(dataMapList.get(sheetName)));
+        }
+
+        // 遍历每个sheet页
+        for (String sheetName : dataMapList.keySet()) {
+            List<Map<String, Object>> dataList = dataMapList.get(sheetName);
+            List<String> headersList = headerMap.get(sheetName);
+
+            // 创建 Excel 文件并写入数据
+            File outputFile = new File("/Users/asteroid/所有文件数据/对比结果/output" + "_" + sheetName + ".xlsx");
+            try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                // 构造头部数据
+                List<List<String>> head = headersList.stream()
+                        .map(s -> Collections.singletonList(s))
+                        .collect(Collectors.toList());
+
+                // 收集数据行
+                List<List<Object>> sheetData = new ArrayList<>();
+                for (Map<String, Object> map : dataList) {
+                    List<Object> row = new ArrayList<>(headersList.size());
+                    for (String header : headersList) {
+                        row.add(map.getOrDefault(header, ""));
+                    }
+                    sheetData.add(row);
+                }
+
+                // 写入数据
+                EasyExcel.write(fos)
+                        .head(head)
+                        .sheet(sheetName)
+                        .needHead(true)
+                        .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                        .doWrite(sheetData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public static List<String> method_获取excel表头(List<Map<String, Object>> dataList) {
         Set<String> tempColumnNames = new TreeSet<>();

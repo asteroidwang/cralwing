@@ -31,6 +31,7 @@ public class T_Compare extends T_Config_Father {
         ArrayList<String> result = new ArrayList<>();
         try {
             method_连接数据库();
+            System.out.println(sql);
             ResultSet resultSet = stmt.executeQuery(sql);
             while (resultSet.next()) {
                 Class c = Class.forName(packBag);
@@ -114,8 +115,8 @@ public class T_Compare extends T_Config_Father {
         return method_去重的查询("select distinct " + columnName + " from " + tableName + " where " + columnName + "  like '%○%' and " + columnName + "  like '%元%'");
     }
 
-    public ArrayList<String> method_汽车之家和易车的版本id去重数据() {
-        return method_去重的查询("select distinct C_汽车之家版本Id_易车版本Id from " + tableName);
+    public ArrayList<String> method_汽车之家和易车的版本id去重数据(String ids) {
+        return method_去重的查询("select distinct C_汽车之家版本Id_易车版本Id from " + tableName+" where C_IsFinish = 0 and C_汽车之家版本Id_易车版本Id not in ("+ids+")");
     }
 
     public List<Map<String, Object>> method_根据id查询交集表中的数据(String id) {

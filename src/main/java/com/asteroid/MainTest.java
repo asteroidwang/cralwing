@@ -64,7 +64,8 @@ public class MainTest {
 //        new MainTest().method_找出有必要规范的字段();
 
 
-        new MainTest().method_读取文件然后数据写入Excel();
+//        new MainTest().method_读取文件然后数据写入Excel();
+        new MainTest().method_判断数据对比的类型();
     }
 
 
@@ -80,16 +81,16 @@ public class MainTest {
         String dataExcelList_名称匹配不上配置匹配不上 = mapContent.substring(mapContent.indexOf("名称匹配不上配置匹配不上"), mapContent.indexOf("名称匹配的上配置匹配的上")).substring(13);
         String dataExcelList_名称匹配的上配置匹配的上 = mapContent.substring(mapContent.indexOf("名称匹配的上配置匹配的上"), mapContent.indexOf("名称匹配不上配置匹配的上")).substring(13);
         String dataExcelList_名称匹配不上配置匹配的上 = mapContent.substring(mapContent.indexOf("名称匹配不上配置匹配的上")).substring(13, mapContent.substring(mapContent.indexOf("名称匹配不上配置匹配的上")).length() - 1);
-        Map<String,List<Map<String,Object>>> dataList = new HashMap<>();
+        Map<String, List<Map<String, Object>>> dataList = new HashMap<>();
         dataList.put("名称匹配的上配置匹配不上", parseMapString(dataExcelList_名称匹配的上配置匹配不上));
         dataList.put("名称匹配不上配置匹配不上", parseMapString(dataExcelList_名称匹配不上配置匹配不上));
         dataList.put("名称匹配的上配置匹配的上", parseMapString(dataExcelList_名称匹配的上配置匹配的上));
         dataList.put("名称匹配不上配置匹配的上", parseMapString(dataExcelList_名称匹配不上配置匹配的上));
-        Main.method_写excel(dataList);
+        Main.method_写excel_修改前_通义(dataList);
     }
 
-    private static  List<Map<String, Object>> parseMapString(String s) {
-        List<Map<String, Object>> result =new ArrayList<>();
+    private static List<Map<String, Object>> parseMapString(String s) {
+        List<Map<String, Object>> result = new ArrayList<>();
         Pattern pattern = Pattern.compile("(\\{.*?\\})");
         Matcher matcher = pattern.matcher(s);
         while (matcher.find()) {
@@ -97,9 +98,16 @@ public class MainTest {
             String entryStr = matcher.group(1);
             entryStr = entryStr.substring(1, entryStr.length() - 1).trim();
             String[] valuesList = entryStr.split(",");
+//            System.out.println(entryStr);
             for (int i = 0; i < valuesList.length; i++) {
-                String key = valuesList[i].split("=")[0];
-                String val = valuesList[i].split("=")[1];
+                String key = valuesList[i].split("=")[0].trim();
+                String val = valuesList[i].split("=")[1].trim();
+//                if (key.contains("汽车之家的")){
+//                    System.out.println(key+"\t"+val);
+//                }
+//                if (key.equals("汽车之家的版本Id")||key.equals("易车的版本Id")||key.equals("汽车之家_易车的版本Id")){
+//                    System.out.println(val);
+//                }
                 map.put(key, val);
             }
             result.add(map);
@@ -118,9 +126,149 @@ public class MainTest {
     }
 
     public void method_判断数据对比的类型() {
-        T_Compare compare = new T_Compare(2, 1, 2);
+        String filePath = "/Users/asteroid/所有文件数据/对比结果/";
+        T_Compare compare = new T_Compare(2, 1, 1);
+        String idsFinish = T_Config_File.method_读取文件内容(filePath+"已匹配的版本ids.txt");
+        ArrayList<String> idsList = compare.method_汽车之家和易车的版本id去重数据(idsFinish.equals("")?"''":idsFinish.substring(0,idsFinish.length()-1));
+        List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配的上 = new ArrayList<>();
+        List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配不上 = new ArrayList<>();
+        List<Map<String, Object>> dataExcelList_名称匹配不上配置匹配的上 = new ArrayList<>();
+        List<Map<String, Object>> dataExcelList_名称匹配不上配置匹配不上 = new ArrayList<>();
+        int a = 0;
+        for (String ids : idsList) {
+            // pre定义汽车之家的相关数据
+            List<Map<String, Object>> dataList = compare.method_根据id查询交集表中的数据(ids);
+            ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
+            String versionNameColumnName = "C_基本参数__车型名称";
+            String modelNameColumnName = "C_ModelName";
+            String preVersionId = ids.split("_")[0];
+            String nextVersionId = ids.split("_")[1];
+            String preModelName = dataList.get(0).get(modelNameColumnName).toString();
+            String nextModelName = dataList.get(1).get(modelNameColumnName).toString();
+            String preVersionName = dataList.get(0).get(versionNameColumnName).toString().contains(preModelName) ? dataList.get(0).get(versionNameColumnName).toString() : preModelName + dataList.get(0).get(versionNameColumnName).toString();
+            String nextVersionName = dataList.get(1).get(versionNameColumnName).toString().contains("款") && !String.valueOf(dataList.get(1).get(versionNameColumnName).toString().charAt(0)).equals("9") ? nextModelName + "20" + dataList.get(1).get(versionNameColumnName).toString() : nextModelName + "19" + dataList.get(1).get(versionNameColumnName).toString();
+
+            StringBuilder sameConfig = new StringBuilder();
+            StringBuilder noSameConfig = new StringBuilder();
+            for (String columnName : columnsList) {
+                String preValue = dataList.get(0).get(columnName).toString();
+                String nextValue = dataList.get(1).get(columnName).toString();
+                if (!preValue.equals("-") && !nextValue.equals("-")) {
+                    if (preValue.equals(nextValue)) {
+                        sameConfig.append(preValue);
+                    } else {
+//                        noSameConfig.append(columnName + "=>" + preValue + "->" + nextValue + "||");
+                        noSameConfig.append(columnName).append("=>").append(preValue).append("->").append(nextValue).append("||");
+                    }
+                }
+            }
+            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "已匹配的版本ids.txt", "'"+ids+"',");
+
+            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "匹配结果备份.txt", ids + "\t" + preVersionId + "\t" + nextVersionId + "\t" + preVersionName + "\t" + nextVersionName + "\t" + noSameConfig);
+//            String preModelYear = preModelName + extractYearFromVersionName(preVersionName);
+//            String nextModelYear = nextModelName + extractYearFromVersionName(nextVersionName);
+//            String preYear = extractYearFromVersionName(preVersionName);
+//            String nextYear = extractYearFromVersionName(nextVersionName);
+//
+//            Map<String, Object> mapList = new HashMap<>();
+//            mapList.put("汽车之家_易车的版本Id", ids);
+//            mapList.put("汽车之家的版本Id", "");
+//            mapList.put("易车的版本Id", "");
+//            mapList.put("汽车之家的版本名称", "");
+//            mapList.put("易车的版本名称", "");
+//
+//
+//            Map<String, Object> mapListPre = new HashMap<>();
+//            mapListPre.put("汽车之家_易车的版本Id", ids);
+//            mapListPre.put("汽车之家的版本Id", "");
+//            mapListPre.put("易车的版本Id", "");
+//            mapListPre.put("汽车之家的版本名称", "");
+//            mapListPre.put("易车的版本名称", "");
+//            Map<String, Object> mapListMext = new HashMap<>();
+//            mapListMext.put("汽车之家_易车的版本Id", ids);
+//            mapListMext.put("汽车之家的版本Id", "");
+//            mapListMext.put("易车的版本Id", "");
+//            mapListMext.put("汽车之家的版本名称", "");
+//            mapListMext.put("易车的版本名称", "");
+//            // 最起码年要对得上
+//            if (preYear.equals(nextYear)) {
+//                if (preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配的上 配置匹配的上
+//                    dataExcelList_名称匹配的上配置匹配的上.add(mapList);
+////                    System.out.println("dataExcelList_名称匹配的上配置匹配的上");
+//                } else if (preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) {  // 名称匹配的上 配置匹配不上
+//                    mapListPre.put("汽车之家的版本Id", preVersionId);
+//                    mapListPre.put("汽车之家的版本名称", preVersionName);
+//                    mapListMext.put("易车的版本Id", nextVersionId);
+//                    mapListMext.put("易车的版本名称", nextVersionName);
+//                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
+//                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
+//
+////                    System.out.println("dataExcelList_名称匹配的上配置匹配不上\t"+dataExcelList_名称匹配的上配置匹配不上);
+//                } else if (!preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配的上
+//                    dataExcelList_名称匹配不上配置匹配的上.add(mapList);
+//                } else if (!preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配不上
+////                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap(mapList, noSameConfig));
+//                    mapListPre.put("汽车之家的版本Id", preVersionId);
+//                    mapListPre.put("汽车之家的版本名称", preVersionName);
+//                    mapListMext.put("易车的版本Id", nextVersionId);
+//                    mapListMext.put("易车的版本名称", nextVersionName);
+//                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
+//                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
+//                }
+//            }
+            a++;
+            System.out.println("还有" + (idsList.size() - a) + "个");
+        }
+//        Map<String, List<Map<String, Object>>> allExcelData = new HashMap<>();
+//        allExcelData.put("名称匹配的上配置匹配的上", dataExcelList_名称匹配的上配置匹配的上);
+//        allExcelData.put("名称匹配的上配置匹配不上", dataExcelList_名称匹配的上配置匹配不上);
+//        allExcelData.put("名称匹配不上配置匹配的上", dataExcelList_名称匹配不上配置匹配的上);
+//        allExcelData.put("名称匹配不上配置匹配不上", dataExcelList_名称匹配不上配置匹配不上);
+//        System.out.println(allExcelData);
+//        T_Config_File.method_写文件_根据路径创建文件夹(filePath, "对比结果汇总.txt", allExcelData.toString());
+//        method_写excel(allExcelData);
     }
 
+    public String extractYearFromVersionName(String versionName) {
+        int yearStartIndex = versionName.indexOf("款") - 4;
+        return versionName.substring(yearStartIndex, yearStartIndex + 5);
+    }
+
+    public Map<String, Object> addConfigToMap_汽车之家(Map<String, Object> map, StringBuilder config) {
+        String[] configList = config.toString().split("\\|\\|");
+        for (String item : configList) {
+            int splitIndex = item.indexOf("=>");
+            String columnName = item.substring(0, splitIndex);
+            String[] values = item.substring(splitIndex + 2).split("->");
+            if (values.length >= 2) {
+                map.put(columnName, values[0]);
+            }
+//            map.put(columnName,values[1]);
+//            for (int j = 0; j < values.length; j++) {
+//                map.put(columnName, values[j]);
+//            }
+        }
+        return map;
+    }
+
+    public Map<String, Object> addConfigToMap_易车(Map<String, Object> map, StringBuilder config) {
+        String[] configList = config.toString().split("\\|\\|");
+        for (String item : configList) {
+            int splitIndex = item.indexOf("=>");
+            String columnName = item.substring(0, splitIndex);
+
+            String[] values = item.substring(splitIndex + 2).split("->");
+            if (values.length >= 2) {
+                map.put(columnName, values[1]);
+            }
+
+//            map.put(columnName,values[1]);
+//            for (int j = 0; j < values.length; j++) {
+//                map.put(columnName, values[j]);
+//            }
+        }
+        return map;
+    }
     // 特殊字段的数据类型以及怎么替换
     // 替换字符匹配 【轮胎等有关数据 空格，/ 等特殊字符的替换然后再规范数据】【扬声器数量 喇叭 >=  个 字符的替换后再规范数据】【电池类型 替换掉 电池】【上市时间 把-替换成.】
     // 实心圈和空心圈的位置规范 ● ○ 以及 易车的带有实心圈但是汽车之家的不带实心圈 或者 汽车之家的带有实心圈但是易车的不带有实心圈
