@@ -135,40 +135,40 @@ public class MainYiChe extends TimerTask {
     // 4.下载其余分页url数据
     public Boolean method_下载其余分页url数据(String filePath) {
 //        try {
-            ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
-            ArrayList<Object> cityDataList = erShouCheDataBase.yiche_get_获取未下载的城市分页url();
-            System.out.println(cityDataList.size());
-            if (cityDataList.size() > 36) {
-                try{
+        ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
+        ArrayList<Object> cityDataList = erShouCheDataBase.yiche_get_获取未下载的城市分页url();
+        System.out.println(cityDataList.size());
+        if (cityDataList.size() > 36) {
+            try {
 
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> cityDataList.subList(i * (cityDataList.size() + 5) / 6, Math.min((i + 1) * (cityDataList.size() + 5) / 6, cityDataList.size())))
                         .collect(Collectors.toList());
-                    CountDownLatch latch = new CountDownLatch(list.size());
+                CountDownLatch latch = new CountDownLatch(list.size());
                 for (int i = 0; i < cityDataList.size(); i++) {
-                    YiCheFenYeThread moreThread = new YiCheFenYeThread(list.get(i), filePath);
+                    YiCheFenYeThread moreThread = new YiCheFenYeThread(list.get(i), filePath,latch);
                     Thread thread = new Thread(moreThread);
                     thread.start();
                 }
                 latch.await();
                 return true;
-                }catch (Exception e){
-                    return true;
-                }
-            } else {
-                for (Object cityItem : cityDataList) {
-                    String cityPinYin = ((YiChe_FenYeUrl) cityItem).get_C_EngName();
-                    String cityId = ((YiChe_FenYeUrl) cityItem).get_C_CityId();
-                    String mainUrl = ((YiChe_FenYeUrl) cityItem).get_C_FenYeUrl();
-                    String cityName = ((YiChe_FenYeUrl) cityItem).get_C_CityName();
-                    String regionId = ((YiChe_FenYeUrl) cityItem).get_C_RegionId();
-                    int page = ((YiChe_FenYeUrl) cityItem).get_C_Page();
-                    String cookie = "auto_id=181f5816f5e830e88e006c677b6a2349; uuid=f216f73b-9ab6-4dcc-979b-7f60eea3740a; _utrace=f216f73b-9ab6-4dcc-979b-7f60eea3740a; _clck=1fag7v9%7C2%7Cfp3%7C0%7C1617; ipCity={%22cityId%22:910%2C%22cityName%22:%22%E4%BF%9D%E5%AE%9A%22%2C%22citySpell%22:%22baoding%22%2C%22cityCode%22:%22130600%22}; city=%7B%22cityName%22%3A%22" + cityName + "%22%2C%22cityId%22%3A" + cityId + "%2C%22cityCode%22%3A" + regionId + "%2C%22citySpell%22%3A%22" + cityPinYin + "%22%7D; _clsk=s0qf0m%7C1726024145609%7C7%7C1%7Cz.clarity.ms%2Fcollect";
-                    if (MainYiChe.method_访问url(mainUrl, cityId, cookie, filePath, cityPinYin + "_" + page + ".txt")) {
-                        new ErShouCheDataBase().yiche_update_修改已下载的分页数据下载状态(mainUrl);
-                    }
-                }
+            } catch (Exception e) {
                 return true;
             }
+        } else {
+            for (Object cityItem : cityDataList) {
+                String cityPinYin = ((YiChe_FenYeUrl) cityItem).get_C_EngName();
+                String cityId = ((YiChe_FenYeUrl) cityItem).get_C_CityId();
+                String mainUrl = ((YiChe_FenYeUrl) cityItem).get_C_FenYeUrl();
+                String cityName = ((YiChe_FenYeUrl) cityItem).get_C_CityName();
+                String regionId = ((YiChe_FenYeUrl) cityItem).get_C_RegionId();
+                int page = ((YiChe_FenYeUrl) cityItem).get_C_Page();
+                String cookie = "auto_id=181f5816f5e830e88e006c677b6a2349; uuid=f216f73b-9ab6-4dcc-979b-7f60eea3740a; _utrace=f216f73b-9ab6-4dcc-979b-7f60eea3740a; _clck=1fag7v9%7C2%7Cfp3%7C0%7C1617; ipCity={%22cityId%22:910%2C%22cityName%22:%22%E4%BF%9D%E5%AE%9A%22%2C%22citySpell%22:%22baoding%22%2C%22cityCode%22:%22130600%22}; city=%7B%22cityName%22%3A%22" + cityName + "%22%2C%22cityId%22%3A" + cityId + "%2C%22cityCode%22%3A" + regionId + "%2C%22citySpell%22%3A%22" + cityPinYin + "%22%7D; _clsk=s0qf0m%7C1726024145609%7C7%7C1%7Cz.clarity.ms%2Fcollect";
+                if (MainYiChe.method_访问url(mainUrl, cityId, cookie, filePath, cityPinYin + "_" + page + ".txt")) {
+                    new ErShouCheDataBase().yiche_update_修改已下载的分页数据下载状态(mainUrl);
+                }
+            }
+            return true;
+        }
 //            if (erShouCheDataBase.yiche_get_获取未下载的城市分页url().size() > 0) {
 //                method_下载其余分页url数据(filePath);
 //            }
@@ -415,15 +415,15 @@ public class MainYiChe extends TimerTask {
     public void run() {
         System.out.println(new Date() + "\t任务" + taskName + "在执行");
         String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String filePath = "D:\\爬取网页源数据\\yiche\\"+currentTime+"\\";
+        String filePath = "D:\\爬取网页源数据\\yiche\\" + currentTime + "\\";
         // 1
-        method_下载城市数据并入库(filePath);
-
-        // 2
-        method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
-
-        // 3
-        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
+//        method_下载城市数据并入库(filePath);
+//
+//        // 2
+//        method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
+//
+//        // 3
+//        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
 
         // 4
 //        method_下载其余分页url数据(filePath + "各个城市分页数据\\");

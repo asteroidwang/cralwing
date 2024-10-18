@@ -26,17 +26,18 @@ public class RunKouBei {
         // 3.解析所有已下载的分页url数据并入库 为了获取showId 下载口碑详情页
         // 4.解析口碑数据 口碑图片数据并入库 获取一级评论信息和二级回复信息 追加口碑数据
         // 5.下载一级评论信息和二级回复信息 并解析入库
-        String filePathCommon = "/Users/asteroid/所有文件数据/爬取网页原始数据/口碑评价数据/20241016/";
+//        String filePathCommon = "/Users/asteroid/所有文件数据/爬取网页原始数据/口碑评价数据/20241016/";
+        String filePathCommon = "D:\\爬取网页源数据\\汽车之家\\口碑评价数据\\20241017\\";
         RunKouBei runKouBei = new RunKouBei();
-        // if (runKouBei.downloadFirstPageByModelId(filePathCommon + "口碑分页数据/")) {
-        //    runKouBei.parseFirstPageByModelId(filePathCommon + "口碑分页数据/");
-        // }
-        // if (runKouBei.downLoadOtherPage(filePathCommon + "口碑分页数据/")) {
-        //    runKouBei.parseOtherPage(filePathCommon + "口碑分页数据/");
-        // }
-//        if (runKouBei.downLoadKouBeiDetailsPage(filePathCommon + "口碑详情页/")) {
-        runKouBei.parseDetailsKouBei(filePathCommon + "口碑详情页/");
+//        if (runKouBei.downloadFirstPageByModelId(filePathCommon + "口碑分页数据\\")) {
+//            runKouBei.parseFirstPageByModelId(filePathCommon + "口碑分页数据\\");
 //        }
+//        if (runKouBei.downLoadOtherPage(filePathCommon + "口碑分页数据\\")) {
+//            runKouBei.parseOtherPage(filePathCommon + "口碑分页数据\\");
+//        }
+        if (runKouBei.downLoadKouBeiDetailsPage(filePathCommon + "口碑详情页\\")) {
+            runKouBei.parseDetailsKouBei(filePathCommon + "口碑详情页\\");
+        }
 
     }
 
@@ -48,19 +49,17 @@ public class RunKouBei {
             for (String modelId : modelIdList) {
                 String modelKouBeiUrl = "https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=" + modelId + "&pageIndex=1&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0";
                 if (T_Config_File.method_访问url获取Json普通版(modelKouBeiUrl, "UTF-8", filePath, modelId + "_1.txt")) {
-                    return true;
-                } else {
-                    return false;
+                    kouBeiDataBase.update_下载状态(modelId,1);
                 }
             }
+            return true;
         } else {
-
             try {
                 List<List<String>> list = IntStream.range(0, 6).mapToObj(i -> modelIdList.subList(i * (modelIdList.size() + 5) / 6, Math.min((i + 1) * (modelIdList.size() + 5) / 6, modelIdList.size())))
                         .collect(Collectors.toList());
                 CountDownLatch latch = new CountDownLatch(list.size());
                 for (int i = 0; i < list.size(); i++) {
-                    FirstPageByModelThread moreThread = new FirstPageByModelThread(list.get(i), filePath);
+                    FirstPageByModelThread moreThread = new FirstPageByModelThread(list.get(i), filePath,latch);
                     Thread thread = new Thread(moreThread);
                     thread.start();
                 }
@@ -70,7 +69,6 @@ public class RunKouBei {
                 return false;
             }
         }
-        return true;
     }
 
     public void parseFirstPageByModelId(String filePath) {
@@ -137,44 +135,57 @@ public class RunKouBei {
 
         for (String fileName : fileNameList) {
             String content = T_Config_File.method_读取文件内容(filePath + fileName);
-            JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
-            JSONArray jsonArray = jsonRoot.getJSONArray("list");
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JSONObject jsonObject = ((JSONObject) jsonArray.get(i));
-                String showId = jsonObject.getString("showId");
-                String kouBeiId = jsonObject.getString("Koubeiid");
-                String modelId = jsonObject.getString("specid");
-                String buyPlace = jsonObject.getString("buyplace");
-                int kuBeiType = jsonObject.getInteger("koubeiType");
-                String userId = jsonObject.getString("userid");
-                String dealerName = jsonObject.getString("dealerName");
-                String dealerId = jsonObject.getString("dealerId");
-                JSONArray medalsArray = jsonObject.getJSONArray("medals");
-                String medalsName = "";
-                String medalsType = "";
-                for (int j = 0; j < medalsArray.size(); j++) {
-                    medalsName = ((JSONObject) medalsArray.get(j)).getString("name");
-                    medalsType = ((JSONObject) medalsArray.get(j)).getString("type");
-                }
-                Bean_KouBei_KouBeiShortInfo kouBei_kouBeiShortInfo = new Bean_KouBei_KouBeiShortInfo();
-                kouBei_kouBeiShortInfo.set_C_ShowId(showId);
-                kouBei_kouBeiShortInfo.set_C_KouBeiId(kouBeiId);
-                kouBei_kouBeiShortInfo.set_C_ModelId(modelId);
-                kouBei_kouBeiShortInfo.set_C_BuyPlace(buyPlace);
-                kouBei_kouBeiShortInfo.set_C_DealerName(dealerName);
-                kouBei_kouBeiShortInfo.set_C_DealerId(dealerId == null ? "" : dealerId);
-                kouBei_kouBeiShortInfo.set_C_MedalsName(medalsName);
-                kouBei_kouBeiShortInfo.set_C_MedalsType(medalsType);
-                kouBei_kouBeiShortInfo.set_C_IsFinish(0);
-                kouBei_kouBeiShortInfo.set_C_FileName(fileName);
-                kouBei_kouBeiShortInfo.set_C_Content(jsonObject.toString());
-                kouBei_kouBeiShortInfo.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                dataList.add(kouBei_kouBeiShortInfo);
-                if (dataList.size() >= 10000) {
-                    new KouBei_DataBase().insertShortKouBeiInfo(dataList);
-                    dataList.clear();
-                }
+            JSONObject jsonRoot = null;
+            try {
+                 jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
+            }catch (Exception e){
+                KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
+                kouBeiDataBase.update_修改已下载的分页数据状态(fileName.split("_")[0], Integer.parseInt(fileName.split("_")[1].replace(".txt","")), 0);
             }
+//            JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
+            if (jsonRoot!=null){
+                JSONArray jsonArray = jsonRoot.getJSONArray("list");
+                if (jsonArray!=null){
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject jsonObject = ((JSONObject) jsonArray.get(i));
+                        String showId = jsonObject.getString("showId");
+                        String kouBeiId = jsonObject.getString("Koubeiid");
+                        String modelId = jsonObject.getString("specid");
+                        String buyPlace = jsonObject.getString("buyplace");
+                        int kuBeiType = jsonObject.getInteger("koubeiType");
+                        String userId = jsonObject.getString("userid");
+                        String dealerName = jsonObject.getString("dealerName");
+                        String dealerId = jsonObject.getString("dealerId");
+                        JSONArray medalsArray = jsonObject.getJSONArray("medals");
+                        String medalsName = "";
+                        String medalsType = "";
+                        for (int j = 0; j < medalsArray.size(); j++) {
+                            medalsName = ((JSONObject) medalsArray.get(j)).getString("name");
+                            medalsType = ((JSONObject) medalsArray.get(j)).getString("type");
+                        }
+                        Bean_KouBei_KouBeiShortInfo kouBei_kouBeiShortInfo = new Bean_KouBei_KouBeiShortInfo();
+                        kouBei_kouBeiShortInfo.set_C_ShowId(showId);
+                        kouBei_kouBeiShortInfo.set_C_KouBeiId(kouBeiId);
+                        kouBei_kouBeiShortInfo.set_C_ModelId(modelId);
+                        kouBei_kouBeiShortInfo.set_C_BuyPlace(buyPlace);
+                        kouBei_kouBeiShortInfo.set_C_DealerName(dealerName==null?"":dealerName);
+                        kouBei_kouBeiShortInfo.set_C_DealerId(dealerId == null ? "" : dealerId);
+                        kouBei_kouBeiShortInfo.set_C_MedalsName(medalsName);
+                        kouBei_kouBeiShortInfo.set_C_MedalsType(medalsType);
+                        kouBei_kouBeiShortInfo.set_C_IsFinish(0);
+                        kouBei_kouBeiShortInfo.set_C_FileName(fileName);
+                        kouBei_kouBeiShortInfo.set_C_Content(jsonObject.toString());
+                        kouBei_kouBeiShortInfo.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                        dataList.add(kouBei_kouBeiShortInfo);
+                        if (dataList.size() >= 10000) {
+                            new KouBei_DataBase().insertShortKouBeiInfo(dataList);
+                            dataList.clear();
+                        }
+                    }
+                }
+
+            }
+
         }
         new KouBei_DataBase().insertShortKouBeiInfo(dataList);
     }
@@ -182,6 +193,7 @@ public class RunKouBei {
     public Boolean downLoadKouBeiDetailsPage(String filePath) throws InterruptedException {
         KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
         ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiData();
+        System.out.println(dataList.size());
         if (dataList.size() >= 36) {
             // 使用 ExecutorService 来管理线程
             List<List<Object>> list = IntStream.range(0, 6)
@@ -232,7 +244,7 @@ public class RunKouBei {
 
     public void parseDetailsKouBei(String filePath) {
         List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
-        for(String fileName:fileList){
+        for (String fileName : fileList) {
             String content = T_Config_File.method_读取文件内容(fileName);
             Document mainDoc = Jsoup.parse(content);
             System.out.println(mainDoc);

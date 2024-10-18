@@ -298,7 +298,7 @@ public class Bean_Config {
     private String  C_音响_车内灯光__车外扬声器数量; public void set_C_音响_车内灯光__车外扬声器数量(String C_音响_车内灯光__车外扬声器数量){this.C_音响_车内灯光__车外扬声器数量=C_音响_车内灯光__车外扬声器数量.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_音响_车内灯光__车外扬声器数量(){return C_音响_车内灯光__车外扬声器数量;}
     private String  C_四驱_越野__拖车取电口; public void set_C_四驱_越野__拖车取电口(String C_四驱_越野__拖车取电口){this.C_四驱_越野__拖车取电口=C_四驱_越野__拖车取电口.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__拖车取电口(){return C_四驱_越野__拖车取电口;}
     private String  C_驾驶功能__代客泊车; public void set_C_驾驶功能__代客泊车(String C_驾驶功能__代客泊车){this.C_驾驶功能__代客泊车=C_驾驶功能__代客泊车.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶功能__代客泊车(){return C_驾驶功能__代客泊车;}
-    private String  C_音响_车内灯光__车外扬声器数量; public void set_C_音响_车内灯光__车外扬声器数量(String C_音响_车内灯光__车外扬声器数量){this.C_音响_车内灯光__车外扬声器数量=C_音响_车内灯光__车外扬声器数量.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_音响_车内灯光__车外扬声器数量(){return C_音响_车内灯光__车外扬声器数量;}
+//    private String  C_音响_车内灯光__车外扬声器数量; public void set_C_音响_车内灯光__车外扬声器数量(String C_音响_车内灯光__车外扬声器数量){this.C_音响_车内灯光__车外扬声器数量=C_音响_车内灯光__车外扬声器数量.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_音响_车内灯光__车外扬声器数量(){return C_音响_车内灯光__车外扬声器数量;}
     private String  C_UpdateTime;public String  get_C_UpdateTime(){return C_UpdateTime;}public void set_C_UpdateTime(String C_UpdateTime){this.C_UpdateTime=C_UpdateTime==null?"-":C_UpdateTime.replace("\t","").replace("\r","").replace("\r\n","").replace("\n","");}
     @Override
     public boolean equals(Object o) {

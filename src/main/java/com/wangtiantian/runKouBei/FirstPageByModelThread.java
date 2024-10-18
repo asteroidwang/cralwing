@@ -8,15 +8,17 @@ import org.jsoup.nodes.Document;
 
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 // 车型查询口碑的首页多线程数据下载
 public class FirstPageByModelThread implements Runnable {
     private List<String> list;
     private String filePath;
-
-    public FirstPageByModelThread(List<String> list, String filePath) {
+    private CountDownLatch latch;
+    public FirstPageByModelThread(List<String> list, String filePathh, CountDownLatch latch) {
         this.list = list;
         this.filePath = filePath;
+        this.latch = latch;
     }
 
     @Override
@@ -29,5 +31,6 @@ public class FirstPageByModelThread implements Runnable {
             KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
             kouBeiDataBase.update_下载状态(modelId, 1);
         }
+        latch.countDown();
     }
 }
