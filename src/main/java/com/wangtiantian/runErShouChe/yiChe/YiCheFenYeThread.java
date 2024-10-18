@@ -6,15 +6,18 @@ import com.wangtiantian.mapper.ErShouCheDataBase;
 import com.wangtiantian.runErShouChe.che168.MainChe168;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class YiCheFenYeThread implements Runnable {
 
     private List<Object> list;
     private String filePath;
+    private CountDownLatch latch;
 
-    public YiCheFenYeThread(List<Object> list, String filePath) {
+    public YiCheFenYeThread(List<Object> list, String filePath, CountDownLatch latch) {
         this.list = list;
         this.filePath = filePath;
+        this.latch = latch;
     }
 
     @Override
@@ -34,5 +37,6 @@ public class YiCheFenYeThread implements Runnable {
             }
 
         }
+        latch.countDown();
     }
 }

@@ -19,7 +19,7 @@
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Model",
-            "tableName": "T_汽车之家_车型表_20241010"
+            "tableName": "T_汽车之家_车型表_20240910"
           },
           {
             "entity": "com.wangtiantian.entity.Bean_Version",

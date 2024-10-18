@@ -13,13 +13,13 @@ public class KouBei_DataBase {
 
     // 获取最新的车型信息数据
     public ArrayList<String> getLatestModelIdData() {
-        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(2, 0, 2);
+        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(0, 0, 2);
         return dataBaseKouBei.getDataByOneColumn("C_ModelID");
     }
 
     // 修改已下载的车型首页数据状态
     public void update_下载状态(String modelId, int status) {
-        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(2, 0, 2);
+        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(0, 0, 2);
         dataBaseKouBei.update_下载状态("C_ModelID", modelId, status);
     }
 
@@ -46,6 +46,11 @@ public class KouBei_DataBase {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
         dataBaseKouBei.insertForeach(dataList);
     }
+    //
+//    public ArrayList<Object> getShortKouBeiData() {
+//        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
+//        return dataBaseKouBei.method_查询未下载的数据();
+//    }
 
     // 查询未下载的口碑详情页数据
     public ArrayList<Object> getShortKouBeiData() {
