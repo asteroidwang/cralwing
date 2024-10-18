@@ -49,7 +49,7 @@ public class RunKouBei {
             for (String modelId : modelIdList) {
                 String modelKouBeiUrl = "https://koubeiipv6.app.autohome.com.cn/pc/series/list?pm=3&seriesId=" + modelId + "&pageIndex=1&pageSize=20&yearid=0&ge=0&seriesSummaryKey=0&order=0";
                 if (T_Config_File.method_访问url获取Json普通版(modelKouBeiUrl, "UTF-8", filePath, modelId + "_1.txt")) {
-                    kouBeiDataBase.update_下载状态(modelId,1);
+                    kouBeiDataBase.update_下载状态(modelId, 1);
                 }
             }
             return true;
@@ -59,7 +59,7 @@ public class RunKouBei {
                         .collect(Collectors.toList());
                 CountDownLatch latch = new CountDownLatch(list.size());
                 for (int i = 0; i < list.size(); i++) {
-                    FirstPageByModelThread moreThread = new FirstPageByModelThread(list.get(i), filePath,latch);
+                    FirstPageByModelThread moreThread = new FirstPageByModelThread(list.get(i), filePath, latch);
                     Thread thread = new Thread(moreThread);
                     thread.start();
                 }
@@ -137,15 +137,15 @@ public class RunKouBei {
             String content = T_Config_File.method_读取文件内容(filePath + fileName);
             JSONObject jsonRoot = null;
             try {
-                 jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
-            }catch (Exception e){
+                jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
+            } catch (Exception e) {
                 KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
-                kouBeiDataBase.update_修改已下载的分页数据状态(fileName.split("_")[0], Integer.parseInt(fileName.split("_")[1].replace(".txt","")), 0);
+                kouBeiDataBase.update_修改已下载的分页数据状态(fileName.split("_")[0], Integer.parseInt(fileName.split("_")[1].replace(".txt", "")), 0);
             }
 //            JSONObject jsonRoot = JSONObject.parseObject(content).getJSONObject("result");
-            if (jsonRoot!=null){
+            if (jsonRoot != null) {
                 JSONArray jsonArray = jsonRoot.getJSONArray("list");
-                if (jsonArray!=null){
+                if (jsonArray != null) {
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject jsonObject = ((JSONObject) jsonArray.get(i));
                         String showId = jsonObject.getString("showId");
@@ -168,7 +168,7 @@ public class RunKouBei {
                         kouBei_kouBeiShortInfo.set_C_KouBeiId(kouBeiId);
                         kouBei_kouBeiShortInfo.set_C_ModelId(modelId);
                         kouBei_kouBeiShortInfo.set_C_BuyPlace(buyPlace);
-                        kouBei_kouBeiShortInfo.set_C_DealerName(dealerName==null?"":dealerName);
+                        kouBei_kouBeiShortInfo.set_C_DealerName(dealerName == null ? "" : dealerName);
                         kouBei_kouBeiShortInfo.set_C_DealerId(dealerId == null ? "" : dealerId);
                         kouBei_kouBeiShortInfo.set_C_MedalsName(medalsName);
                         kouBei_kouBeiShortInfo.set_C_MedalsType(medalsType);
@@ -192,34 +192,34 @@ public class RunKouBei {
 
     public Boolean downLoadKouBeiDetailsPage(String filePath) throws InterruptedException {
         KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
-        ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiData();
-        System.out.println(dataList.size());
-        if (dataList.size() >= 36) {
-            // 使用 ExecutorService 来管理线程
-            List<List<Object>> list = IntStream.range(0, 6)
-                    .mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
-                    .collect(Collectors.toList());
-            CountDownLatch latch = new CountDownLatch(list.size());
-            for (int i = 0; i < list.size(); i++) {
-                DetailsKouBeiInfoThread moreThread = new DetailsKouBeiInfoThread(list.get(i), filePath, latch);
-                Thread thread = new Thread(moreThread);
-                thread.start();
-            }
-            // 等待所有子线程完成
-            latch.await();
-            kouBeiDataBase.update_修改已下载的口碑详情页数据(method_确认详情页的下载数据(filePath));
-
-            if (kouBeiDataBase.getShortKouBeiData().size() > 0) {
-                num++;
-                if (num < 4) {
-                    downLoadKouBeiDetailsPage(filePath);
+        int count = kouBeiDataBase.getShortKouBeiDataCount();
+        if (count >= 36) {
+            for (int kk = 0; kk < count / 10000; kk++) {
+                ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiDataForeach(kk * 10000);
+                List<List<Object>> list = IntStream.range(0, 6)
+                        .mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                        .collect(Collectors.toList());
+                CountDownLatch latch = new CountDownLatch(list.size());
+                for (int i = 0; i < list.size(); i++) {
+                    DetailsKouBeiInfoThread moreThread = new DetailsKouBeiInfoThread(list.get(i), filePath, latch);
+                    Thread thread = new Thread(moreThread);
+                    thread.start();
                 }
-
-                return false;
-            } else {
-                return true;
+                // 等待所有子线程完成
+                latch.await();
+                kouBeiDataBase.update_修改已下载的口碑详情页数据(method_确认详情页的下载数据(filePath));
+                if (kouBeiDataBase.getShortKouBeiData().size() > 0) {
+                    num++;
+                    if (num < 4) {
+                        downLoadKouBeiDetailsPage(filePath);
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
             }
         } else {
+            ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiData();
             for (Object o : dataList) {
                 String showId = ((Bean_KouBei_KouBeiShortInfo) o).get_C_ShowId();
                 String kbId = ((Bean_KouBei_KouBeiShortInfo) o).get_C_KouBeiId();
@@ -238,8 +238,7 @@ public class RunKouBei {
                 return true;
             }
         }
-
-
+        return true;
     }
 
     public void parseDetailsKouBei(String filePath) {

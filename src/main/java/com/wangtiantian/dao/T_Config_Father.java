@@ -239,7 +239,6 @@ public class T_Config_Father {
             while (resultSet.next()) {
                 num = (int) resultSet.getObject(1);
             }
-
             resultSet.close();
             stmt.close();
             conn.close();
