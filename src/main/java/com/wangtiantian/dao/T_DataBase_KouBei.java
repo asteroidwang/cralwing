@@ -23,9 +23,18 @@ public class T_DataBase_KouBei extends T_Config_Father {
     }
     public void update_修改已下载的口碑详情页数据(String showIds) {
         String sql = "update " + tableName + " set C_IsFinish = 1 where C_ShowId  in ("+showIds+")";
+        System.out.println(sql);
         method_i_d_u(sql);
     }
+    public int get_未下载口碑详情页的表中总数量(){
+        String sql ="select count(*) from "+tableName+ "  where C_ShowId not in (select distinct C_ShowID from T_KouBeiInfo_20240804) and C_IsFinish = 0";
+        return get_获取表中数据数量_有查询条件(sql);
+    }
 
+    public ArrayList<Object> method_分页查询未下载的口碑详情页数据(int begin) {
+        String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0 and C_ShowId not in (select distinct C_ShowID from T_KouBeiInfo_20240804)  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
+        return method_有条件的查询(sql);
+    }
 
 
 }

@@ -11,12 +11,10 @@ import java.util.concurrent.CountDownLatch;
 public class DetailsKouBeiInfoThread implements Runnable {
     private List<Object> list;
     private String filePath;
-    private CountDownLatch latch;
 
-    public DetailsKouBeiInfoThread(List<Object> list, String filePath, CountDownLatch latch) {
+    public DetailsKouBeiInfoThread(List<Object> list, String filePath) {
         this.list = list;
         this.filePath = filePath;
-        this.latch = latch;
     }
 
     @Override
@@ -29,6 +27,5 @@ public class DetailsKouBeiInfoThread implements Runnable {
             String mainUrl = "https://k.autohome.com.cn/detail/view_" + showId + ".html#pvareaid=2112108";
             T_Config_File.method_访问url获取网页源码普通版(mainUrl, "UTF-8", filePath, showId + "_" + kbId + ".txt");
         }
-        latch.countDown();
     }
 }

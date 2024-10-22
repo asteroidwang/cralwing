@@ -8,6 +8,7 @@ import com.wangtiantian.entity.koubei.Bean_KouBei_KouBeiShortInfo;
 import com.wangtiantian.mapper.KouBei_DataBase;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,9 +36,10 @@ public class RunKouBei {
 //        if (runKouBei.downLoadOtherPage(filePathCommon + "口碑分页数据\\")) {
 //            runKouBei.parseOtherPage(filePathCommon + "口碑分页数据\\");
 //        }
-        if (runKouBei.downLoadKouBeiDetailsPage(filePathCommon + "口碑详情页\\")) {
+
+//        if (runKouBei.downLoadKouBeiDetailsPage(filePathCommon + "口碑详情页\\")) {
             runKouBei.parseDetailsKouBei(filePathCommon + "口碑详情页\\");
-        }
+//        }
 
     }
 
@@ -192,23 +194,33 @@ public class RunKouBei {
 
     public Boolean downLoadKouBeiDetailsPage(String filePath) throws InterruptedException {
         KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
+//        kouBeiDataBase.update_修改已下载的口碑详情页数据(method_确认详情页的下载数据(filePath));
         int count = kouBeiDataBase.getShortKouBeiDataCount();
-        if (count >= 36) {
-            for (int kk = 0; kk < count / 10000; kk++) {
-                ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiDataForeach(kk * 10000);
-                List<List<Object>> list = IntStream.range(0, 6)
-                        .mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
-                        .collect(Collectors.toList());
-                CountDownLatch latch = new CountDownLatch(list.size());
-                for (int i = 0; i < list.size(); i++) {
-                    DetailsKouBeiInfoThread moreThread = new DetailsKouBeiInfoThread(list.get(i), filePath, latch);
-                    Thread thread = new Thread(moreThread);
-                    thread.start();
+        if (count!=0){
+            if (count >= 36) {
+                for (int kk = 0; kk < count / 10000; kk++) {
+                    ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiDataForeach(kk * 10000);
+                    List<List<Object>> list = IntStream.range(0, 6)
+                            .mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                            .collect(Collectors.toList());
+                    CountDownLatch latch = new CountDownLatch(list.size());
+                    for (int i = 0; i < list.size(); i++) {
+                        DetailsKouBeiInfoThread moreThread = new DetailsKouBeiInfoThread(list.get(i), filePath);
+                        Thread thread = new Thread(() -> {
+                            try {
+                                moreThread.run();
+                            } finally {
+                                latch.countDown();
+                            }
+
+                        });
+                        thread.start();
+                    }
+                    // 等待所有子线程完成
+                    latch.await();
+                    method_确认详情页的下载数据(filePath);
                 }
-                // 等待所有子线程完成
-                latch.await();
-                kouBeiDataBase.update_修改已下载的口碑详情页数据(method_确认详情页的下载数据(filePath));
-                if (kouBeiDataBase.getShortKouBeiData().size() > 0) {
+                if (kouBeiDataBase.getShortKouBeiDataCount() > 0) {
                     num++;
                     if (num < 4) {
                         downLoadKouBeiDetailsPage(filePath);
@@ -217,28 +229,29 @@ public class RunKouBei {
                 } else {
                     return true;
                 }
-            }
-        } else {
-            ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiData();
-            for (Object o : dataList) {
-                String showId = ((Bean_KouBei_KouBeiShortInfo) o).get_C_ShowId();
-                String kbId = ((Bean_KouBei_KouBeiShortInfo) o).get_C_KouBeiId();
-                String mainUrl = "https://k.autohome.com.cn/detail/view_" + showId + ".html#pvareaid=2112108";
-                T_Config_File.method_访问url获取网页源码普通版(mainUrl, "UTF-8", filePath, showId + "_" + kbId + ".txt");
-            }
-            kouBeiDataBase.update_修改已下载的口碑详情页数据(method_确认详情页的下载数据(filePath));
-            if (kouBeiDataBase.getShortKouBeiData().size() > 0) {
-                num++;
-                if (num < 4) {
-                    downLoadKouBeiDetailsPage(filePath);
-                }
-
-                return false;
             } else {
-                return true;
+                ArrayList<Object> dataList = kouBeiDataBase.getShortKouBeiDataForeach(0);
+                for (Object o : dataList) {
+                    String showId = ((Bean_KouBei_KouBeiShortInfo) o).get_C_ShowId();
+                    String kbId = ((Bean_KouBei_KouBeiShortInfo) o).get_C_KouBeiId();
+                    String mainUrl = "https://k.autohome.com.cn/detail/view_" + showId + ".html#pvareaid=2112108";
+                    T_Config_File.method_访问url获取网页源码普通版(mainUrl, "UTF-8", filePath, showId + "_" + kbId + ".txt");
+                }
+                method_确认详情页的下载数据(filePath);
+                if (kouBeiDataBase.getShortKouBeiDataCount() > 0) {
+                    num++;
+//                if (num < 4) {
+                    downLoadKouBeiDetailsPage(filePath);
+//                }
+                } else {
+                    return true;
+                }
             }
+        }else {
+            return true;
         }
         return true;
+
     }
 
     public void parseDetailsKouBei(String filePath) {
@@ -246,15 +259,25 @@ public class RunKouBei {
         for (String fileName : fileList) {
             String content = T_Config_File.method_读取文件内容(fileName);
             Document mainDoc = Jsoup.parse(content);
-            System.out.println(mainDoc);
+//            System.out.println(mainDoc);
+            Elements mainItems = mainDoc.select(".con-left.fl");
+            String mainContent = mainItems.toString();
+            Elements kbMainItems  = mainItems.select(".kb-msg").select(".timeline-con");
 
+            System.out.println(mainItems);
         }
 
     }
 
-    public String method_确认详情页的下载数据(String filePath) {
+    public void method_确认详情页的下载数据(String filePath) {
+        KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
         List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
         fileList = fileList.stream().map(value -> value.replace(".txt", "").split("_")[0].replace(filePath, "")).distinct().collect(Collectors.toList());
-        return "'" + fileList.toString().replace(", ", "','").substring(1, fileList.toString().length() - 1) + "'";
+        int batchSize = 100;
+        for (int i = 0; i < fileList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, fileList.size());
+            List<String> batchList = fileList.subList(i, end);
+            kouBeiDataBase.update_修改已下载的口碑详情页数据("'" + batchList.toString().replace(", ", "','").replace("[", "").replace("]", "") + "'");
+        }
     }
 }

@@ -150,9 +150,13 @@ public class MainYiChe extends TimerTask {
                     thread.start();
                 }
                 latch.await();
-                return true;
+                if (erShouCheDataBase.yiche_get_获取未下载的城市分页url().size()>0){
+                    return false;
+                }else {
+                    return true;
+                }
             } catch (Exception e) {
-                return true;
+                return false;
             }
         } else {
             for (Object cityItem : cityDataList) {
@@ -245,6 +249,7 @@ public class MainYiChe extends TimerTask {
                         }
                     }
                     YiChe_CarInfo carInfo = new YiChe_CarInfo();
+//                    carInfo.set_C_UpdateTime("2024-10-19");
                     carInfo.set_C_tradeNumber(tradeNumber);
                     carInfo.set_C_carName(carName);
                     carInfo.set_C_platformAuth(platformAuth);
@@ -288,6 +293,7 @@ public class MainYiChe extends TimerTask {
                     carInfo.set_C_colorType(colorType);
                     carInfo.set_C_FileName(fileName.replace(filePath, ""));
                     carInfo.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
                     carInfo.set_C_IsFinish(0);
                     dataList.add(carInfo);
                     if (dataList.size() > 100000) {
@@ -415,6 +421,7 @@ public class MainYiChe extends TimerTask {
     public void run() {
         System.out.println(new Date() + "\t任务" + taskName + "在执行");
         String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
+//        String currentTime = "20241019";
         String filePath = "D:\\爬取网页源数据\\yiche\\" + currentTime + "\\";
         // 1
 //        method_下载城市数据并入库(filePath);
@@ -426,13 +433,13 @@ public class MainYiChe extends TimerTask {
 //        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
 
         // 4
-//        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
+        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
 
         // 5
-        if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
-            parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
-        }
-
+//        if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
+//            System.out.println("这次的任务完成了喔");
+//            parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
+//        }
 
         // 6
         // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面\\");
