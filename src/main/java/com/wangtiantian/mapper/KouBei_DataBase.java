@@ -49,12 +49,12 @@ public class KouBei_DataBase {
     // 获取需要下载的口碑详情总数量
     public int getShortKouBeiDataCount() {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
-        return dataBaseKouBei.get_获取表中数据数量();
+        return dataBaseKouBei.get_未下载口碑详情页的表中总数量();
     }
     // 分批查询未下载的口碑详情页数据
     public ArrayList<Object> getShortKouBeiDataForeach(int group) {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
-        return dataBaseKouBei.method_分页查询未下载的数据10000条每次(group);
+        return dataBaseKouBei.method_分页查询未下载的口碑详情页数据(group);
     }
 
     // 查询未下载的口碑详情页数据
