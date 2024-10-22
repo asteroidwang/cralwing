@@ -27,32 +27,34 @@ public class Main {
     // 判断数据对比的类型
     public static void main(String[] args) {
         // 1 数据的规范处理
-//        new Main().method_前置数据处理();
-//        new Main().method_规范数据_实心圈位置();
-//        new Main().method_规范数据_汽车之家();
-//        new Main().method_规范数据_易车();
-//        new Main().method_规范数据_汽车之家_易车();
-//        new Main().method_座位数的数据规范();
-//        new Main().method_中文数字和阿拉伯数字不统一的数据规范();
-//        new Main().method_电芯品牌的数据规范();
-//        new Main().method_辅助驾驶系统();
-//        new Main().method_数据规范();
-//        new Main().method_选配带有价格的数据规范();
-//        new Main().method_规范数据_实心圈位置();
-//        new Main().method_找出有必要规范的字段();
+        new Main().method_前置数据处理();
+        new Main().method_规范数据_实心圈位置();
+        new Main().method_规范数据_汽车之家();
+        new Main().method_规范数据_易车();
+        new Main().method_规范数据_汽车之家_易车();
+        new Main().method_座位数的数据规范();
+        new Main().method_中文数字和阿拉伯数字不统一的数据规范();
+        new Main().method_电芯品牌的数据规范();
+        new Main().method_辅助驾驶系统();
+        new Main().method_数据规范();
+        new Main().method_选配带有价格的数据规范();
+        new Main().method_规范数据_实心圈位置();
+        new Main().method_找出有必要规范的字段();
 
         // 判断数据对比的类型
-        new Main().method_判断数据对比的类型();
+//        new Main().method_判断数据对比的类型();
 
 
     }
 
+
+
     public void method_判断数据对比的类型() {
         String filePath = "/Users/asteroid/所有文件数据/对比结果/";
-        T_Compare compare = new T_Compare(2, 1, 1);
-        String idsFinish = T_Config_File.method_读取文件内容(filePath+"已匹配的版本ids.txt");
+        T_Compare compare = new T_Compare(2, 1, 3);
+        String idsFinish = T_Config_File.method_读取文件内容(filePath + "已匹配的版本ids.txt");
 
-        ArrayList<String> idsList = compare.method_汽车之家和易车的版本id去重数据(idsFinish.equals("")?"''":idsFinish.substring(0,idsFinish.length()-1));
+        ArrayList<String> idsList = compare.method_汽车之家和易车的版本id去重数据(idsFinish.equals("") ? "''" : idsFinish.substring(0, idsFinish.length() - 1));
         List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配的上 = new ArrayList<>();
         List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配不上 = new ArrayList<>();
         List<Map<String, Object>> dataExcelList_名称匹配不上配置匹配的上 = new ArrayList<>();
@@ -81,7 +83,7 @@ public class Main {
                         sameConfig.append(preValue);
                     } else {
 //                        noSameConfig.append(columnName + "=>" + preValue + "->" + nextValue + "||");
-                        noSameConfig.append(columnName).append("=>").append(preValue).append("->").append(nextValue).append("||");
+                        noSameConfig.append(columnName).append("=>").append(preValue).append("->").append(nextValue.equals("")?"-":nextValue).append("||");
                     }
                 }
             }
@@ -92,10 +94,10 @@ public class Main {
 
             Map<String, Object> mapList = new HashMap<>();
             mapList.put("汽车之家_易车的版本Id", ids);
-            mapList.put("汽车之家的版本Id", "");
-            mapList.put("易车的版本Id", "");
-            mapList.put("汽车之家的版本名称", "");
-            mapList.put("易车的版本名称", "");
+            mapList.put("汽车之家的版本Id", preVersionId);
+            mapList.put("易车的版本Id", nextVersionId);
+            mapList.put("汽车之家的版本名称", preVersionName);
+            mapList.put("易车的版本名称", nextVersionName);
 
 
             Map<String, Object> mapListPre = new HashMap<>();
@@ -110,36 +112,51 @@ public class Main {
             mapListMext.put("易车的版本Id", "");
             mapListMext.put("汽车之家的版本名称", "");
             mapListMext.put("易车的版本名称", "");
-            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "匹配结果备份12.txt", ids + "\t" + preVersionId + "\t" + nextVersionId + "\t" + preVersionName + "\t" + nextVersionName + "\t" + noSameConfig);
-            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "已匹配的版本ids.txt", "'"+ids+"',");
+            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "匹配结果备份12.txt", ids + "\t" + preVersionId + "\t" + nextVersionId + "\t" + preVersionName + "\t" + nextVersionName + "\t" + noSameConfig+"\n");
+            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "已匹配的版本ids.txt", "'" + ids + "',");
             // 最起码年要对得上
             if (preYear.equals(nextYear)) {
-                if (preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配的上 配置匹配的上
-                    dataExcelList_名称匹配的上配置匹配的上.add(mapList);
-//                    System.out.println("dataExcelList_名称匹配的上配置匹配的上");
-                } else if (preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) {  // 名称匹配的上 配置匹配不上
-                    mapListPre.put("汽车之家的版本Id", preVersionId);
-                    mapListPre.put("汽车之家的版本名称", preVersionName);
-                    mapListMext.put("易车的版本Id", nextVersionId);
-                    mapListMext.put("易车的版本名称", nextVersionName);
-                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
-                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
-//                    System.out.println("dataExcelList_名称匹配的上配置匹配不上\t"+dataExcelList_名称匹配的上配置匹配不上);
-                } else if (!preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配的上
-                    dataExcelList_名称匹配不上配置匹配的上.add(mapList);
-                } else if (!preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配不上
-//                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap(mapList, noSameConfig));
-                    mapListPre.put("汽车之家的版本Id", preVersionId);
-                    mapListPre.put("汽车之家的版本名称", preVersionName);
-                    mapListMext.put("易车的版本Id", nextVersionId);
-                    mapListMext.put("易车的版本名称", nextVersionName);
-                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
-                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
+
+                if (preVersionName.equals(nextVersionName)) {
+                    if (noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) {
+                    } else {
+
+                    }
+                } else {
+                    if (noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) {
+                    } else {
+
+                    }
                 }
+
+
+//                if (preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配的上 配置匹配的上
+//                    dataExcelList_名称匹配的上配置匹配的上.add(mapList);
+////                    System.out.println("dataExcelList_名称匹配的上配置匹配的上");
+//                } else if (preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) {  // 名称匹配的上 配置匹配不上
+//                    mapListPre.put("汽车之家的版本Id", preVersionId);
+//                    mapListPre.put("汽车之家的版本名称", preVersionName);
+//                    mapListMext.put("易车的版本Id", nextVersionId);
+//                    mapListMext.put("易车的版本名称", nextVersionName);
+//                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
+//                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
+////                    System.out.println("dataExcelList_名称匹配的上配置匹配不上\t"+dataExcelList_名称匹配的上配置匹配不上);
+//                } else if (!preVersionName.equals(nextVersionName) && noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配的上
+//                    dataExcelList_名称匹配不上配置匹配的上.add(mapList);
+//                } else if (!preVersionName.equals(nextVersionName) && !noSameConfig.toString().equals("") && !sameConfig.toString().equals("")) { // 名称匹配不上 配置匹配不上
+////                    dataExcelList_名称匹配的上配置匹配不上.add(addConfigToMap(mapList, noSameConfig));
+//                    mapListPre.put("汽车之家的版本Id", preVersionId);
+//                    mapListPre.put("汽车之家的版本名称", preVersionName);
+//                    mapListMext.put("易车的版本Id", nextVersionId);
+//                    mapListMext.put("易车的版本名称", nextVersionName);
+//                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_汽车之家(mapListPre, noSameConfig));
+//                    dataExcelList_名称匹配不上配置匹配不上.add(addConfigToMap_易车(mapListMext, noSameConfig));
+//                }
             }
             a++;
             System.out.println("还有" + (idsList.size() - a) + "个");
         }
+
         Map<String, List<Map<String, Object>>> allExcelData = new HashMap<>();
         allExcelData.put("名称匹配的上配置匹配的上", dataExcelList_名称匹配的上配置匹配的上);
         allExcelData.put("名称匹配的上配置匹配不上", dataExcelList_名称匹配的上配置匹配不上);
@@ -147,7 +164,9 @@ public class Main {
         allExcelData.put("名称匹配不上配置匹配不上", dataExcelList_名称匹配不上配置匹配不上);
         System.out.println(allExcelData);
         T_Config_File.method_写文件_根据路径创建文件夹(filePath, "对比结果汇总.txt", allExcelData.toString());
+
         method_写excel(allExcelData);
+
     }
 
 
@@ -254,11 +273,13 @@ public class Main {
 
     }
 
+
     public static void method_写excel_修改前(Map<String, List<Map<String, Object>>> dataMapList) {
 //        String filePath = "/Users/asteroid/所有文件数据/对比结果/";
         // 创建工作簿
 //        Workbook workbook = new XSSFWorkbook(); // 用于创建 .xlsx 文件
         System.out.println("创建excel文件");
+        File outputFile = new File("/Users/asteroid/所有文件数据/对比结果/output_1022.xlsx");
         //Workbook workbook = new HSSFWorkbook(); // 用于创建 .xls 文件
         Set<String> sheetList = dataMapList.keySet();
         List<String> sheetNames = sheetList.stream().distinct().collect(Collectors.toList());
@@ -285,7 +306,7 @@ public class Main {
                 }
                 sheetData.add(list);
             }
-            File outputFile = new File("/Users/asteroid/所有文件数据/对比结果/output_" + sheetName + ".xlsx");
+
             try (FileOutputStream fos = new FileOutputStream(outputFile)) {
                 EasyExcel.write(fos)
                         .head(head) // 通过createExcelHead方法将表头信息传递给EasyExcel
@@ -333,7 +354,6 @@ public class Main {
                     }
                     sheetData.add(row);
                 }
-
                 // 写入数据
                 EasyExcel.write(fos)
                         .head(head)
@@ -371,7 +391,7 @@ public class Main {
 // 选配带有价格的跟空心圈是一样的   ○ 价格 规范成○
 
     public void method_前置数据处理() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (String columnName : columnsList) {
             compare.method_修改可以规范的数据(columnName, "○", "○选配");
@@ -505,7 +525,7 @@ public class Main {
 
     // 汽车之家单个网站的数据规范
     public void method_规范数据_汽车之家() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (int kk = 0; kk < columnsList.size(); kk++) {
             String columnName = columnsList.get(kk);
@@ -686,7 +706,7 @@ public class Main {
     }
 
     public void method_规范数据_易车() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (int kk = 0; kk < columnsList.size(); kk++) {
             String columnName = columnsList.get(kk);
@@ -867,7 +887,7 @@ public class Main {
     }
 
     public void method_规范数据_汽车之家_易车() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (int kk = 0; kk < columnsList.size(); kk++) {
             String columnName = columnsList.get(kk);
@@ -889,7 +909,7 @@ public class Main {
     }
 
     public void method_规范数据_实心圈位置() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (int kk = 0; kk < columnsList.size(); kk++) {
             String columnName = columnsList.get(kk);
@@ -908,7 +928,7 @@ public class Main {
     }
 
     public void method_规范数据通用(String columnName, String preString, String nextString, String preStringReplace, String nextStringReplace) {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         // 需要进行替换操作的字段以及处理过程
         if (columnName.contains("备胎") || columnName.contains("轮胎")) {
             preStringReplace = preStringReplace.replace("/", "").trim();
@@ -1076,7 +1096,7 @@ public class Main {
     }
 
     public void method_座位数的数据规范() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         String columnName = "C_车身__座位数_个";
         ArrayList<String> dataResult = compare.method_获取去重后的座位数数据_含有横杠字符的(columnName);
         ArrayList<String> dataResult2 = compare.method_获取去重后的座位数数据_含有斜杠字符的(columnName);
@@ -1112,7 +1132,7 @@ public class Main {
     }
 
     public void method_中文数字和阿拉伯数字不统一的数据规范() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnList = new ArrayList<>();
         columnList.add("C_电动机__电池组质保");
         columnList.add("C_基本参数__首任车主质保政策");
@@ -1130,7 +1150,7 @@ public class Main {
     }
 
     public void method_电芯品牌的数据规范() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         String columnName = "C_电动机__电芯品牌";
         ArrayList<String> dataResult = compare.method_获取去重后的电芯品牌数据_含有实心圈或者空心圈(columnName);
         ArrayList<String> dataResult2 = compare.method_获取去重后的电芯品牌数据_含有斜杠字符的(columnName);
@@ -1157,7 +1177,7 @@ public class Main {
     }
 
     public void method_数据规范() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (int kk = 0; kk < columnsList.size(); kk++) {
             String columnName = columnsList.get(kk);
@@ -1180,7 +1200,7 @@ public class Main {
     }
 
     public void method_选配带有价格的数据规范() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (int kk = 0; kk < columnsList.size(); kk++) {
             String columnName = columnsList.get(kk);
@@ -1214,7 +1234,7 @@ public class Main {
     }
 
     public void method_辅助驾驶系统() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         String columnName = "C_驾驶功能__辅助驾驶系统";
         ArrayList<String> dataResult = compare.method_获取去重的单列数据(columnName);
         for (int i = 0; i < dataResult.size(); i++) {
@@ -1225,7 +1245,7 @@ public class Main {
     }
 
     public void method_找出有必要规范的字段() {
-        T_Compare compare = new T_Compare(2, 1, 1);
+        T_Compare compare = new T_Compare(2, 1, 3);
         ArrayList<String> columnsList = T_CompareField.method_除Id外所有字段();
         for (String columnName : columnsList) {
             if (!columnName.contains("厂商")) {

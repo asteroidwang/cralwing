@@ -49,19 +49,19 @@ public class MainTest {
 //    }
     public static void main(String[] args) {
         // 1
-//        new MainTest().method_前置数据处理();
-//        new MainTest().method_规范数据_实心圈位置();
-//        new MainTest().method_规范数据_汽车之家();
-//        new MainTest().method_规范数据_易车();
-//        new MainTest().method_规范数据_汽车之家_易车();
-//        new MainTest().method_座位数的数据规范();
-//        new MainTest().method_中文数字和阿拉伯数字不统一的数据规范();
-//        new MainTest().method_电芯品牌的数据规范();
-//        new MainTest().method_辅助驾驶系统();
-//        new MainTest().method_数据规范();
-//        new MainTest().method_选配带有价格的数据规范();
-//        new MainTest().method_规范数据_实心圈位置();
-//        new MainTest().method_找出有必要规范的字段();
+        new MainTest().method_前置数据处理();
+        new MainTest().method_规范数据_实心圈位置();
+        new MainTest().method_规范数据_汽车之家();
+        new MainTest().method_规范数据_易车();
+        new MainTest().method_规范数据_汽车之家_易车();
+        new MainTest().method_座位数的数据规范();
+        new MainTest().method_中文数字和阿拉伯数字不统一的数据规范();
+        new MainTest().method_电芯品牌的数据规范();
+        new MainTest().method_辅助驾驶系统();
+        new MainTest().method_数据规范();
+        new MainTest().method_选配带有价格的数据规范();
+        new MainTest().method_规范数据_实心圈位置();
+        new MainTest().method_找出有必要规范的字段();
 
 
 //        new MainTest().method_读取文件然后数据写入Excel();
@@ -77,6 +77,7 @@ public class MainTest {
 //        allExcelData.put("名称匹配不上配置匹配的上", dataExcelList_名称匹配不上配置匹配的上);
 //        allExcelData.put("名称匹配不上配置匹配不上", dataExcelList_名称匹配不上配置匹配不上);
 //        parseMapString(mapContent);
+//        System.out.println(mapContent.indexOf("名称匹配的上配置匹配不上") + "\t" + mapContent.indexOf("名称匹配不上配置匹配不上") + "\t" + mapContent.indexOf("名称匹配的上配置匹配的上") + "\t" + mapContent.indexOf("名称匹配不上配置匹配的上"));
         String dataExcelList_名称匹配的上配置匹配不上 = mapContent.substring(mapContent.indexOf("名称匹配的上配置匹配不上"), mapContent.indexOf("名称匹配不上配置匹配不上")).substring(13);
         String dataExcelList_名称匹配不上配置匹配不上 = mapContent.substring(mapContent.indexOf("名称匹配不上配置匹配不上"), mapContent.indexOf("名称匹配的上配置匹配的上")).substring(13);
         String dataExcelList_名称匹配的上配置匹配的上 = mapContent.substring(mapContent.indexOf("名称匹配的上配置匹配的上"), mapContent.indexOf("名称匹配不上配置匹配的上")).substring(13);
@@ -99,15 +100,14 @@ public class MainTest {
             entryStr = entryStr.substring(1, entryStr.length() - 1).trim();
             String[] valuesList = entryStr.split(",");
 //            System.out.println(entryStr);
+//            System.out.println(entryStr);
             for (int i = 0; i < valuesList.length; i++) {
+//                System.out.println(valuesList[i].split("=").length);
                 String key = valuesList[i].split("=")[0].trim();
-                String val = valuesList[i].split("=")[1].trim();
-//                if (key.contains("汽车之家的")){
-//                    System.out.println(key+"\t"+val);
-//                }
-//                if (key.equals("汽车之家的版本Id")||key.equals("易车的版本Id")||key.equals("汽车之家_易车的版本Id")){
-//                    System.out.println(val);
-//                }
+                String val = "";
+                if (valuesList[i].split("=").length == 2) {
+                    val = valuesList[i].split("=")[1].trim();
+                }
                 map.put(key, val);
             }
             result.add(map);
@@ -128,8 +128,8 @@ public class MainTest {
     public void method_判断数据对比的类型() {
         String filePath = "/Users/asteroid/所有文件数据/对比结果/";
         T_Compare compare = new T_Compare(2, 1, 1);
-        String idsFinish = T_Config_File.method_读取文件内容(filePath+"已匹配的版本ids.txt");
-        ArrayList<String> idsList = compare.method_汽车之家和易车的版本id去重数据(idsFinish.equals("")?"''":idsFinish.substring(0,idsFinish.length()-1));
+        String idsFinish = T_Config_File.method_读取文件内容(filePath + "已匹配的版本ids.txt");
+        ArrayList<String> idsList = compare.method_汽车之家和易车的版本id去重数据(idsFinish.equals("") ? "''" : idsFinish.substring(0, idsFinish.length() - 1));
         List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配的上 = new ArrayList<>();
         List<Map<String, Object>> dataExcelList_名称匹配的上配置匹配不上 = new ArrayList<>();
         List<Map<String, Object>> dataExcelList_名称匹配不上配置匹配的上 = new ArrayList<>();
@@ -162,7 +162,7 @@ public class MainTest {
                     }
                 }
             }
-            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "已匹配的版本ids.txt", "'"+ids+"',");
+            T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "已匹配的版本ids.txt", "'" + ids + "',");
 
             T_Config_File.method_重复写文件_根据路径创建文件夹(filePath, "匹配结果备份.txt", ids + "\t" + preVersionId + "\t" + nextVersionId + "\t" + preVersionName + "\t" + nextVersionName + "\t" + noSameConfig);
 //            String preModelYear = preModelName + extractYearFromVersionName(preVersionName);

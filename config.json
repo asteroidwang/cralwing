@@ -454,6 +454,10 @@
           {
             "entity": "com.asteroid.entity.Bean_CommonField",
             "tableName": "T_汽车之家_易车_数据处理表_差集表"
+          },
+          {
+            "entity": "com.asteroid.entity.Bean_Two",
+            "tableName": "T_汽车之家_易车_数据处理表_新差集表"
           }
         ]
       },

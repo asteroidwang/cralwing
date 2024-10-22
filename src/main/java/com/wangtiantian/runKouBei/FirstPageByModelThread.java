@@ -15,7 +15,7 @@ public class FirstPageByModelThread implements Runnable {
     private List<String> list;
     private String filePath;
     private CountDownLatch latch;
-    public FirstPageByModelThread(List<String> list, String filePathh, CountDownLatch latch) {
+    public FirstPageByModelThread(List<String> list, String filePath, CountDownLatch latch) {
         this.list = list;
         this.filePath = filePath;
         this.latch = latch;
