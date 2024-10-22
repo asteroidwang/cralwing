@@ -263,7 +263,7 @@ public class MainRunAgain {
         List<String> contentList = T_Config_File.method_按行读取文件("/Users/asteroid/所有文件数据/对比结果/差集表_易车.csv");
         List<List<Map<String, Object>>> list = makeBeanListCarHome(contentList);
         System.out.println(list.size());
-        System.out.println(list.get(0).size());
+        System.out.println(list.get(0));
 //        for (int i = 0; i < list.size(); i++) {
 //            System.out.println(list.get(i));
 //        }
@@ -325,7 +325,6 @@ public class MainRunAgain {
 //                    System.out.println(columnName + "\t" + value);
                 }
                 list.add(mapList);
-
             }
             i++;
             dataList.add(list);
