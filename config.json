@@ -259,6 +259,11 @@
             "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CarInfo",
             "tableName": "T_che300_CarInfo",
             "total": 10
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che168.Bean_CarHtml",
+            "tableName": "T_che168_CarHtml",
+            "total": 11
           }
         ]
       },
@@ -454,6 +459,10 @@
           {
             "entity": "com.asteroid.entity.Bean_CommonField",
             "tableName": "T_汽车之家_易车_数据处理表_差集表"
+          },
+          {
+            "entity": "com.asteroid.entity.Bean_Two",
+            "tableName": "T_汽车之家_易车_数据处理表_新差集表"
           }
         ]
       },
