@@ -107,9 +107,9 @@ public class ErShouCheDataBase {
     }
 
     // 获取未下载的分页url
-    public ArrayList<Object> yiche_get_获取未下载的城市分页url() {
+    public ArrayList<Object> yiche_get_获取未下载的城市分页url(String updateTime) {
         T_Config_ErShouChe fenYeDao = new T_Config_ErShouChe(chooseDataBaseType, chooseDataBase, 3);
-        return fenYeDao.get_查找未下载的数据();
+        return fenYeDao.get_查找未下载的数据_根据时间(updateTime);
     }
 
     // 修改分页数据下载状态
