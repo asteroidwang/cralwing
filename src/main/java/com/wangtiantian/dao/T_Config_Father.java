@@ -269,7 +269,9 @@ public class T_Config_Father {
     public ArrayList<Object> get_查找未下载的数据() {
         return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 ");
     }
-
+    public ArrayList<Object> get_查找未下载的数据_根据时间(String updateTime) {
+        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 and C_UpdateTime like '%"+updateTime+"%'");
+    }
     public int get_获取表中数据数量_有查询条件(String sql) {
         int num = 0;
         try {

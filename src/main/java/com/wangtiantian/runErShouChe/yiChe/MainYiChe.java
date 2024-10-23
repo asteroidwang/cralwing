@@ -136,21 +136,28 @@ public class MainYiChe extends TimerTask {
     public Boolean method_下载其余分页url数据(String filePath) {
 //        try {
         ErShouCheDataBase erShouCheDataBase = new ErShouCheDataBase();
-        ArrayList<Object> cityDataList = erShouCheDataBase.yiche_get_获取未下载的城市分页url();
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        ArrayList<Object> cityDataList = erShouCheDataBase.yiche_get_获取未下载的城市分页url(currentTime);
         System.out.println(cityDataList.size());
         if (cityDataList.size() > 36) {
             try {
-
                 List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> cityDataList.subList(i * (cityDataList.size() + 5) / 6, Math.min((i + 1) * (cityDataList.size() + 5) / 6, cityDataList.size())))
                         .collect(Collectors.toList());
                 CountDownLatch latch = new CountDownLatch(list.size());
-                for (int i = 0; i < cityDataList.size(); i++) {
-                    YiCheFenYeThread moreThread = new YiCheFenYeThread(list.get(i), filePath,latch);
-                    Thread thread = new Thread(moreThread);
+                for (int i = 0; i < list.size(); i++) {
+                    YiCheFenYeThread moreThread = new YiCheFenYeThread(list.get(i), filePath);
+                    Thread thread = new Thread(()->{
+                        try {
+                            moreThread.run();
+                        }finally {
+                            latch.countDown();
+                        }
+
+                    });
                     thread.start();
                 }
                 latch.await();
-                if (erShouCheDataBase.yiche_get_获取未下载的城市分页url().size()>0){
+                if (erShouCheDataBase.yiche_get_获取未下载的城市分页url(currentTime).size()>0){
                     return false;
                 }else {
                     return true;
@@ -421,25 +428,25 @@ public class MainYiChe extends TimerTask {
     public void run() {
         System.out.println(new Date() + "\t任务" + taskName + "在执行");
         String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
-//        String currentTime = "20241019";
+//        String currentTime = "20241022";
         String filePath = "D:\\爬取网页源数据\\yiche\\" + currentTime + "\\";
         // 1
 //        method_下载城市数据并入库(filePath);
-////
-//        // 2
+//////
+////        // 2
 //        method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
-//
-//        // 3
+////
+////        // 3
 //        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
-//
+////
 //        // 4
 //        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
 
         // 5
-//        if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
+        if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
 //            System.out.println("这次的任务完成了喔");
             parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
-//        }
+        }
 
         // 6
         // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面\\");
