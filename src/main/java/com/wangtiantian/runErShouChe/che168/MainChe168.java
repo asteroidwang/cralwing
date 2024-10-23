@@ -3,6 +3,9 @@ package com.wangtiantian.runErShouChe.che168;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
+import com.wangtiantian.entity.ershouche.BeanCarInfoErShou;
+import com.wangtiantian.entity.ershouche.che168.Bean_CarHtml;
+import com.wangtiantian.entity.ershouche.che168.Che168_CarInfo;
 import com.wangtiantian.entity.ershouche.che168.Che168_CityData;
 import com.wangtiantian.entity.ershouche.che168.Che168_FenYeUrl;
 import com.wangtiantian.mapper.ErShouCheDataBase;
@@ -27,7 +30,8 @@ public class MainChe168 {
         // mainChe168.method_先下载每个城市的第一页二手车数据获取总页数(filePath+"各城市二手车分页/");
 //         mainChe168.parse_解析第一页的数据获取总页数(filePath + "各城市二手车分页/");
 //         mainChe168.downLoad_下载分页数据(filePath + "各城市二手车分页/");
-         mainChe168.parse_解析分页数据获取二手车数据(filePath + "各城市二手车分页/");
+        //mainChe168.parse_解析分页数据获取二手车数据(filePath + "各城市二手车分页/");
+        mainChe168.method_下载车辆详情页(filePath + "车辆详情页/");
     }
 
     // 获取城市数据
@@ -98,14 +102,14 @@ public class MainChe168 {
         try {
             ArrayList<Object> dataList = new ErShouCheDataBase().get_CityData_已经下载();
             ArrayList<Object> result = new ArrayList<>();
-            for (int i =0;i<dataList.size();i++){
+            for (int i = 0; i < dataList.size(); i++) {
                 String pinyin = ((Che168_CityData) dataList.get(i)).get_C_CityPinYin();
                 String content = T_Config_File.method_读取文件内容(filePath + pinyin + "_1.txt");
                 Document mainDoc = Jsoup.parse(content);
                 Elements countItems = mainDoc.select(".list-menu").select(".tab-nav").select("li");
 //                String countNum = countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "");
-                String countNum ="0";
-                if (!countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "").equals("")){
+                String countNum = "0";
+                if (!countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "").equals("")) {
                     countNum = countItems.select(".current").select("a").text().replace("全部车源(", "").replace(")", "");
                 }
                 if (countNum.equals("全部车源")) {
@@ -130,7 +134,7 @@ public class MainChe168 {
                 }
             }
             new ErShouCheDataBase().insert_新增二手车数据分页(result);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -204,11 +208,29 @@ public class MainChe168 {
                     }
                     String guohu = mainItems.get(i).select(".tags").select(".tags-light").text();
                     String htmlUrl = carName.equals("") ? "" : "https://www.che168.com" + mainItems.get(i).select(".carinfo").attr("href");
-
+//                    String carId =
+                    String price = mainItems.get(i).select(".cards-price-box").select(".pirce").text();
+                    String priceYuan = mainItems.get(i).select(".cards-price-box").select("s").text();
+                    String carId = mainItems.get(i).select(".carinfo").attr("href").equals("") ? "" : mainItems.get(i).select(".carinfo").attr("href").substring(0, mainItems.get(i).select(".carinfo").attr("href").indexOf("."));
+                    Bean_CarHtml html = new Bean_CarHtml();
+                    html.set_C_CarHtml(htmlUrl);
+                    html.set_C_IsFinish(0);
+                    html.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    dataList.add(html);
+//                    Che168_CarInfo carInfoErShou = new Che168_CarInfo();
+//                    carInfoErShou.set_C_CarId(htmlUrl);
+//                    carInfoErShou.set_C_CarResource("che168");
+//                    carInfoErShou.set_C_Price(price);
+//                    carInfoErShou.set_C_CarId(carId);
+//                    carInfoErShou.set_C_ImgUrl(imgUrl);
+//                    carInfoErShou.set_C_CityName(location);
+//                    carInfoErShou.set_C_MileNumber(mile);
+//                    carInfoErShou.set_C_PublishTime("");
+//                    carInfoErShou.set_C_RegistrationTime(time);
                 }
             }
         }
-        new ErShouCheDataBase().insert_新增二手车数据分页(dataList);
+        new ErShouCheDataBase().insert_新增che168车辆详情页url数据(dataList);
     }
 
     public static Boolean method_访问二手车url获取网页源码(String url, String encode, String filePath, String fileName) {
@@ -223,6 +245,28 @@ public class MainChe168 {
             return true;
         } else {
             return false;
+        }
+
+    }
+
+    public void method_下载车辆详情页(String filePath) {
+        ArrayList<Object> dataList = new ErShouCheDataBase().get_获取che168车辆详情页url数据();
+        if (dataList.size() < 36) {
+        for (Object o : dataList) {
+            String htmlUrl = ((Bean_CarHtml) o).get_C_CarHtml();
+            if (!htmlUrl.equals("-")) {
+                String fileName = htmlUrl.substring(htmlUrl.indexOf("dealer") + 7, htmlUrl.indexOf(".html")).replace("/", "_");
+                T_Config_File.method_访问url获取网页源码普通版(htmlUrl, "GBK", filePath, fileName + ".txt");
+            }
+        }
+        }else {
+            List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < list.size(); i++) {
+                Che168DetailsThread moreThread = new Che168DetailsThread(list.get(i), filePath);
+                Thread thread = new Thread(moreThread);
+                thread.start();
+            }
         }
 
     }

@@ -48,5 +48,10 @@ public class T_Config_ErShouChe extends T_Config_Father{
         String sql ="update "+tableName+ " set C_IsFinish = 1 where C_city_id='"+cityId+"'";
         method_i_d_u(sql);
     }
+    public void update_修改che168车辆详情页下载状态(String C_CarHtml){
+        String sql ="update "+tableName+ " set C_IsFinish = 1 where C_CarHtml='"+C_CarHtml+"'";
+        method_i_d_u(sql);
+    }
+
 
 }

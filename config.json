@@ -259,6 +259,11 @@
             "entity": "com.wangtiantian.entity.ershouche.che300.Che300_CarInfo",
             "tableName": "T_che300_CarInfo",
             "total": 10
+          },
+          {
+            "entity": "com.wangtiantian.entity.ershouche.che168.Bean_CarHtml",
+            "tableName": "T_che168_CarHtml",
+            "total": 11
           }
         ]
       },

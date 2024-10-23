@@ -32,14 +32,14 @@ public class MainRenRenChe {
 
         // new ErShouCheDataBase().get_文件命名错误数据();
         // 3
-         renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
+        // renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
 
         // 4
-//         renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
+         renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
 
 
         // final
-         renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
+//         renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
 
     }
 
