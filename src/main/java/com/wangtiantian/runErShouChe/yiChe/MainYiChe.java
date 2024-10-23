@@ -425,20 +425,20 @@ public class MainYiChe extends TimerTask {
         String filePath = "D:\\爬取网页源数据\\yiche\\" + currentTime + "\\";
         // 1
 //        method_下载城市数据并入库(filePath);
-//
+////
 //        // 2
 //        method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
 //
 //        // 3
 //        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
-
-        // 4
-        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
+//
+//        // 4
+//        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
 
         // 5
 //        if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
 //            System.out.println("这次的任务完成了喔");
-//            parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
+            parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
 //        }
 
         // 6
