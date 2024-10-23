@@ -115,7 +115,7 @@ public class DataBaseMethod {
 
     public int get_版本表中组数() {
         T_Config_AutoHome_new verIdsDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 4);
-        return verIdsDao.get_获取表中数据数量();
+        return verIdsDao.get_获取表中组数();
     }
 
 

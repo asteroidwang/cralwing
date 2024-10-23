@@ -28,18 +28,6 @@ public class MainConfigData {
         String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).replace("-", "");
         String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
 //        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240910" + "/";
-        //String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/20240910/";
-
-        // 创建表
-        // mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-        // mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-        // mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-        // mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
-        // mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-        // mainConfigData.method_下载配置数据(filePath + "params/");
-        // mainConfigData.method_解析列名(filePath);
-        // mainConfigData.method_取列名(filePath);
-         mainConfigData.method_解析配置数据(filePath);
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/20240910/";
 
         // 创建表
@@ -371,7 +359,7 @@ public class MainConfigData {
                 String verID = verIDTemp_left.replace(verIDTempRight, "");
                 String verName = willSaleItems.get(i).select(".name").text();
                 String verURL = "https://www.autohome.com.cn" + willSaleItems.get(i).select(".name").attr("href");
-                Document verDoc = Jsoup.parse(new URL(verURL).openStream(), "gb2312", verURL);
+                Document verDoc = Jsoup.parse(new URL(verURL).openStream(), "GBK", verURL);
                 Elements verEl = verDoc.select(".athm-sub-nav__channel.athm-js-sticky").select("li");
                 String verIDNumber_L = verEl.get(0).select("a").attr("href").replace("/spec/", "");
                 String verIDNumber_R = verIDNumber_L.substring(verIDNumber_L.indexOf("/"));
@@ -732,7 +720,7 @@ public class MainConfigData {
                                     Class c = configList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
-                                    field.set(configList.get(i), value);
+                                    field.set(configList.get(i), value.replace("[sv:1]","●").replace("[sv:2]","○").replace("####",""));
                                 }
                             }
                         }
