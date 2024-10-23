@@ -46,11 +46,13 @@ public class KouBei_DataBase {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
         dataBaseKouBei.insertForeach(dataList);
     }
+
     // 获取需要下载的口碑详情总数量
     public int getShortKouBeiDataCount() {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
         return dataBaseKouBei.get_未下载口碑详情页的表中总数量();
     }
+
     // 分批查询未下载的口碑详情页数据
     public ArrayList<Object> getShortKouBeiDataForeach(int group) {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
@@ -67,5 +69,16 @@ public class KouBei_DataBase {
     public void update_修改已下载的口碑详情页数据(String showIds) {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 1);
         dataBaseKouBei.update_修改已下载的口碑详情页数据(showIds);
+    }
+
+    // 新增口碑数据
+    public void insertKouBeiInfo(ArrayList<Object> dataList) {
+        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 2);
+        dataBaseKouBei.insertForeach(dataList);
+    }
+
+    public void insertKouBeiImgUrl(ArrayList<Object> dataList) {
+        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 3);
+        dataBaseKouBei.insertForeach(dataList);
     }
 }

@@ -194,7 +194,7 @@ public class T_Config_Father {
                     if (methods[i].getName().equals("get_C_ID")) {
                         continue;
                     }
-                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().trim();
+                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().replace("\t","\\\t").replace("\n","\\\n").replace("\r","\\\r").trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
                         valueList += "N'" + value.replace("'", "''") + "',";
                     } else {
@@ -300,6 +300,7 @@ public class T_Config_Father {
             }
             String tempString = valueBuffer.toString();
             String sql = "insert into " + tableName + columnList + " values" + tempString.substring(0, tempString.length() - 1);
+//            System.out.println(sql);
             method_i_d_u(sql);
             System.out.println(tableName + "分批入库一次");
         }

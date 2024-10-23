@@ -121,12 +121,12 @@
           },
           {
             "entity": "com.wangtiantian.entity.koubei.KouBeiData",
-            "tableName": "T_KouBeiData_20240804",
+            "tableName": "T_KouBeiData",
             "total": 2
           },
           {
-            "entity": "com.wangtiantian.entity.koubei.KouBeiTest",
-            "tableName": "T_Test",
+            "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
+            "tableName": "T_KouBeiPictureUrl",
             "total": 3
           },
           {

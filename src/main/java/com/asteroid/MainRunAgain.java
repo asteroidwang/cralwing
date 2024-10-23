@@ -258,78 +258,136 @@ public class MainRunAgain {
     }
 
     public static void test() throws InvocationTargetException, IllegalAccessException {
-//        ReadUntil readUntil = new ReadUntil();
-//        List<String> contentList =  readUntil.Method_ReadbyLine("F:\\ZKZD\\Java项目\\Data-crawling-2024\\merge-data-car\\src\\main\\resources\\T_汽车之家_1008.csv");
-        List<String> contentList = T_Config_File.method_按行读取文件("/Users/asteroid/所有文件数据/对比结果/差集表_易车.csv");
-        List<List<Map<String, Object>>> list = makeBeanListCarHome(contentList);
-        System.out.println(list.size());
-        System.out.println(list.get(0));
-//        for (int i = 0; i < list.size(); i++) {
-//            System.out.println(list.get(i));
-//        }
+        List<Map<String, Object>> listQ = makeMapListForeach("/Users/asteroid/所有文件数据/对比结果/差集表_汽车之家.csv");
 
-        // 获取具体一列的值
-//        List<Integer> coumn_valueList = list1.stream().map(Bean_Two::get_C_ID).collect(Collectors.toList());
-//
-//        for (int i = 0; i < 20; i++) {
-//            System.out.println(coumn_valueList.get(i));
-//        }
-
-        // 获取部分列
-//        List<Map<String, Map<String,String>>> columnList = list1.stream().map(beanCarHome -> {
-//            Map<String, Map<String,String>> map = new HashMap<>();
-//            Map<String, String> map1 = new HashMap<>();
-//            map1.put("C_BrandName", beanCarHome.getC_BrandName());
-//            map1.put("C_PID", beanCarHome.getC_PID());
-//            map.put(beanCarHome.getC_PID(), map1);
-//            return map;
-//        }).collect(Collectors.toList());
-//        int b = 0;
-//        for (Map<String, Map<String,String>> stringObjectMap : columnList) {
-//
-//            for (String key : stringObjectMap.keySet()) {
-//                // 现在可以使用 key 进行操作
-//                Map<String, String> map =  stringObjectMap.get(key);
-//                // 处理 key 和 value
-//                String value = map.get("C_BrandName");
-//                System.out.println(value);
-//                String value1 = map.get("C_PID");
-//                b++;
-//            }
-//            if (b>20){
-//                break;
-//            }
-//        }
+//        List<Map<String, Object>> listY = makeBeanListCarHome("/Users/asteroid/所有文件数据/对比结果/差集表_易车.csv");
+        method_iii(listQ);
 
     }
 
+    public static void method_iii(List<Map<String, Object>> listQ) {
+        try {
+//        List<Map<String, Object>> listQ = makeBeanListCarHome("/Users/asteroid/所有文件数据/对比结果/差集表_易车.csv");
+            for (Map<String, Object> mapListQ : listQ) {
+                String C_品牌_Q = mapListQ.get("C_品牌").toString();
+                String C_厂商_Q = mapListQ.get("C_厂商").toString();
+                String C_车型_Q = mapListQ.get("C_车型").toString();
+                String C_车款_Q = mapListQ.get("C_车款").toString();
+                String C_变速器_Q = mapListQ.get("C_变速器").toString();
+                String C_发动机简称_Q = mapListQ.get("C_发动机简称").toString();
+                String C_驱动形式_Q = mapListQ.get("C_驱动形式").toString();
+                String C_燃料种类_Q = mapListQ.get("C_燃料种类").toString();
+                String C_配置等级_Q = mapListQ.get("C_配置等级").toString();
+//                String C_车型名称_Q = mapListQ.get("C_车型名称").toString();
+                String C_车型名称_Q = mapListQ.get("C_汽车之家_C_基本参数__车型名称").toString();
+                String year_Q =C_车型名称_Q.substring(C_车型名称_Q.indexOf("款")-4,C_车型名称_Q.indexOf("款")+1);
+                List<Map<String, Object>> listY = makeBeanListCarHome("/Users/asteroid/所有文件数据/对比结果/差集表_易车.csv");
+                for (Map<String, Object> mapListY : listY) {
+                    String C_品牌_Y = mapListY.get("C_品牌").toString();
+                    String C_厂商_Y = mapListY.get("C_厂商").toString();
+                    String C_车型_Y = mapListY.get("C_车型").toString();
+                    String C_车款_Y = mapListY.get("C_车款").toString();
+                    String C_变速器_Y = mapListY.get("C_变速器").toString();
+                    String C_发动机简称_Y = mapListY.get("C_发动机简称").toString();
+                    String C_驱动形式_Y = mapListY.get("C_驱动形式").toString();
+                    String C_燃料种类_Y = mapListY.get("C_燃料种类").toString();
+                    String C_配置等级_Y = mapListY.get("C_配置等级").toString();
+//                    String C_车型名称_Y = mapListY.get("C_车型名称").toString();
+                    String C_车型名称_Y = mapListY.get("C_易车_C_基本参数__车型名称").toString();
 
-    public static List<List<Map<String, Object>>> makeBeanListCarHome(List<String> content) throws InvocationTargetException, IllegalAccessException {
-//        System.out.println(content);
-        List<List<Map<String, Object>>> dataList = new ArrayList<>();
+                    if(Integer.parseInt(C_车型名称_Y.substring(0,1))>2){
+                        C_车型名称_Y = "19"+C_车型名称_Y;
+                    }else {
+                        C_车型名称_Y = "20"+C_车型名称_Y;
+                    }
+                    System.out.println(C_车型名称_Y);
+//                    String year_Y =C_车型名称_Y.substring(C_车型名称_Y.indexOf("款")-4,C_车型名称_Y.indexOf("款")+1);
+                    if (C_品牌_Q.equals(C_品牌_Y) && C_厂商_Q.equals(C_厂商_Y) && C_车型_Q.equals(C_车型_Y) && C_车款_Q.equals(C_车款_Y) && C_变速器_Q.equals(C_变速器_Y) && C_发动机简称_Q.equals(C_发动机简称_Y) && C_驱动形式_Q.equals(C_驱动形式_Y) && C_燃料种类_Q.equals(C_燃料种类_Y) && C_车型名称_Q.equals(C_车型名称_Y)) {
+                        System.out.println("汽车之家\t" + mapListQ);
+                        System.out.println("易车\t" + mapListY);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+    }
+
+    public static List<Map<String, Object>> makeBeanListCarHome(String filePath) throws InvocationTargetException, IllegalAccessException {
+        List<String> content = T_Config_File.method_按行读取文件(filePath);
+        content.replaceAll(e->e.replace(",,",",\"-\","));
+        List<Map<String, Object>> list = new ArrayList<>();
         String[] split = content.get(0).split(",");
         int i = 0;
         for (String s : content) {
-            List<Map<String, Object>> list = new ArrayList<>();
             if (i != 0) {
                 String[] values = s.split(",");
-//                Class<?> class1 = Bean_Two.class;
-//                Method[] methods = class1.getMethods();
-//                Bean_Two beanCarHome = new Bean_Two();
                 Map<String, Object> mapList = new HashMap<>();
                 for (int j = 0; j < split.length; j++) {
                     String columnName = split[j];
                     String value = values[j];
-                    mapList.put(columnName, value);
-//                    System.out.println(columnName + "\t" + value);
+                    mapList.put(columnName.replace("\"", ""), value.replace("\"", ""));
                 }
                 list.add(mapList);
+//                if (list.size() > 10000) {
+//
+//                    list.clear();
+//                }
             }
             i++;
-            dataList.add(list);
         }
-        return dataList;
+        return list;
     }
+
+    public static List<Map<String, Object>> makeMapListForeach(String filePath) throws InvocationTargetException, IllegalAccessException {
+        List<String> content = T_Config_File.method_按行读取文件(filePath);
+        content.replaceAll(e->e.replace(",,",",\"-\","));
+        List<Map<String, Object>> list = new ArrayList<>();
+
+        String[] split = content.get(0).split(",");
+        int i = 0;
+        for (String s : content) {
+            if (i != 0) {
+                String[] values = s.split(",");
+                Map<String, Object> mapList = new HashMap<>();
+                for (int j = 0; j < split.length; j++) {
+                    String columnName = split[j];
+                    String value = values[j];
+//                    System.out.println(value);
+                    mapList.put(columnName.replace("\"", ""), value.replace("\"", ""));
+                }
+                list.add(mapList);
+                if (list.size() > 10000) {
+                    list.clear();
+                }
+            }
+            i++;
+        }
+        return list;
+    }
+
+//    public static List<List<Map<String, Object>>> makeBeanListCarHome(List<String> content) throws InvocationTargetException, IllegalAccessException {
+//        List<List<Map<String, Object>>> dataList = new ArrayList<>();
+//        String[] split = content.get(0).split(",");
+//        int i = 0;
+//        for (String s : content) {
+//            if (i != 0) {
+//                List<Map<String, Object>> list = new ArrayList<>();
+//                String[] values = s.split(",");
+//                Map<String, Object> mapList = new HashMap<>();
+//                for (int j = 0; j < split.length; j++) {
+//                    String columnName = split[j];
+//                    String value = values[j];
+//                    mapList.put(columnName, value);
+//                }
+//                list.add(mapList);
+//                dataList.add(list);
+//            }
+//            i++;
+//
+//        }
+//        return dataList;
+//    }
 
 }
