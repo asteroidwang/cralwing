@@ -156,11 +156,84 @@ public class MainConfigData {
     // 3.下载版本所在的页面数据
     public Boolean method_下载含有版本数据的文件(String filePath) {
         // 1.非图片路径
+        method_下载版本源文件_在售数据_新(filePath + "_非图片路径/");
         method_下载含有版本数据的文件_非图片路径_NOSALE(filePath + "_非图片路径/");
-        method_下载含有版本数据的文件_非图片路径_NOSALE(filePath + "_非图片路径/");
+        method_下载版本源文件_即将销售数据(filePath + "_非图片路径/");
         method_下载含有版本数据的文件_图片路径_OnSale(filePath + "_图片路径/");
         method_下载含有版本数据的文件_图片路径_NoSale(filePath + "_图片路径/");
+
+
         return true;
+    }
+
+    public void method_下载版本源文件_在售数据_新(String filePath) {
+        try {
+            // https://car-web-api.autohome.com.cn/car/series/getspeclistresponse?seriesid=18&tagid=2&tagname=%E5%8D%B3%E5%B0%86%E9%94%80%E5%94%AE
+            ArrayList<Object> onSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("在售", 0);
+            if (onSaleList.size() < 32) {
+                for (Object bean : onSaleList) {
+                    String modId = ((Bean_Model) bean).get_C_ModelID();
+                    String url = "https://car-web-api.autohome.com.cn/car/series/getspeclistresponse?seriesid=" + modId + "&tagid=1&tagname=%E5%9C%A8%E5%94%AE";
+                    if (T_Config_File.method_访问url获取Json普通版(url, "UTF-8", filePath, modId + "_在售.txt")) {
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "在售", 0);
+                    }
+                }
+            } else {
+                List<List<Object>> saList = IntStream.range(0, 6).mapToObj(i -> onSaleList.subList(i * (onSaleList.size() + 5) / 6, Math.min((i + 1) * (onSaleList.size() + 5) / 6, onSaleList.size())))
+                        .collect(Collectors.toList());
+                CountDownLatch latch = new CountDownLatch(saList.size());
+                for (int i = 0; i < saList.size(); i++) {
+                    ModelMoreThread modelMoreThread = new ModelMoreThread(saList.get(i), filePath, 0);
+                    Thread thread = new Thread(() -> {
+                        try {
+                            modelMoreThread.run();
+                        } finally {
+                            latch.countDown();
+                        }
+                    });
+                    thread.start();
+                }
+                latch.await();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void method_下载版本源文件_即将销售数据(String filePath) {
+        try {
+            // 2.停售
+            ArrayList<Object> noSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("即将销售", 0);
+            if (noSaleList.size() < 32) {
+                for (Object bean : noSaleList) {
+                    String modId = ((Bean_Model) bean).get_C_ModelID();
+                    String url = "https://car-web-api.autohome.com.cn/car/series/getspeclistresponse?seriesid=" + modId + "&tagid=2&tagname=%E5%8D%B3%E5%B0%86%E9%94%80%E5%94%AE";
+
+                    if (T_Config_File.method_访问url获取Json普通版(url, "UTF-8", filePath, modId + "_即将销售.txt")) {
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "即将销售", 4);
+                    }
+                }
+            } else {
+                List<List<Object>> noSalist = IntStream.range(0, 6).mapToObj(i -> noSaleList.subList(i * (noSaleList.size() + 5) / 6, Math.min((i + 1) * (noSaleList.size() + 5) / 6, noSaleList.size())))
+                        .collect(Collectors.toList());
+                CountDownLatch latch = new CountDownLatch(noSalist.size());
+                for (int i = 0; i < noSalist.size(); i++) {
+                    ModelMoreThread modelMoreThread = new ModelMoreThread(noSalist.get(i), filePath, 4);
+                    Thread thread = new Thread(() -> {
+                        try {
+                            modelMoreThread.run();
+                        } finally {
+                            latch.countDown();
+                        }
+
+                    });
+                    thread.start();
+                }
+                latch.await();
+            }
+        } catch (Exception e) {
+        }
     }
 
     public void method_下载含有版本数据的文件_非图片路径_ONSALE(String filePath) {
@@ -197,6 +270,7 @@ public class MainConfigData {
         } catch (Exception e) {
         }
     }
+
     public void method_下载含有版本数据的文件_非图片路径_NOSALE(String filePath) {
         try {
             // 2.停售
@@ -243,7 +317,7 @@ public class MainConfigData {
 
                     url = "https://car.autohome.com.cn/pic/series/" + modId + ".html#pvareaid=3454438";
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面在售.txt")) {
-                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "图片页面在售", 1);
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "图片页面在售", 2);
                     }
                 }
             } else {
@@ -267,6 +341,7 @@ public class MainConfigData {
             e.printStackTrace();
         }
     }
+
     public void method_下载含有版本数据的文件_图片路径_NoSale(String filePath) {
         try {
             // 2.停售
@@ -278,7 +353,7 @@ public class MainConfigData {
 
                     url = "https://car.autohome.com.cn/pic/series-t/" + modId + ".html";
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面停售.txt")) {
-                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "图片页面停售", 1);
+                        new DataBaseMethod().method_修改车型表中下载的id状态(modId, "图片页面停售", 3);
                     }
                 }
             } else {

@@ -13,6 +13,7 @@ public class Bean_Model {
         private int  C_IsFinish;public int  get_C_IsFinish(){return C_IsFinish;}public void set_C_IsFinish(int C_IsFinish){this.C_IsFinish=C_IsFinish;}
         private int  C_在售;public int  get_C_在售(){return C_在售;}public void set_C_在售(int C_在售){this.C_在售=C_在售;}
         private int  C_停售;public int  get_C_停售(){return C_停售;}public void set_C_停售(int C_停售){this.C_停售=C_停售;}
+        private int  C_即将销售;public int  get_C_即将销售(){return C_即将销售;}public void set_C_即将销售(int C_即将销售){this.C_即将销售=C_即将销售;}
         private int  C_图片页面在售;public int  get_C_图片页面在售(){return C_图片页面在售;}public void set_C_图片页面在售(int C_图片页面在售){this.C_图片页面在售=C_图片页面在售;}
         private int  C_图片页面停售;public int  get_C_图片页面停售(){return C_图片页面停售;}public void set_C_图片页面停售(int C_图片页面停售){this.C_图片页面停售=C_图片页面停售;}
         private String  C_UpdateTime;public String  get_C_UpdateTime(){return C_UpdateTime;}public void set_C_UpdateTime(String C_UpdateTime){this.C_UpdateTime=C_UpdateTime==null?"-":C_UpdateTime.replace("\t","").replace("\r","").replace("\r\n","").replace("\n","");}
