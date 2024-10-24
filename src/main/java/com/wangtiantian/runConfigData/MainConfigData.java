@@ -17,6 +17,7 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,21 +26,22 @@ public class MainConfigData {
 
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
-        String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).replace("-", "");
+        String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
 //        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240910" + "/";
-//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数据/20240910/";
+//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数       据/20240910/";
 
         // 创建表
-        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-        mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件");
-        mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-        mainConfigData.method_下载配置数据(filePath + "params/");
-        mainConfigData.method_解析列名(filePath);
-        mainConfigData.method_取列名(filePath);
-        mainConfigData.method_解析配置数据(filePath);
+//        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+//        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+//        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+        if (mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件")) {
+            mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+        }
+//        mainConfigData.method_下载配置数据(filePath + "params/");
+//        mainConfigData.method_解析列名(filePath);
+//        mainConfigData.method_取列名(filePath);
+//        mainConfigData.method_解析配置数据(filePath);
     }
 
     // 创建爬取汽车之家配置数据所需要的表
@@ -152,18 +154,16 @@ public class MainConfigData {
     }
 
     // 3.下载版本所在的页面数据
-    public void method_下载含有版本数据的文件(String filePath) {
-        try {
-            // 1.非图片路径
-            method_下载含有版本数据的文件_非图片路径(filePath + "_非图片路径/");
-            // 2.图片路径
-            method_下载含有版本数据的文件_图片路径(filePath + "_图片路径/");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Boolean method_下载含有版本数据的文件(String filePath) {
+        // 1.非图片路径
+        method_下载含有版本数据的文件_非图片路径_NOSALE(filePath + "_非图片路径/");
+        method_下载含有版本数据的文件_非图片路径_NOSALE(filePath + "_非图片路径/");
+        method_下载含有版本数据的文件_图片路径_OnSale(filePath + "_图片路径/");
+        method_下载含有版本数据的文件_图片路径_NoSale(filePath + "_图片路径/");
+        return true;
     }
 
-    public void method_下载含有版本数据的文件_非图片路径(String filePath) {
+    public void method_下载含有版本数据的文件_非图片路径_ONSALE(String filePath) {
         try {
             // 1.在售
             ArrayList<Object> onSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("在售", 0);
@@ -180,19 +180,31 @@ public class MainConfigData {
             } else {
                 List<List<Object>> saList = IntStream.range(0, 6).mapToObj(i -> onSaleList.subList(i * (onSaleList.size() + 5) / 6, Math.min((i + 1) * (onSaleList.size() + 5) / 6, onSaleList.size())))
                         .collect(Collectors.toList());
+                CountDownLatch latch = new CountDownLatch(saList.size());
                 for (int i = 0; i < saList.size(); i++) {
                     ModelMoreThread modelMoreThread = new ModelMoreThread(saList.get(i), filePath, 0);
-                    Thread thread = new Thread(modelMoreThread);
+                    Thread thread = new Thread(() -> {
+                        try {
+                            modelMoreThread.run();
+                        } finally {
+                            latch.countDown();
+                        }
+                    });
                     thread.start();
                 }
+                latch.await();
             }
+        } catch (Exception e) {
+        }
+    }
+    public void method_下载含有版本数据的文件_非图片路径_NOSALE(String filePath) {
+        try {
             // 2.停售
             ArrayList<Object> noSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("停售", 0);
             if (noSaleList.size() < 32) {
                 for (Object bean : noSaleList) {
                     String modId = ((Bean_Model) bean).get_C_ModelID();
                     String url = "";
-
                     url = "https://www.autohome.com.cn/" + modId + "/sale.html#pvareaid=3311673";
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_停售.txt")) {
                         new DataBaseMethod().method_修改车型表中下载的id状态(modId, "停售", 1);
@@ -201,18 +213,26 @@ public class MainConfigData {
             } else {
                 List<List<Object>> noSalist = IntStream.range(0, 6).mapToObj(i -> noSaleList.subList(i * (noSaleList.size() + 5) / 6, Math.min((i + 1) * (noSaleList.size() + 5) / 6, noSaleList.size())))
                         .collect(Collectors.toList());
+                CountDownLatch latch = new CountDownLatch(noSalist.size());
                 for (int i = 0; i < noSalist.size(); i++) {
                     ModelMoreThread modelMoreThread = new ModelMoreThread(noSalist.get(i), filePath, 1);
-                    Thread thread = new Thread(modelMoreThread);
+                    Thread thread = new Thread(() -> {
+                        try {
+                            modelMoreThread.run();
+                        } finally {
+                            latch.countDown();
+                        }
+
+                    });
                     thread.start();
                 }
+                latch.await();
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
-    public void method_下载含有版本数据的文件_图片路径(String filePath) {
+    public void method_下载含有版本数据的文件_图片路径_OnSale(String filePath) {
         try {
             // 1.在售
             ArrayList<Object> onSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("图片页面在售", 0);
@@ -225,19 +245,30 @@ public class MainConfigData {
                     if (T_Config_File.method_访问url获取网页源码普通版(url, "gb2312", filePath, modId + "_图片页面在售.txt")) {
                         new DataBaseMethod().method_修改车型表中下载的id状态(modId, "图片页面在售", 1);
                     }
-
                 }
             } else {
                 List<List<Object>> salist = IntStream.range(0, 6).mapToObj(i -> onSaleList.subList(i * (onSaleList.size() + 5) / 6, Math.min((i + 1) * (onSaleList.size() + 5) / 6, onSaleList.size())))
                         .collect(Collectors.toList());
+                CountDownLatch latch = new CountDownLatch(salist.size());
                 for (int i = 0; i < salist.size(); i++) {
                     ModelMoreThread modelMoreThread = new ModelMoreThread(salist.get(i), filePath, 2);
-                    Thread thread = new Thread(modelMoreThread);
+                    Thread thread = new Thread(() -> {
+                        try {
+                            modelMoreThread.run();
+                        } finally {
+                            latch.countDown();
+                        }
+                    });
                     thread.start();
                 }
+                latch.await();
             }
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void method_下载含有版本数据的文件_图片路径_NoSale(String filePath) {
+        try {
             // 2.停售
             ArrayList<Object> noSaleList = new DataBaseMethod().method_查找车型表中未下载的含版本数据的数据("图片页面停售", 0);
             if (noSaleList.size() < 32) {
@@ -253,11 +284,20 @@ public class MainConfigData {
             } else {
                 List<List<Object>> noSalist = IntStream.range(0, 6).mapToObj(i -> noSaleList.subList(i * (noSaleList.size() + 5) / 6, Math.min((i + 1) * (noSaleList.size() + 5) / 6, noSaleList.size())))
                         .collect(Collectors.toList());
+                CountDownLatch latch = new CountDownLatch(noSalist.size());
                 for (int i = 0; i < noSalist.size(); i++) {
                     ModelMoreThread modelMoreThread = new ModelMoreThread(noSalist.get(i), filePath, 3);
-                    Thread thread = new Thread(modelMoreThread);
+                    Thread thread = new Thread(() -> {
+                        try {
+                            modelMoreThread.run();
+                        } finally {
+                            latch.countDown();
+                        }
+
+                    });
                     thread.start();
                 }
+                latch.await();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -455,15 +495,14 @@ public class MainConfigData {
                 }
             } else {
 
-                    List<List<Object>> paramsData = IntStream.range(0, 6).mapToObj(i -> paramsList.subList(i * (paramsList.size() + 5) / 6, Math.min((i + 1) * (paramsList.size() + 5) / 6, paramsList.size())))
-                            .collect(Collectors.toList());
-                    for (int i = 0; i < paramsData.size(); i++) {
-                        ConfigMoreThread params = new ConfigMoreThread(paramsData.get(i), filePath, 0);
-                        Thread thread = new Thread(params);
-                        thread.start();
-                    }
+                List<List<Object>> paramsData = IntStream.range(0, 6).mapToObj(i -> paramsList.subList(i * (paramsList.size() + 5) / 6, Math.min((i + 1) * (paramsList.size() + 5) / 6, paramsList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < paramsData.size(); i++) {
+                    ConfigMoreThread params = new ConfigMoreThread(paramsData.get(i), filePath, 0);
+                    Thread thread = new Thread(params);
+                    thread.start();
                 }
-
+            }
 
 
             if (configList.size() <= 32) {
@@ -476,14 +515,14 @@ public class MainConfigData {
                 }
             } else {
 
-                    List<List<Object>> configData = IntStream.range(0, 6).mapToObj(i -> configList.subList(i * (configList.size() + 5) / 6, Math.min((i + 1) * (configList.size() + 5) / 6, configList.size())))
-                            .collect(Collectors.toList());
-                    for (int i = 0; i < configData.size(); i++) {
-                        ConfigMoreThread config = new ConfigMoreThread(configData.get(i), filePath.replace("params", "config"), 1);
-                        Thread thread = new Thread(config);
-                        thread.start();
-                    }
+                List<List<Object>> configData = IntStream.range(0, 6).mapToObj(i -> configList.subList(i * (configList.size() + 5) / 6, Math.min((i + 1) * (configList.size() + 5) / 6, configList.size())))
+                        .collect(Collectors.toList());
+                for (int i = 0; i < configData.size(); i++) {
+                    ConfigMoreThread config = new ConfigMoreThread(configData.get(i), filePath.replace("params", "config"), 1);
+                    Thread thread = new Thread(config);
+                    thread.start();
                 }
+            }
 
 
             if (bagList.size() <= 36) {
@@ -720,7 +759,7 @@ public class MainConfigData {
                                     Class c = configList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
-                                    field.set(configList.get(i), value.replace("[sv:1]","●").replace("[sv:2]","○").replace("####",""));
+                                    field.set(configList.get(i), value.replace("[sv:1]", "●").replace("[sv:2]", "○").replace("####", ""));
                                 }
                             }
                         }
