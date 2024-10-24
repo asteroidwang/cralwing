@@ -36,7 +36,44 @@ public class KouBeiData {
     private String  C_WaiGuan; public void set_C_WaiGuan(String C_WaiGuan){this.C_WaiGuan=C_WaiGuan.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_WaiGuan(){return C_WaiGuan;}
     private String  C_JiaShiGanShou; public void set_C_JiaShiGanShou(String C_JiaShiGanShou){this.C_JiaShiGanShou=C_JiaShiGanShou.replace("\n","").replace("\r","").replace("\t","").replace("'","''").trim();}public String get_C_JiaShiGanShou(){return C_JiaShiGanShou;}
     private int C_IsFinish;public void set_C_IsFinish(int C_IsFinish){this.C_IsFinish = C_IsFinish;}public int C_IsFinish(){return C_IsFinish;}
-   @Override
+
+    @Override
+    public String toString() {
+        return "KouBeiData{" +
+                "C_ID=" + C_ID +
+                ", C_ShowID='" + C_ShowID + '\'' +
+                ", C_DealerID='" + C_DealerID + '\'' +
+                ", C_DealerName='" + C_DealerName + '\'' +
+                ", C_KouBeiContent='" + C_KouBeiContent + '\'' +
+                ", C_UpdateTime='" + C_UpdateTime + '\'' +
+                ", C_UserName='" + C_UserName + '\'' +
+                ", C_UserID='" + C_UserID + '\'' +
+                ", C_VersionID='" + C_VersionID + '\'' +
+                ", C_VersionName='" + C_VersionName + '\'' +
+                ", C_ModelID='" + C_ModelID + '\'' +
+                ", C_UpTime='" + C_UpTime + '\'' +
+                ", C_KoubeiID='" + C_KoubeiID + '\'' +
+                ", C_Title='" + C_Title + '\'' +
+                ", C_XingShiLiCheng='" + C_XingShiLiCheng + '\'' +
+                ", C_BaiGongLiYouHao='" + C_BaiGongLiYouHao + '\'' +
+                ", C_LuoCheGouMaiJia='" + C_LuoCheGouMaiJia + '\'' +
+                ", C_GouMaiShiJian='" + C_GouMaiShiJian + '\'' +
+                ", C_GouMaiDiDian='" + C_GouMaiDiDian + '\'' +
+                ", C_ZuiManYi='" + C_ZuiManYi + '\'' +
+                ", C_ZuiBuManyi='" + C_ZuiBuManyi + '\'' +
+                ", C_CaoKong='" + C_CaoKong + '\'' +
+                ", C_ShuShiXing='" + C_ShuShiXing + '\'' +
+                ", C_NeiShi='" + C_NeiShi + '\'' +
+                ", C_YouHao='" + C_YouHao + '\'' +
+                ", C_XingJiaBi='" + C_XingJiaBi + '\'' +
+                ", C_KongJian='" + C_KongJian + '\'' +
+                ", C_WaiGuan='" + C_WaiGuan + '\'' +
+                ", C_JiaShiGanShou='" + C_JiaShiGanShou + '\'' +
+                ", C_IsFinish=" + C_IsFinish +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

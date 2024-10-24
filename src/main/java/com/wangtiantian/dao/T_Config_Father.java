@@ -194,7 +194,7 @@ public class T_Config_Father {
                     if (methods[i].getName().equals("get_C_ID")) {
                         continue;
                     }
-                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().trim();
+                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().replace("\t","\\\t").replace("\n","\\\n").replace("\r","\\\r").trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
                         valueList += "N'" + value.replace("'", "''") + "',";
                     } else {
@@ -269,7 +269,9 @@ public class T_Config_Father {
     public ArrayList<Object> get_查找未下载的数据() {
         return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 ");
     }
-
+    public ArrayList<Object> get_查找未下载的数据_根据时间(String updateTime) {
+        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 and C_UpdateTime like '%"+updateTime+"%'");
+    }
     public int get_获取表中数据数量_有查询条件(String sql) {
         int num = 0;
         try {
@@ -300,6 +302,7 @@ public class T_Config_Father {
             }
             String tempString = valueBuffer.toString();
             String sql = "insert into " + tableName + columnList + " values" + tempString.substring(0, tempString.length() - 1);
+//            System.out.println(sql);
             method_i_d_u(sql);
             System.out.println(tableName + "分批入库一次");
         }
