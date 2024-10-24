@@ -146,10 +146,10 @@ public class MainYiChe extends TimerTask {
                 CountDownLatch latch = new CountDownLatch(list.size());
                 for (int i = 0; i < list.size(); i++) {
                     YiCheFenYeThread moreThread = new YiCheFenYeThread(list.get(i), filePath);
-                    Thread thread = new Thread(()->{
+                    Thread thread = new Thread(() -> {
                         try {
                             moreThread.run();
-                        }finally {
+                        } finally {
                             latch.countDown();
                         }
 
@@ -157,11 +157,7 @@ public class MainYiChe extends TimerTask {
                     thread.start();
                 }
                 latch.await();
-                if (erShouCheDataBase.yiche_get_获取未下载的城市分页url(currentTime).size()>0){
-                    return false;
-                }else {
-                    return true;
-                }
+                return true;
             } catch (Exception e) {
                 return false;
             }
@@ -431,22 +427,20 @@ public class MainYiChe extends TimerTask {
 //        String currentTime = "20241022";
         String filePath = "D:\\爬取网页源数据\\yiche\\" + currentTime + "\\";
         // 1
-//        method_下载城市数据并入库(filePath);
-//////
-////        // 2
-//        method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
-////
-////        // 3
-//        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
-////
-//        // 4
+        method_下载城市数据并入库(filePath);
+        // 2
+        method_下载所有城市的首页数据(filePath + "各个城市分页数据\\");
+        // 3
+        parse_解析所有城市的首页数据(filePath + "各个城市分页数据\\");
+        // 4
 //        method_下载其余分页url数据(filePath + "各个城市分页数据\\");
-
         // 5
         if (method_下载其余分页url数据(filePath + "各个城市分页数据\\")) {
 //            System.out.println("这次的任务完成了喔");
             parse_解析所有车辆基本信息(filePath + "各个城市分页数据\\");
+            System.out.println("1111");
         }
+
 
         // 6
         // mainYiChe.method_获取易车二手车的车辆详情页面(filePath + "车辆详情页页面\\");
