@@ -77,8 +77,12 @@ public class KouBei_DataBase {
         dataBaseKouBei.insertForeach(dataList);
     }
 
+    // 新增口碑图片数据
     public void insertKouBeiImgUrl(ArrayList<Object> dataList) {
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 3);
         dataBaseKouBei.insertForeach(dataList);
     }
+
+    // 新增追加口碑数据
+    // 新增
 }

@@ -3,10 +3,7 @@ package com.wangtiantian.runKouBei;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.wangtiantian.dao.T_Config_File;
-import com.wangtiantian.entity.koubei.Bean_KouBei_FenYeUrl;
-import com.wangtiantian.entity.koubei.Bean_KouBei_KouBeiShortInfo;
-import com.wangtiantian.entity.koubei.KouBeiData;
-import com.wangtiantian.entity.koubei.KouBeiPicture;
+import com.wangtiantian.entity.koubei.*;
 import com.wangtiantian.mapper.KouBei_DataBase;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -261,7 +258,8 @@ public class RunKouBei {
         List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
         ArrayList<Object> dataListKouBeiInfo = new ArrayList<>();
         ArrayList<Object> dataListKouBeiImg = new ArrayList<>();
-
+        ArrayList<Object> zhuiPing = new ArrayList<>();
+        ArrayList<Object> pictureList = new ArrayList<>();
         for (String fileName : fileList) {
             String mainContent = T_Config_File.method_读取文件内容(fileName);
             String fileNameShort = fileName.replace(filePath, "").replace(".txt", "");
@@ -302,9 +300,9 @@ public class RunKouBei {
                     } else {
                         Document mainDoc = Jsoup.parse(mainContent);
                         Elements mainItems = mainDoc.select(".con-left.fl");
-
+                        // 图片数据
                         Elements mainItemsImg = mainDoc.select(".lazyload");
-                        if (mainItems.size() > 0) {
+                        if (mainItemsImg.size() > 0) {
                             for (int j = 0; j < mainItemsImg.size(); j++) {
                                 KouBeiPicture kouBeiPicture = new KouBeiPicture();
                                 kouBeiPicture.set_C_PictureUrl(mainItemsImg.get(j).attr("data-src").contains("https") ? mainItemsImg.get(j).attr("data-src") : "https:" + mainItemsImg.get(j).attr("data-src"));
@@ -315,6 +313,74 @@ public class RunKouBei {
                                 kouBeiPicture.set_C_NumCount(mainItemsImg.size());
                                 kouBeiPicture.set_C_Position(String.valueOf(j));
                                 dataListKouBeiImg.add(kouBeiPicture);
+                            }
+                        }
+
+                        // 质量评价
+                        Elements mainItemsQulity = mainDoc.select(".qulity-nop");
+                        if (mainItemsQulity != null && !mainItemsQulity.toString().equals("")) {
+                            KouBeiDataPlus kouBeiDataPlus = new KouBeiDataPlus();
+                            String time = mainItems.select("span").text();
+                            String C_购车后追评时间间隔 = time.split(" \\| ")[0];
+                            String C_追评时间 = time.split(" \\| ")[1];
+                            String C_追评的全部内容 = mainItems.text();
+                            StringBuffer C_追评图片 = new StringBuffer();
+                            // 追评图片数据
+                            Elements imgItems = mainItems.select(".multi-imgList").select("li");
+                            for (int i = 0; i < imgItems.size(); i++) {
+                                String img = imgItems.get(i).select("img").attr("data-src");
+                                KouBeiPicture kouBeiPicture = new KouBeiPicture();
+                                kouBeiPicture.set_C_ShowID(fileName.replace(".txt",""));
+                                kouBeiPicture.set_C_PictureUrl(img);
+                                kouBeiPicture.set_C_IsFinish(0);
+                                kouBeiPicture.set_C_NumCount(imgItems.size());
+                                kouBeiPicture.set_C_Position("质量评价_"+String.valueOf(i));
+                                kouBeiPicture.set_C_KouBeiID("");
+                                kouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                                pictureList.add(kouBeiPicture);
+                            }
+                            kouBeiDataPlus.set_C_ShowID(fileName.replace(".txt",""));
+                            kouBeiDataPlus.set_C_KouBeiID("");
+                            kouBeiDataPlus.set_C_Content_追加(C_追评的全部内容);
+                            kouBeiDataPlus.set_C_IsFinish(0);
+                            kouBeiDataPlus.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                            kouBeiDataPlus.set_C_购车后追评时间间隔(C_购车后追评时间间隔);
+                            kouBeiDataPlus.set_C_追评时间(C_追评时间);
+                            kouBeiDataPlus.set_C_Html(mainItems.toString());
+                            zhuiPing.add(kouBeiDataPlus);
+                        }
+                        // 购车后的追评
+                        Elements mainItemsPlus = mainDoc.select(".kb-conplus");
+                        if (mainItemsPlus != null && !mainItemsPlus.toString().equals("")) {
+                            for (int i = 0; i < mainItemsPlus.size(); i++) {
+                                KouBeiDataPlus kouBeiDataPlus = new KouBeiDataPlus();
+                                String time = mainItemsPlus.get(i).select("span").text();
+                                String C_购车后追评时间间隔 = time.split(" \\| ")[0];
+                                String C_追评时间 = time.split(" \\| ")[1];
+                                String C_追评的全部内容 = mainItemsPlus.get(i).text();
+                                StringBuffer C_追评图片 = new StringBuffer();
+                                Elements imgItems = mainItemsPlus.select(".multi-imgList").select("li");
+                                for (int j = 0; j < imgItems.size(); j++) {
+                                    String img = imgItems.get(j).select("img").attr("data-src");
+                                    KouBeiPicture kouBeiPicture = new KouBeiPicture();
+                                    kouBeiPicture.set_C_ShowID(fileName.replace(".txt",""));
+                                    kouBeiPicture.set_C_PictureUrl(img);
+                                    kouBeiPicture.set_C_IsFinish(0);
+                                    kouBeiPicture.set_C_NumCount(imgItems.size());
+                                    kouBeiPicture.set_C_Position("第"+i+"次追评-"+j);
+                                    kouBeiPicture.set_C_KouBeiID("");
+                                    kouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                                    pictureList.add(kouBeiPicture);
+                                }
+                                kouBeiDataPlus.set_C_ShowID(fileName.replace(".txt",""));
+                                kouBeiDataPlus.set_C_KouBeiID("");
+                                kouBeiDataPlus.set_C_Content_追加(C_追评的全部内容);
+                                kouBeiDataPlus.set_C_IsFinish(0);
+                                kouBeiDataPlus.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                                kouBeiDataPlus.set_C_购车后追评时间间隔(C_购车后追评时间间隔);
+                                kouBeiDataPlus.set_C_追评时间(C_追评时间);
+                                kouBeiDataPlus.set_C_Html(mainItemsPlus.get(i).toString());
+                                zhuiPing.add(kouBeiDataPlus);
                             }
                         }
 
