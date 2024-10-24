@@ -265,8 +265,8 @@ public class MainRunAgain {
     public static void method_iii(List<Map<String, Object>> listQ) {
         try {
             List<Map<String, Object>> listY = makeBeanListCarHome("/Users/asteroid/所有文件数据/对比结果/差集表_易车.csv");
+            System.out.println(listY.size());
             for (Map<String, Object> mapListQ : listQ) {
-//                System.out.println(mapListQ);
                 String C_品牌_Q = mapListQ.get("\"C_品牌\"").toString();
                 String C_厂商_Q = mapListQ.get("\"C_厂商\"").toString();
                 String C_车型_Q = mapListQ.get("\"C_车型\"").toString();
@@ -282,6 +282,7 @@ public class MainRunAgain {
                 if (C_车型名称_Q.contains("款")) {
                     year_Q = C_车型名称_Q.substring(C_车型名称_Q.indexOf("款") - 4, C_车型名称_Q.indexOf("款") + 1);
                 }
+                System.out.println(C_车型名称_Q);
                 for (Map<String, Object> mapListY : listY) {
                     String C_品牌_Y = mapListY.get("\"C_品牌\"").toString();
                     String C_厂商_Y = mapListY.get("\"C_厂商\"").toString();
@@ -294,15 +295,17 @@ public class MainRunAgain {
                     String C_配置等级_Y = mapListY.get("\"C_配置等级\"").toString();
 //                    String C_车型名称_Y = mapListY.get("\"C_车型名称\"").toString();
                     String C_车型名称_Y = mapListY.get("\"C_易车_C_基本参数__车型名称\"").toString();
-                    System.out.println(C_车型名称_Y);
                     if (Integer.parseInt(C_车型名称_Y.substring(1, 2)) > 2) {
                         C_车型名称_Y = "19" + C_车型名称_Y;
                     } else {
                         C_车型名称_Y = "20" + C_车型名称_Y;
                     }
-//                    System.out.println(C_车型名称_Y);
-//                    String year_Y =C_车型名称_Y.substring(C_车型名称_Y.indexOf("款")-4,C_车型名称_Y.indexOf("款")+1);
-                    if (C_品牌_Q.equals(C_品牌_Y) && C_厂商_Q.equals(C_厂商_Y) && C_车型_Q.equals(C_车型_Y) && C_车款_Q.equals(C_车款_Y) && C_变速器_Q.equals(C_变速器_Y) && C_发动机简称_Q.equals(C_发动机简称_Y) && C_驱动形式_Q.equals(C_驱动形式_Y) && C_燃料种类_Q.equals(C_燃料种类_Y) && C_车型名称_Q.equals(C_车型名称_Y)) {
+                    String year_Y = "";
+                    if (C_车型名称_Q.contains("款")) {
+                        year_Y = C_车型名称_Y.substring(C_车型名称_Y.indexOf("款") - 4, C_车型名称_Y.indexOf("款") + 1);
+                    }
+
+                    if (C_品牌_Q.equals(C_品牌_Y) && C_厂商_Q.equals(C_厂商_Y) && C_车型_Q.equals(C_车型_Y) && C_车款_Q.equals(C_车款_Y) && C_驱动形式_Q.equals(C_驱动形式_Y) && C_燃料种类_Q.equals(C_燃料种类_Y) && C_车型名称_Q.replace(" ", "").trim().equals(C_车型名称_Y.replace(" ", "").trim())) {
                         System.out.println("汽车之家\t" + mapListQ);
                         System.out.println("易车\t" + mapListY);
                     }
@@ -320,14 +323,16 @@ public class MainRunAgain {
         String[] split = content.get(0).split(",");
         int i = 0;
         for (String s : content) {
+            System.out.println(s);
             if (i != 0) {
                 String[] values = s.split(",");
-                Map<String, Object> mapList = new HashMap<>();
+                Map<String, Object> mapList = new LinkedHashMap<>();
                 for (int j = 0; j < split.length; j++) {
                     String columnName = split[j];
                     String value = values[j];
                     mapList.put(columnName, value);
                 }
+                System.out.println(mapList);
                 list.add(mapList);
             }
             i++;
@@ -353,6 +358,7 @@ public class MainRunAgain {
                 list.add(mapList);
                 if (list.size() > 10000) {
                     method_iii(list);
+//                    System.out.println(list);
                     list.clear();
                 }
             }

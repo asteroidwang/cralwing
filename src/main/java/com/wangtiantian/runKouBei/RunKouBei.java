@@ -24,7 +24,7 @@ public class RunKouBei {
         // 1.下载所有车型的第一页并解析获取总页数 为了获取总页数下载其他分页
         // 2.入库所有分页url数据并下载
         // 3.解析所有已下载的分页url数据并入库 为了获取showId 下载口碑详情页
-        // 4.解析口碑数据 口碑图片数据并入库 获取一级评论信息和二级回复信息 追加口碑数据
+        // 4.解析口碑数据 追加口碑数据  口碑图片数据并入库 获取一级评论信息和二级回复信息
         // 5.下载一级评论信息和二级回复信息 并解析入库
 //        String filePathCommon = "/Users/asteroid/所有文件数据/爬取网页原始数据/口碑评价数据/";
         String filePathCommon = "D:\\爬取网页源数据\\汽车之家\\口碑评价数据\\20241017\\";
@@ -40,6 +40,8 @@ public class RunKouBei {
 //            runKouBei.parseDetailsKouBei(filePathCommon + "口碑详情页\\");
         runKouBei.parseDetailsKouBei(filePathCommon + "口碑详情页\\");
 //        }
+
+
 
     }
 

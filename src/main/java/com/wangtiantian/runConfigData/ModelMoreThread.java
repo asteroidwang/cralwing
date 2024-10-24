@@ -32,12 +32,12 @@ public class ModelMoreThread implements Runnable {
             String modId = ((Bean_Model) bean).get_C_ModelID();
             String url = "";
             if (type == 0) {
-                url = "https://www.autohome.com.cn/"+modId+"/#pvareaid=3454427";
-                if (T_Config_File.method_访问url获取网页源码普通版(url, "GBK",filePath, modId + "_在售.txt")) {
+                url = "https://car-web-api.autohome.com.cn/car/series/getspeclistresponse?seriesid=" + modId + "&tagid=1&tagname=%E5%9C%A8%E5%94%AE";
+                if (T_Config_File.method_访问url获取Json普通版(url, "GBK", filePath, modId + "_在售.txt")) {
                     dataBaseMethod.method_修改车型表中下载的id状态(modId, "在售", 1);
                 }
             } else if (type == 1) {
-                url = "https://www.autohome.com.cn/" + modId + "/sale.html#pvareaid=3311673";
+                url = "https://www.autohome.com.cn/" + modId + "/sale.html";
                 if (T_Config_File.method_访问url获取网页源码普通版(url, "GBK", filePath, modId + "_停售.txt")) {
                     dataBaseMethod.method_修改车型表中下载的id状态(modId, "停售", 1);
                 }
@@ -50,6 +50,12 @@ public class ModelMoreThread implements Runnable {
                 url = "https://car.autohome.com.cn/pic/series-t/" + modId + ".html";
                 if (T_Config_File.method_访问url获取网页源码普通版(url, "GBK", filePath, modId + "_图片页面停售.txt")) {
                     dataBaseMethod.method_修改车型表中下载的id状态(modId, "图片页面停售", 1);
+                }
+            } else if (type == 4) {
+                url = "https://car-web-api.autohome.com.cn/car/series/getspeclistresponse?seriesid=" + modId + "&tagid=2&tagname=%E5%8D%B3%E5%B0%86%E9%94%80%E5%94%AE";
+
+                if (T_Config_File.method_访问url获取Json普通版(url, "UTF-8", filePath, modId + "_即将销售.txt")) {
+                    dataBaseMethod.method_修改车型表中下载的id状态(modId, "即将销售", 1);
                 }
             }
         }
