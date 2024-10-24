@@ -41,6 +41,9 @@ public class RunKouBei {
         runKouBei.parseDetailsKouBei(filePathCommon + "口碑详情页\\");
 //        }
 
+        if (runKouBei.downLoadKouBeiImg(filePathCommon + "图片\\", "2024-10")) {
+            System.out.println("下载完成");
+        }
 
 
     }
@@ -332,16 +335,16 @@ public class RunKouBei {
                             for (int i = 0; i < imgItems.size(); i++) {
                                 String img = imgItems.get(i).select("img").attr("data-src");
                                 KouBeiPicture kouBeiPicture = new KouBeiPicture();
-                                kouBeiPicture.set_C_ShowID(fileName.replace(".txt",""));
+                                kouBeiPicture.set_C_ShowID(fileName.replace(".txt", ""));
                                 kouBeiPicture.set_C_PictureUrl(img);
                                 kouBeiPicture.set_C_IsFinish(0);
                                 kouBeiPicture.set_C_NumCount(imgItems.size());
-                                kouBeiPicture.set_C_Position("质量评价_"+String.valueOf(i));
+                                kouBeiPicture.set_C_Position("质量评价_" + String.valueOf(i));
                                 kouBeiPicture.set_C_KouBeiID("");
                                 kouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                                 pictureList.add(kouBeiPicture);
                             }
-                            kouBeiDataPlus.set_C_ShowID(fileName.replace(".txt",""));
+                            kouBeiDataPlus.set_C_ShowID(fileName.replace(".txt", ""));
                             kouBeiDataPlus.set_C_KouBeiID("");
                             kouBeiDataPlus.set_C_Content_追加(C_追评的全部内容);
                             kouBeiDataPlus.set_C_IsFinish(0);
@@ -365,16 +368,16 @@ public class RunKouBei {
                                 for (int j = 0; j < imgItems.size(); j++) {
                                     String img = imgItems.get(j).select("img").attr("data-src");
                                     KouBeiPicture kouBeiPicture = new KouBeiPicture();
-                                    kouBeiPicture.set_C_ShowID(fileName.replace(".txt",""));
+                                    kouBeiPicture.set_C_ShowID(fileName.replace(".txt", ""));
                                     kouBeiPicture.set_C_PictureUrl(img);
                                     kouBeiPicture.set_C_IsFinish(0);
                                     kouBeiPicture.set_C_NumCount(imgItems.size());
-                                    kouBeiPicture.set_C_Position("第"+i+"次追评-"+j);
+                                    kouBeiPicture.set_C_Position("第" + i + "次追评-" + j);
                                     kouBeiPicture.set_C_KouBeiID("");
                                     kouBeiPicture.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                                     pictureList.add(kouBeiPicture);
                                 }
-                                kouBeiDataPlus.set_C_ShowID(fileName.replace(".txt",""));
+                                kouBeiDataPlus.set_C_ShowID(fileName.replace(".txt", ""));
                                 kouBeiDataPlus.set_C_KouBeiID("");
                                 kouBeiDataPlus.set_C_Content_追加(C_追评的全部内容);
                                 kouBeiDataPlus.set_C_IsFinish(0);
@@ -489,8 +492,120 @@ public class RunKouBei {
                 }
             }
         }
-        new KouBei_DataBase().insertKouBeiInfo(dataListKouBeiInfo);
-        new KouBei_DataBase().insertKouBeiImgUrl(dataListKouBeiImg);
+//        new KouBei_DataBase().insertKouBeiInfo(dataListKouBeiInfo);
+//        new KouBei_DataBase().insertKouBeiImgUrl(dataListKouBeiImg);
+        new KouBei_DataBase().insert_追加口碑数据(zhuiPing);
+        new KouBei_DataBase().insert_追加口碑图片数据(pictureList);
+
+
+    }
+
+    public Boolean downLoadKouBeiImg(String filePath, String updateTime) {
+        downLoad_下载口碑中的图片(filePath + "口碑图片\\", updateTime);
+        downLoad_下载追评口碑中的图片(filePath + "追加口碑图片\\", updateTime);
+        return true;
+    }
+
+
+    public void downLoad_下载口碑中的图片(String filePath, String updateTime) {
+        try {
+            int numCount = new KouBei_DataBase().get_未下载的口碑图片数量(updateTime);
+            System.out.println(numCount);
+            if (numCount < 36) {
+                ArrayList<Object> dataResultList = new KouBei_DataBase().get_口碑图片数据(updateTime, 0);
+
+                for (int i = 0; i < dataResultList.size(); i++) {
+                    String showId = ((KouBeiPicture) dataResultList.get(i)).get_C_ShowID();
+                    String kbId = ((KouBeiPicture) dataResultList.get(i)).get_C_KouBeiID();
+                    String position = ((KouBeiPicture) dataResultList.get(i)).get_C_Position();
+                    String mainUrl = ((KouBeiPicture) dataResultList.get(i)).get_C_PictureUrl().replace("..", ".");
+                    T_Config_File.downloadImage(mainUrl, filePath + showId + "/", showId + "_" + kbId + "_" + position + ".jpg");
+                }
+                method_确认口碑图片数据的下载(filePath);
+                if (new KouBei_DataBase().get_未下载的口碑图片数量(updateTime) > 0) {
+                    downLoad_下载口碑中的图片(filePath, updateTime);
+                }
+            } else {
+                for (int kk = 0; kk < numCount / 10000; kk++) {
+                    ArrayList<Object> dataResultList = new KouBei_DataBase().get_口碑图片数据(updateTime, kk * 1000);
+                    System.out.println(dataResultList.size());
+                    List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataResultList.subList(i * (dataResultList.size() + 5) / 6, Math.min((i + 1) * (dataResultList.size() + 5) / 6, dataResultList.size())))
+                            .collect(Collectors.toList());
+                    CountDownLatch latch = new CountDownLatch(list.size());
+                    for (int i = 0; i < list.size(); i++) {
+                        KouBeiPictureMoreThread moreThread = new KouBeiPictureMoreThread(list.get(i), filePath);
+                        Thread thread = new Thread(() -> {
+                            try {
+                                moreThread.run();
+                            } finally {
+                                latch.countDown();
+                                ;
+                            }
+
+                        });
+                        thread.start();
+                    }
+                    latch.await();
+                    method_确认口碑图片数据的下载(filePath);
+                    if (new KouBei_DataBase().get_未下载的口碑图片数量(updateTime) > 0) {
+                        downLoad_下载口碑中的图片(filePath, updateTime);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void downLoad_下载追评口碑中的图片(String filePath, String updateTime) {
+        try {
+            int numCount = new KouBei_DataBase().get_未下载的追加口碑图片数量(updateTime);
+            System.out.println(numCount);
+            if (numCount < 36) {
+                ArrayList<Object> dataResultList = new KouBei_DataBase().get_追加口碑图片数据(updateTime, 0);
+                for (int i = 0; i < dataResultList.size(); i++) {
+                    String showId = ((KouBeiPicture) dataResultList.get(i)).get_C_ShowID();
+                    String kbId = ((KouBeiPicture) dataResultList.get(i)).get_C_KouBeiID();
+                    String position = ((KouBeiPicture) dataResultList.get(i)).get_C_Position();
+                    String mainUrl = ((KouBeiPicture) dataResultList.get(i)).get_C_PictureUrl();
+                    T_Config_File.downloadImage(mainUrl, filePath + showId + "/", showId + "_" + kbId + "_" + position + ".jpg");
+                }
+                method_确认追加口碑的图片数据的下载(filePath);
+                if (new KouBei_DataBase().get_未下载的追加口碑图片数量(updateTime) > 0) {
+                    downLoad_下载追评口碑中的图片(filePath, updateTime);
+                }
+            } else {
+                for (int kk = 0; kk < numCount / 10000; kk++) {
+                    ArrayList<Object> dataResultList = new KouBei_DataBase().get_追加口碑图片数据(updateTime, kk * 10000);
+                    System.out.println(dataResultList.size());
+                    if (dataResultList.size() > 36) {
+                        List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataResultList.subList(i * (dataResultList.size() + 5) / 6, Math.min((i + 1) * (dataResultList.size() + 5) / 6, dataResultList.size())))
+                                .collect(Collectors.toList());
+                        CountDownLatch latch = new CountDownLatch(list.size());
+                        for (int i = 0; i < list.size(); i++) {
+                            KouBeiPictureMoreThread moreThread = new KouBeiPictureMoreThread(list.get(i), filePath);
+                            Thread thread = new Thread(() -> {
+                                try {
+                                    moreThread.run();
+                                } finally {
+                                    latch.countDown();
+                                }
+                            });
+                            thread.start();
+                        }
+                        latch.await();
+                        method_确认追加口碑的图片数据的下载(filePath);
+                        if (new KouBei_DataBase().get_未下载的追加口碑图片数量(updateTime) > 0) {
+                            downLoad_下载追评口碑中的图片(filePath, updateTime);
+                        }
+                    }
+
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void method_确认详情页的下载数据(String filePath) {
@@ -502,6 +617,30 @@ public class RunKouBei {
             int end = Math.min(i + batchSize, fileList.size());
             List<String> batchList = fileList.subList(i, end);
             kouBeiDataBase.update_修改已下载的口碑详情页数据("'" + batchList.toString().replace(", ", "','").replace("[", "").replace("]", "") + "'");
+        }
+    }
+
+    public void method_确认口碑图片数据的下载(String filePath) {
+        KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
+        List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
+        fileList = fileList.stream().map(value -> value.replace(".txt", "").replace(filePath, "")).distinct().collect(Collectors.toList());
+        int batchSize = 100;
+        for (int i = 0; i < fileList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, fileList.size());
+            List<String> batchList = fileList.subList(i, end);
+            kouBeiDataBase.update_修改已下载的追加口碑图片数据("'" + batchList.toString().replace(", ", "','").replace("[", "").replace("]", "") + "'");
+        }
+    }
+
+    public void method_确认追加口碑的图片数据的下载(String filePath) {
+        KouBei_DataBase kouBeiDataBase = new KouBei_DataBase();
+        List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
+        fileList = fileList.stream().map(value -> value.replace(".txt", "").replace(filePath, "")).distinct().collect(Collectors.toList());
+        int batchSize = 100;
+        for (int i = 0; i < fileList.size(); i += batchSize) {
+            int end = Math.min(i + batchSize, fileList.size());
+            List<String> batchList = fileList.subList(i, end);
+            kouBeiDataBase.update_修改已下载的口碑图片数据("'" + batchList.toString().replace(", ", "','").replace("[", "").replace("]", "") + "'");
         }
     }
 }

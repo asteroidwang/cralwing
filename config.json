@@ -130,13 +130,13 @@
             "total": 3
           },
           {
-            "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
-            "tableName": "T_ReplyKouBei",
+            "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
+            "tableName": " T_KouBeiData_追加口碑",
             "total": 4
           },
           {
-            "entity": "com.wangtiantian.entity.koubei.ConfirmReplySecond",
-            "tableName": "T_ConfirmReplySecond",
+            "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
+            "tableName": " T_KouBeiPictureUrl_追加口碑",
             "total": 5
           },
           {
@@ -160,13 +160,13 @@
             "total": 9
           },
           {
-            "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
-            "tableName": " T_KouBeiPictureUrl_追加口碑",
+            "entity": "com.wangtiantian.entity.koubei.ConfirmReplySecond",
+            "tableName": "T_ConfirmReplySecond",
             "total": 10
           },
           {
-            "entity": "com.wangtiantian.entity.koubei.KouBeiPicture",
-            "tableName": " T_KouBeiData_追加口碑",
+            "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
+            "tableName": "T_ReplyKouBei",
             "total": 11
           }
         ]

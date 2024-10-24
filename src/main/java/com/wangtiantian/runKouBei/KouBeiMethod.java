@@ -877,8 +877,6 @@ public class KouBeiMethod {
 
                 }
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
