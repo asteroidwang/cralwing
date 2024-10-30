@@ -33,7 +33,7 @@ public class ModelMoreThread implements Runnable {
             String url = "";
             if (type == 0) {
                 url = "https://car-web-api.autohome.com.cn/car/series/getspeclistresponse?seriesid=" + modId + "&tagid=1&tagname=%E5%9C%A8%E5%94%AE";
-                if (T_Config_File.method_访问url获取Json普通版(url, "GBK", filePath, modId + "_在售.txt")) {
+                if (T_Config_File.method_访问url获取Json普通版(url, "UTF-8", filePath, modId + "_在售.txt")) {
                     dataBaseMethod.method_修改车型表中下载的id状态(modId, "在售", 1);
                 }
             } else if (type == 1) {

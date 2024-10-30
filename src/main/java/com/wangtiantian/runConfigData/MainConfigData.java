@@ -27,21 +27,22 @@ public class MainConfigData {
     public static void main(String[] args) {
         MainConfigData mainConfigData = new MainConfigData();
         String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
+//        String currentTime = "20241024";
         String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
-//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20240910" + "/";
+//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20241024" + "/";
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数       据/20240910/";
 
         // 创建表
 //        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
 //        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
 //        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-        if (mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件")) {
-            mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-        }
+//        if (mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件")) {
+//            mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+//        }
 //        mainConfigData.method_下载配置数据(filePath + "params/");
 //        mainConfigData.method_解析列名(filePath);
 //        mainConfigData.method_取列名(filePath);
-//        mainConfigData.method_解析配置数据(filePath);
+        mainConfigData.method_解析配置数据(filePath);
     }
 
     // 创建爬取汽车之家配置数据所需要的表
@@ -118,6 +119,11 @@ public class MainConfigData {
                                 model.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                                 model.set_C_ModelID(modID);
                                 model.set_C_ModelURL(modURL);
+                                model.set_C_停售(0);
+                                model.set_C_即将销售(0);
+                                model.set_C_图片页面停售(0);
+                                model.set_C_图片页面在售(0);
+                                model.set_C_在售(0);
                                 modData.add(model);
                             }
                         }
@@ -388,9 +394,10 @@ public class MainConfigData {
                 String content = T_Config_File.method_读取文件内容(filePath + "_非图片路径/" + fileName);
                 if (fileName.contains("停售")) {
                     versionData.addAll(method_解析非图片路径_停售(content, fileName.replace("_停售.txt", "")));
-
                 } else if (fileName.contains("在售")) {
-                    versionData.addAll(method_解析非图片路径_在售(content, fileName.replace("_在售.txt", "")));
+                    versionData.addAll(method_解析非图片路径_在售_New(content, fileName.replace("_在售.txt", ""), "在售"));
+                } else {
+                    versionData.addAll(method_解析非图片路径_在售_New(content, fileName.replace("_即将销售.txt", ""), "即将销售"));
                 }
             }
             ArrayList<String> fileListPic = T_Config_File.method_获取文件名称(filePath + "_图片路径/");
@@ -450,6 +457,42 @@ public class MainConfigData {
                 version.set_config(0);
                 version.set_params(0);
                 result.add(version);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public ArrayList<Bean_Version> method_解析非图片路径_在售_New(String content, String modID, String status) {
+        ArrayList<Bean_Version> result = new ArrayList<>();
+        try {
+            JSONObject jsonObject = JSON.parseObject(content).getJSONObject("result");
+            if (jsonObject != null) {
+                JSONArray specList = jsonObject.getJSONObject("specinfo").getJSONArray("speclist");
+                for (int i = 0; i < specList.size(); i++) {
+                    JSONArray specListItems = ((JSONObject) specList.get(i)).getJSONArray("yearspeclist");
+                    for (int j = 0; j < specListItems.size(); j++) {
+                        JSONArray jsonArray = ((JSONObject) specListItems.get(j)).getJSONArray("speclist");
+                        for (int k = 0; k < jsonArray.size(); k++) {
+                            JSONObject carInfo = ((JSONObject) jsonArray.get(k));
+                            String versionId = carInfo.getString("id");
+                            String versionName = carInfo.getString("name");
+                            String versionUlr = "https://www.autohome.com.cn/spec/" + versionId + "#pvareaid=3454492";
+                            Bean_Version version = new Bean_Version();
+                            version.set_C_VersionID(versionId);
+                            version.set_C_VersionName(versionName);
+                            version.set_C_VersionURL(versionUlr);
+                            version.set_C_VersionStatus(status);
+                            version.set_C_ModelID(modID);
+                            version.set_C_UpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                            version.set_bag(0);
+                            version.set_config(0);
+                            version.set_params(0);
+                            result.add(version);
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -555,7 +598,7 @@ public class MainConfigData {
     // 5.版本ids入库 下载配置数据
     public void method_下载配置数据(String filePath) {
         try {
-//            new DataBaseMethod().insert_批量插入版本ids();
+            new DataBaseMethod().insert_批量插入版本ids();
             ArrayList<Object> paramsList = new DataBaseMethod().method_根据数据类型获取未下载的数据("params", 0);
             ArrayList<Object> configList = new DataBaseMethod().method_根据数据类型获取未下载的数据("config", 0);
             ArrayList<Object> bagList = new DataBaseMethod().method_根据数据类型获取未下载的数据("bag", 0);
@@ -695,9 +738,9 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-        new DataBaseMethod().method_批量插入配置数据(params, "params");
+//        new DataBaseMethod().method_批量插入配置数据(params, "params");
         new DataBaseMethod().method_批量插入配置数据(config, "config");
-        new DataBaseMethod().method_批量插入配置数据(bag, "bag");
+//        new DataBaseMethod().method_批量插入配置数据(bag, "bag");
 //        dataBaseMethod.method_批量插入配置数据(params, "params");
 //        dataBaseMethod.method_批量插入配置数据(config, "config");
 //        dataBaseMethod.method_批量插入配置数据(bag, "bag");
@@ -751,6 +794,9 @@ public class MainConfigData {
                                             optionType = "○";
                                         }
                                         value += optionType + value_sub + subPrice + "####";
+                                        if (value.substring(value.length() - 4).equals("####")) {
+                                            value = value.substring(0, value.length() - 4);
+                                        }
                                     }
                                 }
                                 if (pidList.get(i).get_C_PID().equals(PID)) {

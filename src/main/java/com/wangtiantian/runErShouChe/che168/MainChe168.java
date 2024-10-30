@@ -32,6 +32,7 @@ public class MainChe168 {
 //         mainChe168.downLoad_下载分页数据(filePath + "各城市二手车分页/");
         //mainChe168.parse_解析分页数据获取二手车数据(filePath + "各城市二手车分页/");
         mainChe168.method_下载车辆详情页(filePath + "车辆详情页/");
+//        mainChe168.parse_解析车辆详情页(filePath + "车辆详情页/");
     }
 
     // 获取城市数据
@@ -252,14 +253,14 @@ public class MainChe168 {
     public void method_下载车辆详情页(String filePath) {
         ArrayList<Object> dataList = new ErShouCheDataBase().get_获取che168车辆详情页url数据();
         if (dataList.size() < 36) {
-        for (Object o : dataList) {
-            String htmlUrl = ((Bean_CarHtml) o).get_C_CarHtml();
-            if (!htmlUrl.equals("-")) {
-                String fileName = htmlUrl.substring(htmlUrl.indexOf("dealer") + 7, htmlUrl.indexOf(".html")).replace("/", "_");
-                T_Config_File.method_访问url获取网页源码普通版(htmlUrl, "GBK", filePath, fileName + ".txt");
+            for (Object o : dataList) {
+                String htmlUrl = ((Bean_CarHtml) o).get_C_CarHtml();
+                if (!htmlUrl.equals("-")) {
+                    String fileName = htmlUrl.substring(htmlUrl.indexOf("dealer") + 7, htmlUrl.indexOf(".html")).replace("/", "_");
+                    method_访问url获取网页源码普通版(htmlUrl, "GBK", filePath, fileName + ".txt");
+                }
             }
-        }
-        }else {
+        } else {
             List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
                     .collect(Collectors.toList());
             for (int i = 0; i < list.size(); i++) {
@@ -267,6 +268,46 @@ public class MainChe168 {
                 Thread thread = new Thread(moreThread);
                 thread.start();
             }
+        }
+        if (new ErShouCheDataBase().get_获取che168车辆详情页url数据().size() > 0) {
+            method_下载车辆详情页(filePath);
+        }
+    }
+
+    public void parse_解析车辆详情页(String filePath) {
+        try {
+            List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
+            for (String fileNamePath : fileList) {
+                String fileName = fileNamePath.replace(filePath, "");
+                System.out.println(fileName);
+                String content = T_Config_File.method_读取文件内容(fileNamePath);
+                Document mainDoc = Jsoup.parse(content);
+                Elements mainItems = mainDoc.select(".basic-item-ul").select("li");
+                System.out.println(mainItems.size());
+                System.out.println(mainItems.get(0).text());
+//                for (int i = 0; i < mainItems.size(); i++) {
+//                    System.out.println(mainItems.get(i));
+//                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static Boolean method_访问url获取网页源码普通版(String url, String encode, String filePath, String fileName) {
+        Document mainDoc = null;
+        try {
+            mainDoc = Jsoup.parse(new URL(url).openStream(), encode, url);
+        } catch (Exception e) {
+            return false;
+        }
+        Elements mainItems = mainDoc.select(".car-brand-name");
+        if (mainItems.size()>0) {
+            T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.toString());
+            return true;
+        } else {
+            return false;
         }
 
     }

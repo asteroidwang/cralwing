@@ -84,6 +84,7 @@ public class T_Config_AutoHome_new extends T_Config_Father {
                 "C_停售 int ,\n" +
                 "C_图片页面在售 int ,\n" +
                 "C_图片页面停售 int,\n" +
+                "C_即将销售 int,\n" +
                 "C_IsFinish int,\n" +
                 "C_UpdateTime nvarchar(200)\n" +
                 ")";
