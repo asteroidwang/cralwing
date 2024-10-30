@@ -26,8 +26,8 @@ public class T_DataBase_KouBei extends T_Config_Father {
         System.out.println(sql);
         method_i_d_u(sql);
     }
-    public void update_修改已下载的口碑图片数据(String showIds) {
-        String sql = "update " + tableName + " set C_IsFinish = 1 where concat(C_ShowID,'_',C_KouBeiID,'_',C_Position)  in ("+showIds+")";
+    public void update_修改已下载的口碑图片数据(String type) {
+        String sql = "update " + tableName + " set C_IsFinish = 1 where concat(C_ShowID,'_',C_KouBeiID,'_',C_Position)  in (select distinct C_ConcatString from T_Confirm_Picture where C_Type ='"+type+"')";
         System.out.println(sql);
         method_i_d_u(sql);
     }
@@ -43,11 +43,11 @@ public class T_DataBase_KouBei extends T_Config_Father {
     }
 
     public ArrayList<Object> method_查询本轮下载中未下载的数据(String updateTime,int begin){
-        String sql ="select * from "+tableName+" where C_IsFinish = 0 and C_UpdateTime like '%"+updateTime+"%' ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
+        String sql ="select * from "+tableName+" where C_IsFinish = 0 and C_UpdateTime like '%"+updateTime+"%'  and C_PictureUrl !='-' and C_PictureUrl !='https:'  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
         return method_有条件的查询(sql);
     }
     public int get_查询本轮下载中未下载的数据(String updateTime){
-        String sql ="select count(*) from "+tableName+ "  where C_IsFinish = 0 and C_UpdateTime like '%"+updateTime+"%'";
+        String sql ="select count(*) from "+tableName+ "  where C_IsFinish = 0 and C_UpdateTime like '%"+updateTime+"%' and C_PictureUrl !='-' and C_PictureUrl !='https:'";
         return get_获取表中数据数量_有查询条件(sql);
     }
 
