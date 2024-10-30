@@ -11,22 +11,34 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.asteroid.Main.method_获取excel表头;
 
 public class MainRunAgain {
     public static void main(String[] args) {
         try {
+            System.out.println("E:\\zkzd\\server\\gx_zhtf\\ai_packages\\python\\week_predict.py");
             MainRunAgain again = new MainRunAgain();
             // 交集表
             // new MainRunAgain().method_之后再处理();
             // 差集表
-//        again.method_交集表数据();
+            // again.method_交集表数据();
+//            again.method_交集表数据_匹配表();
+//            makeMapListForeach("/Users/asteroid/所有文件数据/对比结果/差集表_汽车之家.csv");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            makeMapListForeach("/Users/asteroid/所有文件数据/对比结果/差集表_汽车之家.csv");
+    }
+
+    public void method_交集表数据_匹配表() {
+        try {
+            T_Compare compare = new T_Compare(2, 1, 4);
+//        List<Map<String, Object>> mapDataList = compare.
+            List<Map<String, Object>> listY = makeBeanListCarHome("/Users/asteroid/所有文件数据/对比结果/差集表_易车.csv");
+            System.out.println(listY.size());
+            List<Map<String, Object>> listQ = makeBeanListCarHome("/Users/asteroid/所有文件数据/对比结果/差集表_汽车之家.csv");
+            System.out.println(listY.size() + "\t" + listQ.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,16 +77,12 @@ public class MainRunAgain {
                 String C_易车_驱动形式 = ((Bean_Two) o2).get_C_驱动形式();
                 String C_易车_燃料种类 = ((Bean_Two) o2).get_C_燃料种类();
                 String C_易车_版本名称 = ((Bean_Two) o).get_C_车型名称();
+                String C_汽车之家版本Id = ((Bean_Two)o).get_C_汽车之家的版本Id();
+                String C_易车版本Id = ((Bean_Two)o2).get_C_易车的版本Id();
                 if (C_汽车之家_品牌.equals(C_易车_品牌) && C_汽车之家_厂商.equals(C_易车_厂商) && C_汽车之家_车型.equals(C_易车_车型)) {
-                    if (!C_汽车之家_年.equals("") && !C_易车_年.equals("")) {
-                        if (C_汽车之家_版本名称.equals(C_易车_版本名称)) {
-                            System.out.println("年款相同\t" + C_汽车之家_版本名称 + "\t" + C_易车_版本名称 + "\t" + C_汽车之家_变速器 + "\t" + C_汽车之家_发动机简称 + "\t" + C_汽车之家_驱动形式 + "\t" + C_汽车之家_燃料种类 + "\t" + C_易车_变速器 + "\t" + C_易车_发动机简称 + "\t" + C_易车_驱动形式 + "\t" + C_易车_燃料种类);
-                        }
-
-                    } else {
-                        System.out.println("年款不相同\t" + C_汽车之家_版本名称 + "\t" + C_易车_版本名称 + "\t" + C_汽车之家_变速器 + "\t" + C_汽车之家_发动机简称 + "\t" + C_汽车之家_驱动形式 + "\t" + C_汽车之家_燃料种类 + "\t" + C_易车_变速器 + "\t" + C_易车_发动机简称 + "\t" + C_易车_驱动形式 + "\t" + C_易车_燃料种类);
+                    if ((C_汽车之家_版本名称==null?"":C_汽车之家_版本名称).equals(C_易车_版本名称==null?"":C_易车_版本名称)) {
+                        System.out.println("年款相同\t" + C_汽车之家_版本名称 + "\t" + C_易车_版本名称+"\t"+C_汽车之家版本Id+"\t"+C_易车版本Id);
                     }
-
                 }
             }
 
@@ -318,32 +326,28 @@ public class MainRunAgain {
     }
 
     public static List<Map<String, Object>> makeBeanListCarHome(String filePath) throws InvocationTargetException, IllegalAccessException {
-        List<String> content = T_Config_File.method_按行读取文件(filePath);
+        ArrayList<String> content = T_Config_File.method_按行读取文件(filePath);
         List<Map<String, Object>> list = new ArrayList<>();
         String[] split = content.get(0).split(",");
-        int i = 0;
-        for (String s : content) {
-            System.out.println(s);
+
+        for (int i = 0; i < content.size(); i++) {
             if (i != 0) {
-                String[] values = s.split(",");
+                String[] values = content.get(i).split(",");
                 Map<String, Object> mapList = new LinkedHashMap<>();
                 for (int j = 0; j < split.length; j++) {
                     String columnName = split[j];
                     String value = values[j];
                     mapList.put(columnName, value);
                 }
-                System.out.println(mapList);
                 list.add(mapList);
             }
-            i++;
         }
         return list;
     }
 
     public static List<Map<String, Object>> makeMapListForeach(String filePath) throws InvocationTargetException, IllegalAccessException {
-        List<String> content = T_Config_File.method_按行读取文件(filePath);
+        ArrayList<String> content = T_Config_File.method_按行读取文件(filePath);
         List<Map<String, Object>> list = new ArrayList<>();
-
         String[] split = content.get(0).split(",");
         int i = 0;
         for (String s : content) {
@@ -356,11 +360,11 @@ public class MainRunAgain {
                     mapList.put(columnName, value);
                 }
                 list.add(mapList);
-                if (list.size() > 10000) {
-                    method_iii(list);
-//                    System.out.println(list);
-                    list.clear();
-                }
+//                if (list.size() > 10000) {
+//                    method_iii(list);
+////                    System.out.println(list);
+//                    list.clear();
+//                }
             }
             i++;
         }
