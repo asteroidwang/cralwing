@@ -188,6 +188,7 @@ public class T_Config_File {
             URL url = new URL(imageUrl);
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();
+            System.out.println(filePath+fileName);
             OutputStream outputStream = new FileOutputStream(filePath + fileName);
             byte[] buffer = new byte[2048];
             int length;

@@ -2,6 +2,10 @@ package com.asteroid.entity;
 
 public class Bean_Two {
     private int  C_ID;public int  get_C_ID(){return C_ID;}public void set_C_ID(int C_ID){this.C_ID=C_ID;}
+    private int  C_IsFinish;public int  get_C_IsFinish(){return C_IsFinish;}public void set_C_IsFinish(int C_IsFinish){this.C_IsFinish=C_IsFinish;}
+    private String  C_BrandId;public String  get_C_BrandID(){return C_BrandId;}public void set_C_BrandID(String C_BrandId){this.C_BrandId=C_BrandId;}
+    private String  C_ModelId;public String  get_C_ModelID(){return C_ModelId;}public void set_C_ModelID(String C_ModelId){this.C_ModelId=C_ModelId;}
+    private String  C_FactoryId;public String  get_C_FactoryID(){return C_FactoryId;}public void set_C_FactoryID(String C_FactoryId){this.C_FactoryId=C_FactoryId==null?"-":C_FactoryId.replace("\t","").replace("\r","").replace("\r\n","").replace("\n","");}
     private String  C_汽车之家的版本Id; public void set_C_汽车之家的版本Id(String C_汽车之家的版本Id){this.C_汽车之家的版本Id=C_汽车之家的版本Id;}public String get_C_汽车之家的版本Id(){return C_汽车之家的版本Id;}
     private String  C_易车的版本Id; public void set_C_易车的版本Id(String C_易车的版本Id){this.C_易车的版本Id=C_易车的版本Id;}public String get_C_易车的版本Id(){return C_易车的版本Id;}
     private String  C_品牌; public void set_C_品牌(String C_品牌){this.C_品牌=C_品牌;}public String get_C_品牌(){return C_品牌;}

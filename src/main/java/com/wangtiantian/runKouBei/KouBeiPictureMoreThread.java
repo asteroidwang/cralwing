@@ -24,7 +24,8 @@ public class KouBeiPictureMoreThread implements Runnable {
             String kbId = ((KouBeiPicture) bean).get_C_KouBeiID();
             String position = ((KouBeiPicture) bean).get_C_Position();
             String mainUrl = ((KouBeiPicture) bean).get_C_PictureUrl();
-            T_Config_File.downloadImage(mainUrl, filePath + showId + "/", showId + "_" + kbId + "_" + position+".jpg");
+//            System.out.println(filePath)
+            T_Config_File.downloadImage(mainUrl, filePath + showId + "\\", showId + "_" + kbId + "_" + position+".jpg");
         }
     }
 }
