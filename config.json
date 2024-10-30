@@ -140,6 +140,12 @@
             "total": 5
           },
           {
+            "entity": "com.wangtiantian.entity.koubei.Bean_Confirm_Img",
+            "tableName": "T_Confirm_Picture",
+            "total": 6
+          },
+          {
+
             "entity": "com.wangtiantian.entity.koubei.ReplyKouBei",
             "tableName": "T_ReplyKouBei_Second",
             "total": 6

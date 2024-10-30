@@ -104,6 +104,7 @@ public class KouBei_DataBase {
         return dataBaseKouBei.get_查询本轮下载中未下载的数据(updateTime);
     }
     public ArrayList<Object> get_追加口碑图片数据(String updateTime,int begin){
+        System.out.println(updateTime);
         T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 5);
         return dataBaseKouBei.method_查询本轮下载中未下载的数据(updateTime,begin);
     }
@@ -114,13 +115,17 @@ public class KouBei_DataBase {
     }
 
     // 修改已下载的口碑图片数据
-    public void update_修改已下载的口碑图片数据(String C_图片名称) {
-        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 3);
-        dataBaseKouBei.update_修改已下载的口碑图片数据(C_图片名称);
+    public void update_修改已下载的口碑图片数据(ArrayList<Object> dataList) {
+        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 6);
+        dataBaseKouBei.insertForeach(dataList);
+        T_DataBase_KouBei dataBaseKouBei2 = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 3);
+        dataBaseKouBei2.update_修改已下载的口碑图片数据("口碑");
     }
     // 修改已下载的追加口碑图片数据
-    public void update_修改已下载的追加口碑图片数据(String C_图片名称) {
-        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 5);
-        dataBaseKouBei.update_修改已下载的口碑图片数据(C_图片名称);
+    public void update_修改已下载的追加口碑图片数据(ArrayList<Object> dataList) {
+        T_DataBase_KouBei dataBaseKouBei = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 6);
+        dataBaseKouBei.insertForeach(dataList);
+        T_DataBase_KouBei dataBaseKouBei2 = new T_DataBase_KouBei(chooseDataBaseType, chooseDataBase, 3);
+        dataBaseKouBei2.update_修改已下载的口碑图片数据("追加口碑");
     }
 }
