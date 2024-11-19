@@ -42,12 +42,12 @@ public class T_DataBase_KouBei extends T_Config_Father {
         return method_有条件的查询(sql);
     }
 
-    public ArrayList<Object> method_查询本轮下载中未下载的数据(String updateTime,int begin){
-        String sql ="select * from "+tableName+" where C_IsFinish = 0 and C_UpdateTime like '%"+updateTime+"%'  and C_PictureUrl !='-' and C_PictureUrl !='https:'  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
+    public ArrayList<Object> method_查询本轮下载中未下载的数据(int begin){
+        String sql ="select * from "+tableName+" where C_IsFinish = 0   and C_PictureUrl !='-' and C_PictureUrl !='https:'  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
         return method_有条件的查询(sql);
     }
-    public int get_查询本轮下载中未下载的数据(String updateTime){
-        String sql ="select count(*) from "+tableName+ "  where C_IsFinish = 0 and C_UpdateTime like '%"+updateTime+"%' and C_PictureUrl !='-' and C_PictureUrl !='https:'";
+    public int get_查询本轮下载中未下载的数据(){
+        String sql ="select count(*) from "+tableName+ "  where C_IsFinish = 0  and C_PictureUrl !='-' and C_PictureUrl !='https:'";
         return get_获取表中数据数量_有查询条件(sql);
     }
 

@@ -10,7 +10,7 @@ public class TestTwo {
     public static void main(String[] args) {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 24); // 控制时
+        calendar.set(Calendar.HOUR_OF_DAY, 1); // 控制时
         calendar.set(Calendar.MINUTE,0);       // 控制分
         calendar.set(Calendar.SECOND, 0);       // 控制秒
 

@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -186,19 +187,22 @@ public class T_Config_File {
                 file.mkdirs();
             }
             URL url = new URL(imageUrl);
-            URLConnection connection = url.openConnection();
-            InputStream inputStream = connection.getInputStream();
-            System.out.println(filePath+fileName);
-            OutputStream outputStream = new FileOutputStream(filePath + fileName);
-            byte[] buffer = new byte[2048];
-            int length;
-            while ((length = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, length);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            if (connection.getResponseCode()==500||connection.getResponseCode()==404){
+                return false;
+            }else {
+                InputStream inputStream = connection.getInputStream();
+                OutputStream outputStream = new FileOutputStream(filePath + fileName);
+                byte[] buffer = new byte[2048];
+                int length;
+                while ((length = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, length);
+                }
+                inputStream.close();
+                outputStream.close();
+                System.out.println("成功下载一次\t" + filePath + fileName);
+                return true;
             }
-            inputStream.close();
-            outputStream.close();
-            System.out.println("成功下载一次\t" + filePath + fileName);
-            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
