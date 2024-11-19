@@ -180,6 +180,33 @@ public class T_Compare extends T_Config_Father {
         String sql ="select * from "+tableName+" where C_易车的版本Id !='-'";
         return method_有条件的查询(sql);
     }
+
+//    public List<Map<String, Object>> method_查询差集匹配表中的数据() {
+//        List<Map<String, Object>> resultData = new ArrayList<>();
+//        String sql = "select * from " + tableName + " where C_汽车之家版本Id_易车版本Id='" + id + "' order by  C_易车的版本Id";
+//        try {
+//            method_连接数据库();
+//            ResultSet resultSet = stmt.executeQuery(sql);
+//            while (resultSet.next()) {
+//                Class c = Class.forName(packBag);
+//                Object o = c.newInstance();
+//                ResultSetMetaData rsmd = resultSet.getMetaData();
+//                Map<String, Object> result = new HashMap<>();
+//                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+//                    String cname = rsmd.getColumnName(i + 1);
+//                    Object cobj = resultSet.getObject(i + 1);
+//                    result.put(cname, cobj);
+//                }
+//                resultData.add(result);
+//            }
+//            resultSet.close();
+//            stmt.close();
+//            conn.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return resultData;
+//    }
 }
 
 

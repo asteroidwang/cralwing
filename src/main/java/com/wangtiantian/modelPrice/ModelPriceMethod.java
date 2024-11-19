@@ -35,6 +35,7 @@ public class ModelPriceMethod {
         for (Object o : dataList) {
             String modelId = ((Bean_Model) o).get_C_ModelID();
             String mainUrl = "https://www.autohome.com.cn/ashx/dealer/AjaxDealersBySeriesId.ashx?seriesId=" + modelId + "&cityId=0&provinceId=0&countyId=0&orderType=0&kindId=1&pageIndex=1&pageSize=20";
+            System.out.println(mainUrl);
             ModelDealerPriceFenYe bean = new ModelDealerPriceFenYe();
             bean.set_C_DealerFenYeUrl(mainUrl);
             bean.set_C_ModelID(modelId);

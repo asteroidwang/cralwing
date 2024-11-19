@@ -196,9 +196,9 @@ public class T_Config_Father {
                     }
                     String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().replace("\t","\\\t").replace("\n","\\\n").replace("\r","\\\r").trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
-                        valueList += "N'" + value.replace("'", "''") + "',";
+                        valueList += "N'" + value.replace("'", "''").replace("&nbsp;","").replace("\\u0026nbsp;","") + "',";
                     } else {
-                        valueList += "" + value.replace("'", "''") + ",";
+                        valueList += "" + value.replace("'", "''").replace("&nbsp;","").replace("\\u0026nbsp;","") + ",";
                     }
                 }
             }

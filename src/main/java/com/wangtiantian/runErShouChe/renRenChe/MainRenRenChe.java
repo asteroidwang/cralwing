@@ -20,13 +20,13 @@ public class MainRenRenChe {
     public static void main(String[] args) {
 //        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/二手车数据/renrenche/";
 //        String filePath = "/Users/wangtiantian/MyDisk/所有文件数据/二手车数据/renrenche/";
-        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/二手车数据/renrenche/20241010/";
+        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/二手车数据/renrenche/20241030/";
         MainRenRenChe renRenChe = new MainRenRenChe();
         // 1
-//         renRenChe.method_下载城市数据并入库(filePath);
+        // renRenChe.method_下载城市数据并入库(filePath);
 
         // 2
-        // renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
+         renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
 
         // 补充
 
@@ -35,11 +35,11 @@ public class MainRenRenChe {
         // renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
 
         // 4
-         renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
+//         renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
 
 
         // final
-//         renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
+        // renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
 
     }
 

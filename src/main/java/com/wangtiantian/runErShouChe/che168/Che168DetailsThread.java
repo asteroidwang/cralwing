@@ -25,7 +25,7 @@ public class Che168DetailsThread implements Runnable {
             String mainUrl = ((Bean_CarHtml) o).get_C_CarHtml();
             if (!mainUrl.equals("-")) {
                 String fileName = mainUrl.substring(mainUrl.indexOf("dealer") + 7, mainUrl.indexOf(".html")).replace("/", "_");
-                if (T_Config_File.method_访问url获取网页源码普通版(mainUrl, "GBK", filePath, fileName + ".txt")){
+                if (new MainChe168().method_访问url获取网页源码普通版(mainUrl, "GBK", filePath, fileName + ".txt")){
                     ErShouCheDataBase e = new ErShouCheDataBase();
                     e.update_修改che168车辆详情页下载状态(mainUrl);
                 }
