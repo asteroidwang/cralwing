@@ -69,7 +69,8 @@ public class ModelPriceMethod {
                 try {
                     String modId = ((ModelDealerPriceFenYe) bean).get_C_ModelID();
                     String mainUrl = ((ModelDealerPriceFenYe) bean).get_C_DealerFenYeUrl();
-                    if (T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", filePath, modId + "_1.txt")) {
+                    int page = ((ModelDealerPriceFenYe)bean).get_C_Page();
+                    if (T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", filePath, modId + "_"+page+".txt")) {
                         new ModelDealerPriceDataBase().update_修改已下载首页的车型id的下载状态(mainUrl);
                     }
                 } catch (Exception e) {
@@ -88,6 +89,7 @@ public class ModelPriceMethod {
         for (String fileName : fileList) {
             if (!fileName.equals(".DS_Store")) {
                 String content = T_Config_File.method_读取文件内容(filePath + fileName);
+                System.out.println(filePath+fileName);
                 JSONObject jsonObject = JSON.parseObject(content);
                 JSONObject resultObject = jsonObject.getJSONObject("result");
                 int pageCount = resultObject.getInteger("pagecount");

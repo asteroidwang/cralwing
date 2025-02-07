@@ -28,7 +28,8 @@ public class ModelPriceFenYeMoreThread implements Runnable {
             try {
                 String modId =((ModelDealerPriceFenYe) bean).get_C_ModelID();
                 String mainUrl =((ModelDealerPriceFenYe) bean).get_C_DealerFenYeUrl();
-                if (T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", filePath, modId + "_1.txt")) {
+                int page = ((ModelDealerPriceFenYe)bean).get_C_Page();
+                if (T_Config_File.method_访问url获取Json普通版(mainUrl, "UTF-8", filePath, modId + "_"+page+".txt")) {
                     new ModelDealerPriceDataBase().update_修改已下载首页的车型id的下载状态(mainUrl);
                 }
             } catch (Exception e) {

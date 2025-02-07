@@ -26,7 +26,7 @@ public class MainRenRenChe {
         // renRenChe.method_下载城市数据并入库(filePath);
 
         // 2
-         renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
+        // renRenChe.method_下载城市分页数据的首页(filePath + "各城市分页的首页数据/");
 
         // 补充
 
@@ -35,11 +35,11 @@ public class MainRenRenChe {
         // renRenChe.parse_解析城市分页的首页数据(filePath + "各城市分页的首页数据/");
 
         // 4
-//         renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
+        // renRenChe.method_下载城市除首页的其他分页数据(filePath + "各城市分页的首页数据/");
 
 
         // final
-        // renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
+         renRenChe.parse_解析城市分页数据(filePath + "各城市分页的首页数据/");
 
     }
 

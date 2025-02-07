@@ -28,11 +28,19 @@ public class MainChe168 {
         MainChe168 mainChe168 = new MainChe168();
         // mainChe168.get_城市数据(filePath);
         // mainChe168.method_先下载每个城市的第一页二手车数据获取总页数(filePath+"各城市二手车分页/");
-//         mainChe168.parse_解析第一页的数据获取总页数(filePath + "各城市二手车分页/");
-//         mainChe168.downLoad_下载分页数据(filePath + "各城市二手车分页/");
-        //mainChe168.parse_解析分页数据获取二手车数据(filePath + "各城市二手车分页/");
-        mainChe168.method_下载车辆详情页(filePath + "车辆详情页/");
-//        mainChe168.parse_解析车辆详情页(filePath + "车辆详情页/");
+        // mainChe168.parse_解析第一页的数据获取总页数(filePath + "各城市二手车分页/");
+        // mainChe168.downLoad_下载分页数据(filePath + "各城市二手车分页/");
+        // mainChe168.parse_解析分页数据获取二手车数据(filePath + "各城市二手车分页/");
+        // mainChe168.method_下载车辆详情页(filePath + "车辆详情页/");
+
+        // mainChe168.parse_解析车辆详情页(filePath + "车辆详情页/");
+    }
+
+    public void method_修改已下载的车辆价格数据状态(String filePath) {
+        List<String> fileList = T_Config_File.method_流式获取文件名称(filePath);
+        for(String fileNamepath:fileList){
+            System.out.println(fileNamepath);
+        }
     }
 
     // 获取城市数据
@@ -303,7 +311,7 @@ public class MainChe168 {
             return false;
         }
         Elements mainItems = mainDoc.select(".car-brand-name");
-        if (mainItems.size()>0) {
+        if (mainItems.size() > 0) {
             T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.toString());
             return true;
         } else {

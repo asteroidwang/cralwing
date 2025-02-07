@@ -1,11 +1,8 @@
 package com.wangtiantian.entity;
 
-import java.util.Objects;
-
 public class Bean_Config {
-    private int C_ID; public void set_C_ID(int C_ID){this.C_ID=C_ID;}public int get_C_ID(){return C_ID;}
-    private String C_PID; public void set_C_PID(String C_PID){this.C_PID=C_PID;}public String get_C_PID(){return C_PID;}
-    private String  C_被动安全__主_副驾驶座安全气囊; public void set_C_被动安全__主_副驾驶座安全气囊(String C_被动安全__主_副驾驶座安全气囊){this.C_被动安全__主_副驾驶座安全气囊=C_被动安全__主_副驾驶座安全气囊.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__主_副驾驶座安全气囊(){return C_被动安全__主_副驾驶座安全气囊;}
+    private int  C_ID;public int  get_C_ID(){return C_ID;}public void set_C_ID(int C_ID){this.C_ID=C_ID;}
+    private String  C_PID;public void set_C_PID(String C_PID){this.C_PID=C_PID;}public String  get_C_PID(){return C_PID;}    private String  C_被动安全__主_副驾驶座安全气囊; public void set_C_被动安全__主_副驾驶座安全气囊(String C_被动安全__主_副驾驶座安全气囊){this.C_被动安全__主_副驾驶座安全气囊=C_被动安全__主_副驾驶座安全气囊.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__主_副驾驶座安全气囊(){return C_被动安全__主_副驾驶座安全气囊;}
     private String  C_被动安全__前_后排侧气囊; public void set_C_被动安全__前_后排侧气囊(String C_被动安全__前_后排侧气囊){this.C_被动安全__前_后排侧气囊=C_被动安全__前_后排侧气囊.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__前_后排侧气囊(){return C_被动安全__前_后排侧气囊;}
     private String  C_被动安全__前_后排头部气囊_气帘; public void set_C_被动安全__前_后排头部气囊_气帘(String C_被动安全__前_后排头部气囊_气帘){this.C_被动安全__前_后排头部气囊_气帘=C_被动安全__前_后排头部气囊_气帘.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__前_后排头部气囊_气帘(){return C_被动安全__前_后排头部气囊_气帘;}
     private String  C_被动安全__缺气保用轮胎; public void set_C_被动安全__缺气保用轮胎(String C_被动安全__缺气保用轮胎){this.C_被动安全__缺气保用轮胎=C_被动安全__缺气保用轮胎.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__缺气保用轮胎(){return C_被动安全__缺气保用轮胎;}
@@ -101,6 +98,7 @@ public class Bean_Config {
     private String  C_驾驶操控__发动机启停技术; public void set_C_驾驶操控__发动机启停技术(String C_驾驶操控__发动机启停技术){this.C_驾驶操控__发动机启停技术=C_驾驶操控__发动机启停技术.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶操控__发动机启停技术(){return C_驾驶操控__发动机启停技术;}
     private String  C_驾驶操控__上坡辅助; public void set_C_驾驶操控__上坡辅助(String C_驾驶操控__上坡辅助){this.C_驾驶操控__上坡辅助=C_驾驶操控__上坡辅助.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶操控__上坡辅助(){return C_驾驶操控__上坡辅助;}
     private String  C_四驱_越野__限滑差速器_差速锁; public void set_C_四驱_越野__限滑差速器_差速锁(String C_四驱_越野__限滑差速器_差速锁){this.C_四驱_越野__限滑差速器_差速锁=C_四驱_越野__限滑差速器_差速锁.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__限滑差速器_差速锁(){return C_四驱_越野__限滑差速器_差速锁;}
+    private String  C_四驱_越野__低速四驱; public void set_C_四驱_越野__低速四驱(String C_四驱_越野__低速四驱){this.C_四驱_越野__低速四驱=C_四驱_越野__低速四驱.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__低速四驱(){return C_四驱_越野__低速四驱;}
     private String  C_车外灯光__转向辅助灯; public void set_C_车外灯光__转向辅助灯(String C_车外灯光__转向辅助灯){this.C_车外灯光__转向辅助灯=C_车外灯光__转向辅助灯.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_车外灯光__转向辅助灯(){return C_车外灯光__转向辅助灯;}
     private String  C_四驱_越野__中央差速器锁止功能; public void set_C_四驱_越野__中央差速器锁止功能(String C_四驱_越野__中央差速器锁止功能){this.C_四驱_越野__中央差速器锁止功能=C_四驱_越野__中央差速器锁止功能.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__中央差速器锁止功能(){return C_四驱_越野__中央差速器锁止功能;}
     private String  C_天窗_玻璃__后排侧隐私玻璃; public void set_C_天窗_玻璃__后排侧隐私玻璃(String C_天窗_玻璃__后排侧隐私玻璃){this.C_天窗_玻璃__后排侧隐私玻璃=C_天窗_玻璃__后排侧隐私玻璃.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_天窗_玻璃__后排侧隐私玻璃(){return C_天窗_玻璃__后排侧隐私玻璃;}
@@ -115,9 +113,11 @@ public class Bean_Config {
     private String  C_主动安全__前方碰撞预警; public void set_C_主动安全__前方碰撞预警(String C_主动安全__前方碰撞预警){this.C_主动安全__前方碰撞预警=C_主动安全__前方碰撞预警.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__前方碰撞预警(){return C_主动安全__前方碰撞预警;}
     private String  C_主动安全__内置行车记录仪; public void set_C_主动安全__内置行车记录仪(String C_主动安全__内置行车记录仪){this.C_主动安全__内置行车记录仪=C_主动安全__内置行车记录仪.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__内置行车记录仪(){return C_主动安全__内置行车记录仪;}
     private String  C_主动安全__道路救援呼叫; public void set_C_主动安全__道路救援呼叫(String C_主动安全__道路救援呼叫){this.C_主动安全__道路救援呼叫=C_主动安全__道路救援呼叫.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__道路救援呼叫(){return C_主动安全__道路救援呼叫;}
+    private String  C_主动安全__DOW开门预警; public void set_C_主动安全__DOW开门预警(String C_主动安全__DOW开门预警){this.C_主动安全__DOW开门预警=C_主动安全__DOW开门预警.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__DOW开门预警(){return C_主动安全__DOW开门预警;}
     private String  C_驾驶操控__空气悬架; public void set_C_驾驶操控__空气悬架(String C_驾驶操控__空气悬架){this.C_驾驶操控__空气悬架=C_驾驶操控__空气悬架.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶操控__空气悬架(){return C_驾驶操控__空气悬架;}
     private String  C_驾驶操控__可变转向比; public void set_C_驾驶操控__可变转向比(String C_驾驶操控__可变转向比){this.C_驾驶操控__可变转向比=C_驾驶操控__可变转向比.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶操控__可变转向比(){return C_驾驶操控__可变转向比;}
     private String  C_驾驶操控__能量回收系统; public void set_C_驾驶操控__能量回收系统(String C_驾驶操控__能量回收系统){this.C_驾驶操控__能量回收系统=C_驾驶操控__能量回收系统.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶操控__能量回收系统(){return C_驾驶操控__能量回收系统;}
+    private String  C_驾驶硬件__透明底盘_540度影像; public void set_C_驾驶硬件__透明底盘_540度影像(String C_驾驶硬件__透明底盘_540度影像){this.C_驾驶硬件__透明底盘_540度影像=C_驾驶硬件__透明底盘_540度影像.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__透明底盘_540度影像(){return C_驾驶硬件__透明底盘_540度影像;}
     private String  C_驾驶硬件__摄像头数量; public void set_C_驾驶硬件__摄像头数量(String C_驾驶硬件__摄像头数量){this.C_驾驶硬件__摄像头数量=C_驾驶硬件__摄像头数量.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__摄像头数量(){return C_驾驶硬件__摄像头数量;}
     private String  C_驾驶硬件__超声波雷达数量; public void set_C_驾驶硬件__超声波雷达数量(String C_驾驶硬件__超声波雷达数量){this.C_驾驶硬件__超声波雷达数量=C_驾驶硬件__超声波雷达数量.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__超声波雷达数量(){return C_驾驶硬件__超声波雷达数量;}
     private String  C_驾驶功能__辅助驾驶等级; public void set_C_驾驶功能__辅助驾驶等级(String C_驾驶功能__辅助驾驶等级){this.C_驾驶功能__辅助驾驶等级=C_驾驶功能__辅助驾驶等级.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶功能__辅助驾驶等级(){return C_驾驶功能__辅助驾驶等级;}
@@ -135,6 +135,8 @@ public class Bean_Config {
     private String  C_外观_防盗__车顶行李架; public void set_C_外观_防盗__车顶行李架(String C_外观_防盗__车顶行李架){this.C_外观_防盗__车顶行李架=C_外观_防盗__车顶行李架.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__车顶行李架(){return C_外观_防盗__车顶行李架;}
     private String  C_车外灯光__灯光特色功能; public void set_C_车外灯光__灯光特色功能(String C_车外灯光__灯光特色功能){this.C_车外灯光__灯光特色功能=C_车外灯光__灯光特色功能.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_车外灯光__灯光特色功能(){return C_车外灯光__灯光特色功能;}
     private String  C_屏幕_系统__车载智能系统; public void set_C_屏幕_系统__车载智能系统(String C_屏幕_系统__车载智能系统){this.C_屏幕_系统__车载智能系统=C_屏幕_系统__车载智能系统.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__车载智能系统(){return C_屏幕_系统__车载智能系统;}
+    private String  C_屏幕_系统__语音助手唤醒词; public void set_C_屏幕_系统__语音助手唤醒词(String C_屏幕_系统__语音助手唤醒词){this.C_屏幕_系统__语音助手唤醒词=C_屏幕_系统__语音助手唤醒词.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__语音助手唤醒词(){return C_屏幕_系统__语音助手唤醒词;}
+    private String  C_屏幕_系统__语音分区域唤醒识别; public void set_C_屏幕_系统__语音分区域唤醒识别(String C_屏幕_系统__语音分区域唤醒识别){this.C_屏幕_系统__语音分区域唤醒识别=C_屏幕_系统__语音分区域唤醒识别.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__语音分区域唤醒识别(){return C_屏幕_系统__语音分区域唤醒识别;}
     private String  C_屏幕_系统__手势控制; public void set_C_屏幕_系统__手势控制(String C_屏幕_系统__手势控制){this.C_屏幕_系统__手势控制=C_屏幕_系统__手势控制.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__手势控制(){return C_屏幕_系统__手势控制;}
     private String  C_屏幕_系统__后排控制多媒体; public void set_C_屏幕_系统__后排控制多媒体(String C_屏幕_系统__后排控制多媒体){this.C_屏幕_系统__后排控制多媒体=C_屏幕_系统__后排控制多媒体.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__后排控制多媒体(){return C_屏幕_系统__后排控制多媒体;}
     private String  C_智能化配置__4G_5G网络; public void set_C_智能化配置__4G_5G网络(String C_智能化配置__4G_5G网络){this.C_智能化配置__4G_5G网络=C_智能化配置__4G_5G网络.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_智能化配置__4G_5G网络(){return C_智能化配置__4G_5G网络;}
@@ -149,19 +151,16 @@ public class Bean_Config {
     private String  C_座椅配置__后排座椅电动放倒; public void set_C_座椅配置__后排座椅电动放倒(String C_座椅配置__后排座椅电动放倒){this.C_座椅配置__后排座椅电动放倒=C_座椅配置__后排座椅电动放倒.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_座椅配置__后排座椅电动放倒(){return C_座椅配置__后排座椅电动放倒;}
     private String  C_空调_冰箱__负离子发生器; public void set_C_空调_冰箱__负离子发生器(String C_空调_冰箱__负离子发生器){this.C_空调_冰箱__负离子发生器=C_空调_冰箱__负离子发生器.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_空调_冰箱__负离子发生器(){return C_空调_冰箱__负离子发生器;}
     private String  C_空调_冰箱__车内香氛装置; public void set_C_空调_冰箱__车内香氛装置(String C_空调_冰箱__车内香氛装置){this.C_空调_冰箱__车内香氛装置=C_空调_冰箱__车内香氛装置.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_空调_冰箱__车内香氛装置(){return C_空调_冰箱__车内香氛装置;}
-    private String  C_主动安全__DOW开门预警; public void set_C_主动安全__DOW开门预警(String C_主动安全__DOW开门预警){this.C_主动安全__DOW开门预警=C_主动安全__DOW开门预警.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__DOW开门预警(){return C_主动安全__DOW开门预警;}
+    private String  C_空调_冰箱__空气质量监测; public void set_C_空调_冰箱__空气质量监测(String C_空调_冰箱__空气质量监测){this.C_空调_冰箱__空气质量监测=C_空调_冰箱__空气质量监测.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_空调_冰箱__空气质量监测(){return C_空调_冰箱__空气质量监测;}
     private String  C_主动安全__后方碰撞预警; public void set_C_主动安全__后方碰撞预警(String C_主动安全__后方碰撞预警){this.C_主动安全__后方碰撞预警=C_主动安全__后方碰撞预警.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__后方碰撞预警(){return C_主动安全__后方碰撞预警;}
     private String  C_主动安全__低速行车警告; public void set_C_主动安全__低速行车警告(String C_主动安全__低速行车警告){this.C_主动安全__低速行车警告=C_主动安全__低速行车警告.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__低速行车警告(){return C_主动安全__低速行车警告;}
     private String  C_驾驶操控__单踏板模式; public void set_C_驾驶操控__单踏板模式(String C_驾驶操控__单踏板模式){this.C_驾驶操控__单踏板模式=C_驾驶操控__单踏板模式.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶操控__单踏板模式(){return C_驾驶操控__单踏板模式;}
-    private String  C_驾驶硬件__透明底盘_540度影像; public void set_C_驾驶硬件__透明底盘_540度影像(String C_驾驶硬件__透明底盘_540度影像){this.C_驾驶硬件__透明底盘_540度影像=C_驾驶硬件__透明底盘_540度影像.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__透明底盘_540度影像(){return C_驾驶硬件__透明底盘_540度影像;}
     private String  C_驾驶硬件__前方感知摄像头; public void set_C_驾驶硬件__前方感知摄像头(String C_驾驶硬件__前方感知摄像头){this.C_驾驶硬件__前方感知摄像头=C_驾驶硬件__前方感知摄像头.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__前方感知摄像头(){return C_驾驶硬件__前方感知摄像头;}
     private String  C_驾驶硬件__毫米波雷达数量; public void set_C_驾驶硬件__毫米波雷达数量(String C_驾驶硬件__毫米波雷达数量){this.C_驾驶硬件__毫米波雷达数量=C_驾驶硬件__毫米波雷达数量.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__毫米波雷达数量(){return C_驾驶硬件__毫米波雷达数量;}
     private String  C_外观_防盗__电池预加热; public void set_C_外观_防盗__电池预加热(String C_外观_防盗__电池预加热){this.C_外观_防盗__电池预加热=C_外观_防盗__电池预加热.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__电池预加热(){return C_外观_防盗__电池预加热;}
     private String  C_外观_防盗__主动闭合式进气格栅; public void set_C_外观_防盗__主动闭合式进气格栅(String C_外观_防盗__主动闭合式进气格栅){this.C_外观_防盗__主动闭合式进气格栅=C_外观_防盗__主动闭合式进气格栅.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__主动闭合式进气格栅(){return C_外观_防盗__主动闭合式进气格栅;}
     private String  C_外观_防盗__对外放电; public void set_C_外观_防盗__对外放电(String C_外观_防盗__对外放电){this.C_外观_防盗__对外放电=C_外观_防盗__对外放电.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__对外放电(){return C_外观_防盗__对外放电;}
     private String  C_天窗_玻璃__侧窗多层隔音玻璃; public void set_C_天窗_玻璃__侧窗多层隔音玻璃(String C_天窗_玻璃__侧窗多层隔音玻璃){this.C_天窗_玻璃__侧窗多层隔音玻璃=C_天窗_玻璃__侧窗多层隔音玻璃.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_天窗_玻璃__侧窗多层隔音玻璃(){return C_天窗_玻璃__侧窗多层隔音玻璃;}
-    private String  C_屏幕_系统__语音助手唤醒词; public void set_C_屏幕_系统__语音助手唤醒词(String C_屏幕_系统__语音助手唤醒词){this.C_屏幕_系统__语音助手唤醒词=C_屏幕_系统__语音助手唤醒词.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__语音助手唤醒词(){return C_屏幕_系统__语音助手唤醒词;}
-    private String  C_屏幕_系统__语音分区域唤醒识别; public void set_C_屏幕_系统__语音分区域唤醒识别(String C_屏幕_系统__语音分区域唤醒识别){this.C_屏幕_系统__语音分区域唤醒识别=C_屏幕_系统__语音分区域唤醒识别.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__语音分区域唤醒识别(){return C_屏幕_系统__语音分区域唤醒识别;}
     private String  C_屏幕_系统__语音连续识别; public void set_C_屏幕_系统__语音连续识别(String C_屏幕_系统__语音连续识别){this.C_屏幕_系统__语音连续识别=C_屏幕_系统__语音连续识别.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__语音连续识别(){return C_屏幕_系统__语音连续识别;}
     private String  C_屏幕_系统__应用商店; public void set_C_屏幕_系统__应用商店(String C_屏幕_系统__应用商店){this.C_屏幕_系统__应用商店=C_屏幕_系统__应用商店.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__应用商店(){return C_屏幕_系统__应用商店;}
     private String  C_屏幕_系统__面部识别; public void set_C_屏幕_系统__面部识别(String C_屏幕_系统__面部识别){this.C_屏幕_系统__面部识别=C_屏幕_系统__面部识别.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__面部识别(){return C_屏幕_系统__面部识别;}
@@ -229,14 +228,12 @@ public class Bean_Config {
     private String  C_屏幕_系统__中控屏幕类型; public void set_C_屏幕_系统__中控屏幕类型(String C_屏幕_系统__中控屏幕类型){this.C_屏幕_系统__中控屏幕类型=C_屏幕_系统__中控屏幕类型.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__中控屏幕类型(){return C_屏幕_系统__中控屏幕类型;}
     private String  C_屏幕_系统__中控屏幕分辨率; public void set_C_屏幕_系统__中控屏幕分辨率(String C_屏幕_系统__中控屏幕分辨率){this.C_屏幕_系统__中控屏幕分辨率=C_屏幕_系统__中控屏幕分辨率.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__中控屏幕分辨率(){return C_屏幕_系统__中控屏幕分辨率;}
     private String  C_音响_车内灯光__杜比全景声_Dolby_Atmos; public void set_C_音响_车内灯光__杜比全景声_Dolby_Atmos(String C_音响_车内灯光__杜比全景声_Dolby_Atmos){this.C_音响_车内灯光__杜比全景声_Dolby_Atmos=C_音响_车内灯光__杜比全景声_Dolby_Atmos.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_音响_车内灯光__杜比全景声_Dolby_Atmos(){return C_音响_车内灯光__杜比全景声_Dolby_Atmos;}
-    private String  C_空调_冰箱__空气质量监测; public void set_C_空调_冰箱__空气质量监测(String C_空调_冰箱__空气质量监测){this.C_空调_冰箱__空气质量监测=C_空调_冰箱__空气质量监测.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_空调_冰箱__空气质量监测(){return C_空调_冰箱__空气质量监测;}
     private String  C_被动安全__后排安全带式气囊; public void set_C_被动安全__后排安全带式气囊(String C_被动安全__后排安全带式气囊){this.C_被动安全__后排安全带式气囊=C_被动安全__后排安全带式气囊.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__后排安全带式气囊(){return C_被动安全__后排安全带式气囊;}
     private String  C_外观_防盗__车库门遥控装置; public void set_C_外观_防盗__车库门遥控装置(String C_外观_防盗__车库门遥控装置){this.C_外观_防盗__车库门遥控装置=C_外观_防盗__车库门遥控装置.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__车库门遥控装置(){return C_外观_防盗__车库门遥控装置;}
     private String  C_主动安全__移动物体预警系统; public void set_C_主动安全__移动物体预警系统(String C_主动安全__移动物体预警系统){this.C_主动安全__移动物体预警系统=C_主动安全__移动物体预警系统.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_主动安全__移动物体预警系统(){return C_主动安全__移动物体预警系统;}
     private String  C_屏幕_系统__副驾屏幕分辨率; public void set_C_屏幕_系统__副驾屏幕分辨率(String C_屏幕_系统__副驾屏幕分辨率){this.C_屏幕_系统__副驾屏幕分辨率=C_屏幕_系统__副驾屏幕分辨率.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__副驾屏幕分辨率(){return C_屏幕_系统__副驾屏幕分辨率;}
     private String  C_屏幕_系统__后排液晶屏幕尺寸; public void set_C_屏幕_系统__后排液晶屏幕尺寸(String C_屏幕_系统__后排液晶屏幕尺寸){this.C_屏幕_系统__后排液晶屏幕尺寸=C_屏幕_系统__后排液晶屏幕尺寸.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__后排液晶屏幕尺寸(){return C_屏幕_系统__后排液晶屏幕尺寸;}
     private String  C_智能化配置__V2X通讯; public void set_C_智能化配置__V2X通讯(String C_智能化配置__V2X通讯){this.C_智能化配置__V2X通讯=C_智能化配置__V2X通讯.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_智能化配置__V2X通讯(){return C_智能化配置__V2X通讯;}
-    private String  C_四驱_越野__低速四驱; public void set_C_四驱_越野__低速四驱(String C_四驱_越野__低速四驱){this.C_四驱_越野__低速四驱=C_四驱_越野__低速四驱.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__低速四驱(){return C_四驱_越野__低速四驱;}
     private String  C_驾驶功能__方向盘离手检测; public void set_C_驾驶功能__方向盘离手检测(String C_驾驶功能__方向盘离手检测){this.C_驾驶功能__方向盘离手检测=C_驾驶功能__方向盘离手检测.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶功能__方向盘离手检测(){return C_驾驶功能__方向盘离手检测;}
     private String  C_驾驶功能__起步提醒; public void set_C_驾驶功能__起步提醒(String C_驾驶功能__起步提醒){this.C_驾驶功能__起步提醒=C_驾驶功能__起步提醒.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶功能__起步提醒(){return C_驾驶功能__起步提醒;}
     private String  C_屏幕_系统__副驾屏幕类型; public void set_C_屏幕_系统__副驾屏幕类型(String C_屏幕_系统__副驾屏幕类型){this.C_屏幕_系统__副驾屏幕类型=C_屏幕_系统__副驾屏幕类型.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__副驾屏幕类型(){return C_屏幕_系统__副驾屏幕类型;}
@@ -268,7 +265,6 @@ public class Bean_Config {
     private String  C_屏幕_系统__中控下屏幕像素密度; public void set_C_屏幕_系统__中控下屏幕像素密度(String C_屏幕_系统__中控下屏幕像素密度){this.C_屏幕_系统__中控下屏幕像素密度=C_屏幕_系统__中控下屏幕像素密度.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__中控下屏幕像素密度(){return C_屏幕_系统__中控下屏幕像素密度;}
     private String  C_外观_防盗__尾门玻璃独立开启; public void set_C_外观_防盗__尾门玻璃独立开启(String C_外观_防盗__尾门玻璃独立开启){this.C_外观_防盗__尾门玻璃独立开启=C_外观_防盗__尾门玻璃独立开启.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__尾门玻璃独立开启(){return C_外观_防盗__尾门玻璃独立开启;}
     private String  C_四驱_越野__蠕行模式; public void set_C_四驱_越野__蠕行模式(String C_四驱_越野__蠕行模式){this.C_四驱_越野__蠕行模式=C_四驱_越野__蠕行模式.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__蠕行模式(){return C_四驱_越野__蠕行模式;}
-    private String  C_驾驶硬件__芯片总算力_稠密; public void set_C_驾驶硬件__芯片总算力_稠密(String C_驾驶硬件__芯片总算力_稠密){this.C_驾驶硬件__芯片总算力_稠密=C_驾驶硬件__芯片总算力_稠密.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__芯片总算力_稠密(){return C_驾驶硬件__芯片总算力_稠密;}
     private String  C_四驱_越野__坦克转弯; public void set_C_四驱_越野__坦克转弯(String C_四驱_越野__坦克转弯){this.C_四驱_越野__坦克转弯=C_四驱_越野__坦克转弯.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__坦克转弯(){return C_四驱_越野__坦克转弯;}
     private String  C_座椅配置__福祉座椅; public void set_C_座椅配置__福祉座椅(String C_座椅配置__福祉座椅){this.C_座椅配置__福祉座椅=C_座椅配置__福祉座椅.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_座椅配置__福祉座椅(){return C_座椅配置__福祉座椅;}
     private String  C_四驱_越野__绞盘; public void set_C_四驱_越野__绞盘(String C_四驱_越野__绞盘){this.C_四驱_越野__绞盘=C_四驱_越野__绞盘.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__绞盘(){return C_四驱_越野__绞盘;}
@@ -294,21 +290,12 @@ public class Bean_Config {
     private String  C_被动安全__后排中央安全气囊; public void set_C_被动安全__后排中央安全气囊(String C_被动安全__后排中央安全气囊){this.C_被动安全__后排中央安全气囊=C_被动安全__后排中央安全气囊.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__后排中央安全气囊(){return C_被动安全__后排中央安全气囊;}
     private String  C_座椅配置__前后移动扶手箱; public void set_C_座椅配置__前后移动扶手箱(String C_座椅配置__前后移动扶手箱){this.C_座椅配置__前后移动扶手箱=C_座椅配置__前后移动扶手箱.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_座椅配置__前后移动扶手箱(){return C_座椅配置__前后移动扶手箱;}
     private String  C_被动安全__后排座椅防下滑气囊; public void set_C_被动安全__后排座椅防下滑气囊(String C_被动安全__后排座椅防下滑气囊){this.C_被动安全__后排座椅防下滑气囊=C_被动安全__后排座椅防下滑气囊.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_被动安全__后排座椅防下滑气囊(){return C_被动安全__后排座椅防下滑气囊;}
-    private String  C_屏幕_系统__屏幕刷新率_Hz; public void set_C_屏幕_系统__屏幕刷新率_Hz(String C_屏幕_系统__屏幕刷新率_Hz){this.C_屏幕_系统__屏幕刷新率_Hz=C_屏幕_系统__屏幕刷新率_Hz.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__屏幕刷新率_Hz(){return C_屏幕_系统__屏幕刷新率_Hz;}
     private String  C_音响_车内灯光__车外扬声器数量; public void set_C_音响_车内灯光__车外扬声器数量(String C_音响_车内灯光__车外扬声器数量){this.C_音响_车内灯光__车外扬声器数量=C_音响_车内灯光__车外扬声器数量.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_音响_车内灯光__车外扬声器数量(){return C_音响_车内灯光__车外扬声器数量;}
+    private String  C_驾驶硬件__芯片总算力_稠密; public void set_C_驾驶硬件__芯片总算力_稠密(String C_驾驶硬件__芯片总算力_稠密){this.C_驾驶硬件__芯片总算力_稠密=C_驾驶硬件__芯片总算力_稠密.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶硬件__芯片总算力_稠密(){return C_驾驶硬件__芯片总算力_稠密;}
+    private String  C_屏幕_系统__屏幕刷新率_Hz; public void set_C_屏幕_系统__屏幕刷新率_Hz(String C_屏幕_系统__屏幕刷新率_Hz){this.C_屏幕_系统__屏幕刷新率_Hz=C_屏幕_系统__屏幕刷新率_Hz.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_屏幕_系统__屏幕刷新率_Hz(){return C_屏幕_系统__屏幕刷新率_Hz;}
     private String  C_四驱_越野__拖车取电口; public void set_C_四驱_越野__拖车取电口(String C_四驱_越野__拖车取电口){this.C_四驱_越野__拖车取电口=C_四驱_越野__拖车取电口.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_四驱_越野__拖车取电口(){return C_四驱_越野__拖车取电口;}
+    private String  C_外观_防盗__投影感应开启; public void set_C_外观_防盗__投影感应开启(String C_外观_防盗__投影感应开启){this.C_外观_防盗__投影感应开启=C_外观_防盗__投影感应开启.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__投影感应开启(){return C_外观_防盗__投影感应开启;}
+    private String  C_外观_防盗__感应前备厢; public void set_C_外观_防盗__感应前备厢(String C_外观_防盗__感应前备厢){this.C_外观_防盗__感应前备厢=C_外观_防盗__感应前备厢.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_外观_防盗__感应前备厢(){return C_外观_防盗__感应前备厢;}
     private String  C_驾驶功能__代客泊车; public void set_C_驾驶功能__代客泊车(String C_驾驶功能__代客泊车){this.C_驾驶功能__代客泊车=C_驾驶功能__代客泊车.replace("\n","").replace("\r","").replace("\t","").trim();}public String get_C_驾驶功能__代客泊车(){return C_驾驶功能__代客泊车;}
     private String  C_UpdateTime;public String  get_C_UpdateTime(){return C_UpdateTime;}public void set_C_UpdateTime(String C_UpdateTime){this.C_UpdateTime=C_UpdateTime==null?"-":C_UpdateTime.replace("\t","").replace("\r","").replace("\r\n","").replace("\n","");}
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bean_Config that = (Bean_Config) o;
-        return Objects.equals(C_PID, that.C_PID); // Compare relevant fields
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(C_PID); // Use relevant fields
-    }
 }

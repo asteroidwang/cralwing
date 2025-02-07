@@ -194,7 +194,7 @@ public class T_Config_Father {
                     if (methods[i].getName().equals("get_C_ID")) {
                         continue;
                     }
-                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().replace("\t","\\\t").replace("\n","\\\n").replace("\r","\\\r").trim();
+                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().replace("\t","").replace("\n","").replace("\r","").trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
                         valueList += "N'" + value.replace("'", "''").replace("&nbsp;","").replace("\\u0026nbsp;","") + "',";
                     } else {
@@ -252,6 +252,7 @@ public class T_Config_Father {
         try {
             method_连接数据库();
             String sql = "select max(C_Group) from " + tableName;
+            System.out.println(sql);
             ResultSet resultSet = stmt.executeQuery(sql);
             while (resultSet.next()) {
                 num = (int) resultSet.getObject(1);
@@ -292,6 +293,7 @@ public class T_Config_Father {
 
     public void insertForeach(ArrayList<Object> dataList) {
         int batchSize = 100;
+        System.out.println(tableName + "入库ing");
         for (int i = 0; i < dataList.size(); i += batchSize) {
             int end = Math.min(i + batchSize, dataList.size());
             List<Object> batchList = dataList.subList(i, end);
@@ -302,10 +304,9 @@ public class T_Config_Father {
             }
             String tempString = valueBuffer.toString();
             String sql = "insert into " + tableName + columnList + " values" + tempString.substring(0, tempString.length() - 1);
-//            System.out.println(sql);
             method_i_d_u(sql);
-            System.out.println(tableName + "分批入库一次");
         }
+        System.out.println(tableName + "入库完成");
     }
 
     public ArrayList<Object> method_分页查询未下载的数据10000条每次(int begin) {

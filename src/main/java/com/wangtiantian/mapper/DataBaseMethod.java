@@ -19,7 +19,8 @@ import java.util.*;
 public class DataBaseMethod {
     //选择数据库与
     private static int chooseDataBase = 0;
-    private static int chooseDataBaseType = 0;
+    // xuanze lianjie
+    private static int chooseDataBaseType = 2;
 
     public void method_入库品牌数据(ArrayList<Object> dataList) {
         T_Config_AutoHome_new brandDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 0);
@@ -114,7 +115,7 @@ public class DataBaseMethod {
     }
 
     public int get_版本表中组数() {
-        T_Config_AutoHome_new verIdsDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 4);
+        T_Config_AutoHome_new verIdsDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 3);
         return verIdsDao.get_获取表中组数();
     }
 
@@ -143,7 +144,17 @@ public class DataBaseMethod {
         String model_lastTableName = "T_汽车之家_车型表_" + tempTime;
         String versionId_lastTableName = "T_汽车之家_版本id表_" + tempTime;
         String bag_lastTableName = "T_汽车之家_选装包_" + tempTime;
-        String updateContent = content.replace(brand_lastTableName, brandTableName).replace(factory_lastTableName, factoryTableName).replace(model_lastTableName, modelTableName).replace(version_lastTableName, versionTableName).replace(versionId_lastTableName, versionIdTableName).replace(bag_lastTableName, bagTableName).replace("T_汽车之家_参数表_"+tempTime,"T_汽车之家_参数表_"+currentTime).replace("T_汽车之家_配置表_"+tempTime,"T_汽车之家_配置表_"+currentTime);
-        T_Config_File.method_写文件_根据路径创建文件夹("", "config.json", updateContent);
+        String updateContent = content.replace(brand_lastTableName, brandTableName).replace(factory_lastTableName, factoryTableName).replace(model_lastTableName, modelTableName).replace(version_lastTableName, versionTableName).replace(versionId_lastTableName, versionIdTableName).replace(bag_lastTableName, bagTableName).replace("T_汽车之家_参数表_" + tempTime, "T_汽车之家_参数表_" + currentTime).replace("T_汽车之家_配置表_" + tempTime, "T_汽车之家_配置表_" + currentTime);
+        T_Config_File.method_写文件("config.json", updateContent);
+    }
+
+    public void method_创建爬取汽车之家配置数据表(String currentTime, String paramsSql, String configSql) {
+        T_Config_AutoHome_new tableDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 0);
+        String paramsTableName = "T_汽车之家_参数表_" + currentTime;
+        String configTableName = "T_汽车之家_配置表_" + currentTime;
+        String bagTableName = "T_汽车之家_选装包_" + currentTime;
+        tableDao.create_参数表(paramsTableName, paramsSql);
+        tableDao.create_配置表(configTableName, configSql);
+        tableDao.create_选装包表(bagTableName);
     }
 }

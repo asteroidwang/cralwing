@@ -16,23 +16,48 @@ import org.jsoup.select.Elements;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class MainConfigData {
+public class MainConfigData extends TimerTask {
+    @Override
+    public void run() {
+        int day = Integer.parseInt(new SimpleDateFormat("dd").format(new Date()));
+        YearMonth currentYearMonth = YearMonth.now();
+        int totalDay = currentYearMonth.lengthOfMonth();
+        if (day == 10 || day == 20 || day == 30 || (totalDay < 30 && totalDay == day)) {
+            MainConfigData mainConfigData = new MainConfigData();
+            String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
+            String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
+            // 创建表
+            System.out.println(new Date() + "\t数据爬取中");
+            mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+            mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+            mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+            if (mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件")) {
+                mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+            }
+            mainConfigData.method_下载配置数据(filePath + "params/");
+            mainConfigData.method_解析列名(filePath);
+            mainConfigData.method_创建所有爬取汽车之家配置数据表(currentTime, filePath);
+            mainConfigData.method_解析配置数据(filePath);
+            System.out.println(new Date() + "\t数据完成");
+        } else {
+            System.out.println("现在是" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "还没到时间哦～");
+        }
+
+    }
 //    private DataBaseMethod new DataBaseMethod() = new DataBaseMethod();
 
-    public static void main(String[] args) {
-        MainConfigData mainConfigData = new MainConfigData();
-        String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
-//        String currentTime = "20241024";
-        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
-//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + "20241024" + "/";
-//        String filePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/配置数       据/20240910/";
-
-        // 创建表
+//    public static void main(String[] args) {
+//        MainConfigData mainConfigData = new MainConfigData();
+//        String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
+//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
+//        // 创建表
+//        System.out.println(new Date()+"\t数据爬取中");
 //        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
 //        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
 //        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
@@ -41,9 +66,10 @@ public class MainConfigData {
 //        }
 //        mainConfigData.method_下载配置数据(filePath + "params/");
 //        mainConfigData.method_解析列名(filePath);
-//        mainConfigData.method_取列名(filePath);
-        mainConfigData.method_解析配置数据(filePath);
-    }
+//        mainConfigData.method_创建所有爬取汽车之家配置数据表(currentTime, filePath);
+//        mainConfigData.method_解析配置数据(filePath);
+//        System.out.println(new Date()+"\t数据完成");
+//    }
 
     // 创建爬取汽车之家配置数据所需要的表
     public void method_创建所有爬取汽车之家配置数据需要的表(String currentTime) {
@@ -51,13 +77,23 @@ public class MainConfigData {
         new DataBaseMethod().method_创建爬取汽车之家配置数据所需要的表(currentTime);
     }
 
+    public void method_创建所有爬取汽车之家配置数据表(String currentTime, String filePath) {
+        // 获取当前时间
+        String columns = method_取列名(filePath);
+        String paramSql = columns.split(",__")[0];
+        String configSql = columns.split(",__")[1];
+        new DataBaseMethod().method_创建爬取汽车之家配置数据表(currentTime, paramSql, configSql);
+    }
+
     // 1.下载品牌厂商车型数据
     public void method_下载品牌厂商车型数据(String filePath) {
         try {
+            System.out.println("download ing");
             for (char a = 'A'; a <= 'Z'; a++) {
                 String mainUrl = "https://www.autohome.com.cn/grade/carhtml/" + a + ".html";
                 T_Config_File.method_访问url获取网页源码普通版(mainUrl, "UTF-8", filePath, a + ".txt");
             }
+            System.out.println("download ok");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -162,13 +198,13 @@ public class MainConfigData {
     // 3.下载版本所在的页面数据
     public Boolean method_下载含有版本数据的文件(String filePath) {
         // 1.非图片路径
+        System.out.println("download ing");
         method_下载版本源文件_在售数据_新(filePath + "_非图片路径/");
         method_下载含有版本数据的文件_非图片路径_NOSALE(filePath + "_非图片路径/");
         method_下载版本源文件_即将销售数据(filePath + "_非图片路径/");
         method_下载含有版本数据的文件_图片路径_OnSale(filePath + "_图片路径/");
         method_下载含有版本数据的文件_图片路径_NoSale(filePath + "_图片路径/");
-
-
+        System.out.println("download ok");
         return true;
     }
 
@@ -598,7 +634,10 @@ public class MainConfigData {
     // 5.版本ids入库 下载配置数据
     public void method_下载配置数据(String filePath) {
         try {
-            new DataBaseMethod().insert_批量插入版本ids();
+            System.out.println("download ing");
+            if (!T_Config_File.method_判断文件是否存在(filePath)) {
+                new DataBaseMethod().insert_批量插入版本ids();
+            }
             ArrayList<Object> paramsList = new DataBaseMethod().method_根据数据类型获取未下载的数据("params", 0);
             ArrayList<Object> configList = new DataBaseMethod().method_根据数据类型获取未下载的数据("config", 0);
             ArrayList<Object> bagList = new DataBaseMethod().method_根据数据类型获取未下载的数据("bag", 0);
@@ -612,17 +651,16 @@ public class MainConfigData {
                     }
                 }
             } else {
-
                 List<List<Object>> paramsData = IntStream.range(0, 6).mapToObj(i -> paramsList.subList(i * (paramsList.size() + 5) / 6, Math.min((i + 1) * (paramsList.size() + 5) / 6, paramsList.size())))
                         .collect(Collectors.toList());
+                CountDownLatch latchParams = new CountDownLatch(paramsData.size());
                 for (int i = 0; i < paramsData.size(); i++) {
-                    ConfigMoreThread params = new ConfigMoreThread(paramsData.get(i), filePath, 0);
+                    ConfigMoreThread params = new ConfigMoreThread(paramsData.get(i), filePath, 0, latchParams);
                     Thread thread = new Thread(params);
                     thread.start();
                 }
+                latchParams.await();
             }
-
-
             if (configList.size() <= 32) {
                 for (Object o : configList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
@@ -632,17 +670,16 @@ public class MainConfigData {
                     }
                 }
             } else {
-
                 List<List<Object>> configData = IntStream.range(0, 6).mapToObj(i -> configList.subList(i * (configList.size() + 5) / 6, Math.min((i + 1) * (configList.size() + 5) / 6, configList.size())))
                         .collect(Collectors.toList());
+                CountDownLatch latchConfig = new CountDownLatch(configData.size());
                 for (int i = 0; i < configData.size(); i++) {
-                    ConfigMoreThread config = new ConfigMoreThread(configData.get(i), filePath.replace("params", "config"), 1);
+                    ConfigMoreThread config = new ConfigMoreThread(configData.get(i), filePath.replace("params", "config"), 1, latchConfig);
                     Thread thread = new Thread(config);
                     thread.start();
                 }
+                latchConfig.await();
             }
-
-
             if (bagList.size() <= 36) {
                 for (Object o : bagList) {
                     String ids = ((Bean_VersionIds) o).get_C_Ids();
@@ -654,12 +691,18 @@ public class MainConfigData {
             } else {
                 List<List<Object>> bagData = IntStream.range(0, 6).mapToObj(i -> bagList.subList(i * (bagList.size() + 5) / 6, Math.min((i + 1) * (bagList.size() + 5) / 6, bagList.size())))
                         .collect(Collectors.toList());
+                CountDownLatch latchBag = new CountDownLatch(bagData.size());
                 for (int i = 0; i < bagData.size(); i++) {
-                    ConfigMoreThread bag = new ConfigMoreThread(bagData.get(i), filePath.replace("params", "bag"), 2);
+                    ConfigMoreThread bag = new ConfigMoreThread(bagData.get(i), filePath.replace("params", "bag"), 2, latchBag);
                     Thread thread = new Thread(bag);
                     thread.start();
                 }
+                latchBag.await();
             }
+            while (new DataBaseMethod().method_根据数据类型获取未下载的数据("params", 0).size() > 0 || new DataBaseMethod().method_根据数据类型获取未下载的数据("config", 0).size() > 0 || new DataBaseMethod().method_根据数据类型获取未下载的数据("bag", 0).size() > 0) {
+                method_下载配置数据(filePath);
+            }
+            System.out.println("download ok");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -678,7 +721,8 @@ public class MainConfigData {
         }
     }
 
-    public static void method_取列名(String filePath) {
+    public static String method_取列名(String filePath) {
+        String sqlContent = "";
         try {
             ArrayList<String> columnNames_params = T_Config_File.method_按行读取文件(filePath + "/params_ColumnName.txt");
             ArrayList<String> columnNames_config = T_Config_File.method_按行读取文件(filePath + "/config_ColumnName.txt");
@@ -686,23 +730,112 @@ public class MainConfigData {
             LinkedHashSet<String> hashSet_config = new LinkedHashSet<>(columnNames_config);
             ArrayList<String> lost_params = new ArrayList<>(hashSet_params);
             ArrayList<String> lost_config = new ArrayList<>(hashSet_config);
+            ArrayList<String> paramsList = new ArrayList<>();
+            ArrayList<String> paramsMapList = new ArrayList<>();
+            ArrayList<String> configList = new ArrayList<>();
+            ArrayList<String> configMapList = new ArrayList<>();
+
             for (String paramsString : lost_params) {
                 String params_原来 = paramsString;
-                String params_替换 = paramsString.replace("/", "_").replace("-", "_").replace("[", "_").replace("]", "_").replace(" ", "_").replace(".", "_").replace("（", "_").replace("）", "_").replace("*", "_").replace("·", "_").replace("(", "_").replace(")", "_").replace("%", "_").replace("°", "_").replace("・", "_");
-                System.out.println(params_原来 + "\t" + params_替换);
+                String params_替换 = paramsString.replace("/", "_").replace("-", "_").replace("[", "_").replace("]", "_").replace(" ", "_").replace(".", "_").replace("（", "_").replace("）", "_").replace("*", "_").replace("·", "_").replace("(", "_").replace(")", "").replace("%", "_").replace("°", "_").replace("・", "_");
+                for (int i = 0; i < 6; i++) {
+                    if (params_替换.endsWith("_")) {
+                        params_替换 = params_替换.substring(0, params_替换.length() - 1);
+                    }
+                }
+                paramsList.add("C_" + params_替换);
+                paramsMapList.add("paramsMapList.put(\"" + params_原来 + "\", \"C_" + params_替换 + "\");");
             }
-            System.out.println("==================================================");
             for (String configString : lost_config) {
                 String config_原来 = configString;
                 String config_替换 = configString.replace("/", "_").replace("-", "_").replace("[", "_").replace("]", "_").replace(" ", "_").replace(".", "_").replace("（", "_").replace("）", "_").replace("*", "_").replace("·", "_").replace("(", "_").replace(")", "_").replace("%", "_").replace("°", "_").replace("・", "_");
-                System.out.println(config_原来 + "\t" + config_替换);
+                for (int i = 0; i < 5; i++) {
+                    if (config_替换.endsWith("_")) {
+                        config_替换 = config_替换.substring(0, config_替换.length() - 1);
+                    }
+                }
+                configList.add("C_" + config_替换);
+                configMapList.add("configMapList.put(\"" + config_原来 + "\", \"" + "C_" + config_替换 + "\");");
             }
-//            System.out.println(lost_params.toString().substring(1, lost_params.toString().length() - 1).replace(", ", "\n")+"\t"+lost_params.toString().substring(1, lost_params.toString().length() - 1).replace("/", "_").replace(", ", "\n"));
-//            System.out.println("=============");
-//            System.out.println(lost_config.toString().substring(1, lost_config.toString().length() - 1).replace(", ", "\n")+"\t"+lost_config.toString().substring(1, lost_config.toString().length() - 1).replace("/", "_").replace(", ", "\n"));
-        } catch (Exception e) {
+            LinkedHashSet<String> paramsAll = new LinkedHashSet<>(paramsList);
+            ArrayList<String> paramsFinal = new ArrayList<>(paramsAll);
+            LinkedHashSet<String> configAll = new LinkedHashSet<>(configList);
+            ArrayList<String> configFinal = new ArrayList<>(configAll);
 
+            LinkedHashSet<String> paramsMapListAll = new LinkedHashSet<>(paramsMapList);
+            ArrayList<String> paramsMapListFinal = new ArrayList<>(paramsMapListAll);
+            LinkedHashSet<String> configMapListAll = new LinkedHashSet<>(configMapList);
+            ArrayList<String> configMapListFinal = new ArrayList<>(configMapListAll);
+
+            method_修改Bean_ParamsAndConfig(paramsFinal, "Bean_Params");
+            method_修改Bean_ParamsAndConfig(configFinal, "Bean_Config");
+            method_修改ZiDuan_Prams_Config(paramsMapListFinal, configMapListFinal);
+            sqlContent = method_Param_Config_SQl(paramsFinal, configFinal);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return sqlContent;
+    }
+
+    public static String method_Param_Config_SQl(ArrayList<String> paramsMapList, ArrayList<String> configMapList) {
+        StringBuffer stringBufferConfig = new StringBuffer();
+        for (String param : paramsMapList) {
+            stringBufferConfig.append(param).append(" nvarchar(1000),");
+        }
+
+        stringBufferConfig.append("__");
+        for (String config : configMapList) {
+            stringBufferConfig.append(config).append(" nvarchar(1000),");
+        }
+        stringBufferConfig.append("__");
+        return stringBufferConfig.toString();
+    }
+
+    // 修改Bean_Params
+    public static void method_修改Bean_ParamsAndConfig(ArrayList<String> configList, String fileName) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (String config : configList) {
+            String test = "    private String  " + config + "; public void set_" + config + "(String " + config + "){this." + config + "=" + config + ".replace(\"\\n\",\"\").replace(\"\\r\",\"\").replace(\"\\t\",\"\").trim();}public String get_" + config + "(){return " + config + ";}";
+            stringBuffer.append(test).append("\n");
+        }
+        String beanConfig = T_Config_File.method_读取文件内容("src/main/java/com/wangtiantian/entity/" + fileName + ".java");
+        String tempString = beanConfig.substring(beanConfig.indexOf("return C_PID;") + "return C_PID;".length() + 1, beanConfig.indexOf("    private String  C_UpdateTime;"));
+        beanConfig = beanConfig.replace(tempString, stringBuffer.toString());
+        T_Config_File.method_写文件("src/main/java/com/wangtiantian/entity/" + fileName + ".java", beanConfig);
+    }
+
+    public static void method_修改ZiDuan_Prams_Config(ArrayList<String> paramsMapList, ArrayList<String> configMapList) {
+        StringBuffer stringBufferConfig = new StringBuffer();
+        stringBufferConfig.append("package com.wangtiantian.dao;\n" +
+                "\n" +
+                "import java.text.SimpleDateFormat;\n" +
+                "import java.util.Date;\n" +
+                "import java.util.HashMap;\n" +
+                "\n" +
+                "public class T_ZiDuan_Params_Config {\n" +
+                "    public static HashMap<String, String> params_字段() {\n" +
+                "        HashMap<String, String> paramsMapList = new HashMap<>();");
+        for (String param : paramsMapList) {
+            stringBufferConfig.append("        ").append(param).append("\n");
+        }
+        stringBufferConfig.append("        paramsMapList.put(new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()), \"C_UpdateTime\");\n" +
+                "        return paramsMapList;\n" +
+                "    }\n" +
+                "\n" +
+                "    public static HashMap<String, String> config_字段() {\n" +
+                "        HashMap<String, String> configMapList = new HashMap<>();");
+        for (String config : configMapList) {
+            stringBufferConfig.append("        ").append(config).append("\n");
+        }
+        stringBufferConfig.append("        configMapList.put(new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()), \"C_UpdateTime\");\n" +
+                "        return configMapList;\n" +
+                "    }\n" +
+                "}");
+
+//        String beanConfig = T_Config_File.method_读取文件内容("src/main/java/com/wangtiantian/entity/" + fileName + ".java");
+//        String tempString = beanConfig.substring(beanConfig.indexOf("return C_PID;") + "return C_PID;".length() + 1, beanConfig.indexOf("    private String  C_UpdateTime;"));
+//        beanConfig = beanConfig.replace(tempString, stringBuffer.toString());
+        T_Config_File.method_写文件("src/main/java/com/wangtiantian/dao/T_ZiDuan_Params_Config.java", stringBufferConfig.toString());
     }
 
     // 6.解析配置数据
@@ -738,9 +871,9 @@ public class MainConfigData {
         bag.clear();
         bag.addAll(setBag);
 
-//        new DataBaseMethod().method_批量插入配置数据(params, "params");
+        new DataBaseMethod().method_批量插入配置数据(params, "params");
         new DataBaseMethod().method_批量插入配置数据(config, "config");
-//        new DataBaseMethod().method_批量插入配置数据(bag, "bag");
+        new DataBaseMethod().method_批量插入配置数据(bag, "bag");
 //        dataBaseMethod.method_批量插入配置数据(params, "params");
 //        dataBaseMethod.method_批量插入配置数据(config, "config");
 //        dataBaseMethod.method_批量插入配置数据(bag, "bag");
@@ -783,27 +916,48 @@ public class MainConfigData {
                                 JSONObject paramObject = paramItemArray.getJSONObject(iiii);
                                 String PID = paramObject.getString("specid");
                                 String value = paramObject.getString("value");
-                                if (value.equals("")) {
-                                    for (int j = 0; j < paramObject.getJSONArray("sublist").size(); j++) {
-                                        String optionType = paramObject.getJSONArray("sublist").getJSONObject(j).getString("optiontype");
-                                        String value_sub = paramObject.getJSONArray("sublist").getJSONObject(j).getString("subvalue");
-                                        String subPrice = paramObject.getJSONArray("sublist").getJSONObject(j).getString("price").equals("0") ? "" : "[" + paramObject.getJSONArray("sublist").getJSONObject(j).getString("price") + "元]";
-                                        if (optionType.equals("1")) {
-                                            optionType = "●";
-                                        } else if (optionType.equals("2")) {
-                                            optionType = "○";
+                                String optionType = paramObject.getString("optiontype") == null ? "" : paramObject.getString("optiontype").equals("1") ? "●" : paramObject.getString("optiontype").equals("2") ? "○" : "";
+                                JSONArray subList = paramObject.getJSONArray("sublist");
+                                StringBuffer subValue = new StringBuffer();
+//                                System.out.println(value+"\t"+subList.size());
+                                if (subList.size() > 0) {
+                                    for (int j = 0; j < subList.size(); j++) {
+                                        JSONObject subObject = subList.getJSONObject(j);
+                                        String svType = subObject.getString("optiontype");
+                                        String subvalueItem = subObject.getString("subvalue");
+
+                                        if (!subObject.getString("subname").equals("")) {
+                                            subValue.append(subObject.getString("subname"));
                                         }
-                                        value += optionType + value_sub + subPrice + "####";
-                                        if (value.substring(value.length() - 4).equals("####")) {
-                                            value = value.substring(0, value.length() - 4);
+                                        if (svType.equals("1")) {
+                                            svType = "●";
+                                        } else if (svType.equals("2")) {
+                                            svType = "○";
                                         }
+//                                        System.out.println(subvalueItem);
+                                        subValue.append(svType + subvalueItem + "####");
+//                                        if (subObject.getString("price").equals("0")) {
+//                                            subValue.append("####");
+//                                        } else {
+//                                            subValue.append(subvalueItem+"[" + subObject.getString("price") + "元]####");
+//                                        }
                                     }
+                                }
+                                value = optionType + value + subValue.toString();
+
+                                if (value.contains("####")) {
+                                    if (value.substring(value.length() - 4).equals("####")) {
+                                        value = value.substring(0, value.length() - 4);
+                                    }
+                                }
+                                if (value.equals("")) {
+                                    value = "-";
                                 }
                                 if (pidList.get(i).get_C_PID().equals(PID)) {
                                     Class c = pidList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
-                                    field.set(pidList.get(i), value);
+                                    field.set(pidList.get(i), value.replace("####", "").replace("&nbsp;", ""));
                                 }
                             }
                         }
@@ -850,17 +1004,17 @@ public class MainConfigData {
                                 String value = valueItemsObject.getString("value");
                                 String PID = valueItemsObject.getString("specid");
                                 JSONArray subList = valueItemsObject.getJSONArray("sublist");
+                                JSONArray priceList = valueItemsObject.getJSONArray("price");
                                 StringBuffer subValue = new StringBuffer();
-                                if (subList.size() != 0) {
-                                    for (int iiiii = 0; iiiii < subList.size(); iiiii++) {
-                                        JSONObject subObject = subList.getJSONObject(iiiii);
+                                if (subList.size() > 0) {
+                                    for (int j = 0; j < subList.size(); j++) {
+                                        JSONObject subObject = subList.getJSONObject(j);
                                         String svType = subObject.getString("subvalue");
                                         if (svType.equals("1")) {
                                             svType = "●";
                                         } else if (svType.equals("2")) {
                                             svType = "○";
                                         }
-//                                        subValue.append("[sv:" + subObject.getString("subvalue") + "]" + subObject.getString("subname"));
                                         subValue.append(svType + subObject.getString("subname"));
                                         if (subObject.getString("price").equals("0")) {
                                             subValue.append("####");
@@ -869,10 +1023,28 @@ public class MainConfigData {
                                         }
                                     }
                                 }
+                                if (priceList.size() > 0) {
+                                    for (int j = 0; j < priceList.size(); j++) {
+                                        JSONObject priceObject = priceList.getJSONObject(j);
+                                        String price_sub_name = priceObject.getString("subname");
+                                        String price_price = priceObject.getString("price");
+                                        if (price_sub_name.equals("")) {
+                                            subValue.append("[" + price_price + "元]####");
+                                        } else {
+                                            subValue.append("[" + price_sub_name + "->" + price_price + "元]####");
+                                        }
+                                    }
+                                }
+
                                 if (subValue.toString().equals("####") || subValue.toString().equals("-")) {
                                     subValue.append("-");
                                 }
                                 value = value + subValue.toString();
+                                if (value.contains("####")) {
+                                    if (value.substring(value.length() - 4).equals("####")) {
+                                        value = value.substring(0, value.length() - 4);
+                                    }
+                                }
                                 if (value.equals("")) {
                                     value = "-";
                                 }
@@ -880,7 +1052,7 @@ public class MainConfigData {
                                     Class c = configList.get(i).getClass();
                                     Field field = c.getDeclaredField(mapList.get(typeName + "__" + columnName));
                                     field.setAccessible(true);
-                                    field.set(configList.get(i), value.replace("[sv:1]", "●").replace("[sv:2]", "○").replace("####", ""));
+                                    field.set(configList.get(i), value.replace("####", "").replace("&nbsp;", ""));
                                 }
                             }
                         }
@@ -888,7 +1060,8 @@ public class MainConfigData {
                     dataList.add(configList.get(i));
                 }
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
         return dataList;

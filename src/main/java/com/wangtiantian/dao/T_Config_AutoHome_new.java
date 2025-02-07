@@ -52,6 +52,33 @@ public class T_Config_AutoHome_new extends T_Config_Father {
 
     }
 
+
+    public void create_参数表(String createTableName, String params) {
+        if (method_判断要创建的表是否已存在(createTableName)) {
+            method_删除已存在的表(createTableName);
+        }
+        String sql = "create table " + createTableName + " (\n" +
+                "C_ID int not null  identity(1,1) primary key," +
+                "C_PID nvarchar(200)," +
+                params +
+                ",C_UpdateTime nvarchar(200))";
+        method_i_d_u(sql);
+    }
+
+    public void create_配置表(String createTableName, String configSql) {
+        if (method_判断要创建的表是否已存在(createTableName)) {
+            method_删除已存在的表(createTableName);
+        }
+        String sql = "create table " + createTableName + " (\n" +
+                "C_ID int not null  identity(1,1) primary key,\n" +
+                "C_PID nvarchar(200)," +
+                configSql +
+                ",C_UpdateTime nvarchar(200))";
+        method_i_d_u(sql);
+
+
+    }
+
     public void create_厂商表(String createTableName) {
         if (method_判断要创建的表是否已存在(createTableName)) {
             method_删除已存在的表(createTableName);

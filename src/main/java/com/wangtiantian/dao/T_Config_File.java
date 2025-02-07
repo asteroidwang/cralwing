@@ -29,13 +29,10 @@ public class T_Config_File {
         String text = "";
         try {
             File file = new File(filePath);
-//            if (!file.exists()) {
-//                T_Config_File.method_重复写文件_根据路径创建文件夹(" D:/汽车之家/口碑评价数据/20240804/", "不存在.txt", filePath + "\n");
-//            }
             BufferedReader br = new BufferedReader(new FileReader(file));
             StringBuffer sb = new StringBuffer();
             while ((text = br.readLine()) != null) {
-                sb.append(text);
+                sb.append(text).append("\n");
             }
             br.close();
             text = sb.toString();
@@ -59,6 +56,19 @@ public class T_Config_File {
             writer.close();
             fos.close();
             System.out.println("下载一次\t" + filePath + fileName + "\t" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+    public static void method_写文件(String filePath, String content) {
+        try {
+            FileOutputStream fos = new FileOutputStream(filePath );
+            Writer writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(content);
+            writer.flush();
+            writer.close();
+            fos.close();
+//            System.out.println("下载一次\t" + filePath  + "\t" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         } catch (Exception e) {
             System.out.println(e.toString());
         }
