@@ -18,7 +18,7 @@ public class DataBaseMethod {
     //选择数据库与
     private static int chooseDataBase = 0;
     // xuanze lianjie
-    private static int chooseDataBaseType = 2;
+    private static int chooseDataBaseType = 3;
 
     public void method_入库品牌数据(ArrayList<Object> dataList) {
         T_Config_AutoHome_new brandDao = new T_Config_AutoHome_new(chooseDataBaseType, chooseDataBase, 0);
