@@ -36,14 +36,17 @@ public class ModelPriceMoreThread implements Runnable {
                 }
                 String dealerId = ((ModelDealerData) bean).get_C_DealerId();
                 String modId = ((ModelDealerData) bean).get_C_ModelId();
-                String mainUrl = "https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + dealerId + "&seriesId=" + modId + "&show0Price=1";
-                Document mainDoc =null;
-                try {
-                    mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "UTF-8", mainUrl);
-                    T_Config_File.method_写文件_根据路径创建文件夹(savePath, dealerId + "_" + modId + ".txt", mainDoc.text());
-                }catch (Exception e){
-                    e.printStackTrace();
+                if (!T_Config_File.method_判断文件是否存在(savePath+ dealerId + "_" + modId + ".txt")){
+                    String mainUrl = "https://dealer.autohome.com.cn/handler/other/getdata?__action=dealerlq.getdealerspeclist&dealerId=" + dealerId + "&seriesId=" + modId + "&show0Price=1";
+                    Document mainDoc =null;
+                    try {
+                        mainDoc = Jsoup.parse(new URL(mainUrl).openStream(), "UTF-8", mainUrl);
+                        T_Config_File.method_写文件_根据路径创建文件夹(savePath, dealerId + "_" + modId + ".txt", mainDoc.text());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
