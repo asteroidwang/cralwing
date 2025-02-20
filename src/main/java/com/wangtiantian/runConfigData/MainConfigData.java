@@ -818,7 +818,7 @@ public class MainConfigData extends TimerTask {
         for (String param : paramsMapList) {
             stringBufferConfig.append("        ").append(param).append("\n");
         }
-        stringBufferConfig.append("        paramsMapList.put(new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()), \"C_UpdateTime\");\n" +
+        stringBufferConfig.append("        paramsMapList.put(\"C_UpdateTime\",new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()));\n" +
                 "        return paramsMapList;\n" +
                 "    }\n" +
                 "\n" +
@@ -827,7 +827,7 @@ public class MainConfigData extends TimerTask {
         for (String config : configMapList) {
             stringBufferConfig.append("        ").append(config).append("\n");
         }
-        stringBufferConfig.append("        configMapList.put(new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()), \"C_UpdateTime\");\n" +
+        stringBufferConfig.append("        configMapList.put(\"C_UpdateTime\",new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()));\n" +
                 "        return configMapList;\n" +
                 "    }\n" +
                 "}");
@@ -844,14 +844,7 @@ public class MainConfigData extends TimerTask {
         ArrayList<Object> config = new ArrayList<>();
         ArrayList<Object> bag = new ArrayList<>();
         int groupCount = new DataBaseMethod().get_版本表中组数();
-//        int groupCount = 8219;
-//        ArrayList<Object> groupList = new DataBaseMethod().method_根据数据类型获取未下载的数据("params", 1);
-
-//        int groupCount = dataBaseMethod.get_版本表中组数();
-//        int groupCount = 8219;
-//        ArrayList<Object> groupList = dataBaseMethod.method_根据数据类型获取未下载的数据("params", 1);
         for (int i = 1; i < groupCount + 1; i++) {
-//        int i = 8219;
             String paramsContent = T_Config_File.method_读取文件内容(filePath + "params/" + i + "_params.txt");
             String configContent = T_Config_File.method_读取文件内容(filePath + "config/" + i + "_config.txt");
             String bagContent = T_Config_File.method_读取文件内容(filePath + "bag/" + i + "_bag.txt");
@@ -874,9 +867,6 @@ public class MainConfigData extends TimerTask {
         new DataBaseMethod().method_批量插入配置数据(params, "params");
         new DataBaseMethod().method_批量插入配置数据(config, "config");
         new DataBaseMethod().method_批量插入配置数据(bag, "bag");
-//        dataBaseMethod.method_批量插入配置数据(params, "params");
-//        dataBaseMethod.method_批量插入配置数据(config, "config");
-//        dataBaseMethod.method_批量插入配置数据(bag, "bag");
     }
 
 
