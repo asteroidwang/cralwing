@@ -57,7 +57,7 @@ public class DataBaseConnectPic {
     }
 
     public void insertPictureInfoList(ArrayList<Object> dataList) {
-        T_Config_Picture picture = new T_Config_Picture(chooseDataBaseType,chooseDataBase,1);
+        T_Config_Picture picture = new T_Config_Picture(chooseDataBaseType,chooseDataBase,2);
         picture.insertForeach(dataList);
 
     }

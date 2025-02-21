@@ -11,5 +11,6 @@ public class MainPicture {
          pictureMethod.downloadPictureHtml(filePathPic + "图片html页面/");
         // pictureMethod.checkPictureHtml(filePathPic+"图片html页面/");
         // pictureMethod.parsePictureHtml(filePathPic + "图片html页面/");
+
     }
 }

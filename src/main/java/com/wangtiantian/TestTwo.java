@@ -17,8 +17,8 @@ public class TestTwo {
         // pictureMethod.downloadModelCategory(filePathPic);
         // pictureMethod.parsePicListPage(filePathPic+"车型类型页面/");
         // pictureMethod.downloadPictureHtml(filePathPic+"图片html页面/");
-        pictureMethod.checkPictureHtml(filePathPic+"图片html页面/");
-        // pictureMethod.parsePictureHtml(filePathPic+"图片html页面/");
+        // pictureMethod.checkPictureHtml(filePathPic+"图片html页面/");
+         pictureMethod.parsePictureHtml(filePathPic+"图片html页面/");
 //        Calendar calendar = Calendar.getInstance();
 //        calendar.set(Calendar.HOUR_OF_DAY, 6); // 控制时
 //        calendar.set(Calendar.MINUTE,0);       // 控制分
