@@ -11,10 +11,31 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        DownLoadData downLoadData = new DownLoadData();
-        String websiteURL = "https://car.autohome.com.cn";
-        String saveFilePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/20240807/";
-        System.out.println(System.getProperty("os.name").toLowerCase());
+        int a =0;
+        int b =20;
+        int c =70;
+        int d =75;
+        int e =85;
+        int f =100;
+        double aaa=93.0;
+        System.out.println(aaa>b);
+        if (aaa >= c && aaa < b) {
+            System.out.println("软");
+        } else if (aaa >= b && aaa < c) {
+            System.out.println("松");
+        } else if (aaa >= c && aaa < d) {
+            System.out.println("平");
+        } else if (aaa >= d && aaa < e) {
+            System.out.println("俏");
+        } else if (aaa >= e && aaa <= f) {
+            System.out.println("紧");
+        }else {
+            System.out.println("软");
+        }
+        // DownLoadData downLoadData = new DownLoadData();
+        // String websiteURL = "https://car.autohome.com.cn";
+        // String saveFilePath = "/Users/asteroid/所有文件数据/爬取网页原始数据/汽车之家/配置数据/20240807/";
+        // System.out.println(System.getProperty("os.name").toLowerCase());
         // 1.下载品牌厂商车型数据
         // downLoadData.downLoadBrandFactoryModel(saveFilePath);
         // 1.解析入库 品牌厂商车型

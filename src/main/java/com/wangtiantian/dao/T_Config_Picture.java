@@ -7,6 +7,33 @@ public class T_Config_Picture extends T_Config_Father {
         super(chooseDataBaseType, chooseDataBase, chooseTable);
     }
 
+
+
+    public void update_修改下载车型分类页面的状态(String html) {
+        String sql = "update " + tableName + " set C_IsFinish =1 where C_PictureCategoryMoreHtml = '" + html + "'";
+        method_i_d_u(sql);
+    }
+
+    public void update_修改下载图片html页面的状态(String htmls) {
+        String sql = "update " + tableName + " set C_IsFinish =1 where C_PictureHtml in (" + htmls + ")";
+            method_i_d_u(sql);
+    }
+
+    public void update_修改下载图片html页面的状态为不能下载(String htmlCode) {
+        String sql = "update " + tableName + " set C_IsFinish =5 where C_PictureHtmlCode in (" + htmlCode + ")";
+        method_i_d_u(sql);
+    }
+
+
+
+
+
+
+
+
+
+
+
     public void update_修改已下载数据的版本状态(String versionID) {
         String sql = "update " + tableName + " set C_IsFinish =1 where C_VersionID = " + versionID;
         method_i_d_u(sql);

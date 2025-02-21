@@ -61,9 +61,10 @@ public class T_Config_File {
             System.out.println(e.toString());
         }
     }
+
     public static void method_写文件(String filePath, String content) {
         try {
-            FileOutputStream fos = new FileOutputStream(filePath );
+            FileOutputStream fos = new FileOutputStream(filePath);
             Writer writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             writer.write(content);
             writer.flush();
@@ -166,7 +167,7 @@ public class T_Config_File {
         } catch (Exception e) {
             return false;
         }
-        if (mainDoc != null) {
+        if (mainDoc != null && !mainDoc.toString().contains("�")) {
             T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.toString());
             return true;
         } else {
@@ -190,6 +191,23 @@ public class T_Config_File {
         }
     }
 
+    public static Boolean method_访问url获取Json_token版(String url, String encode, String filePath, String fileName) {
+        Document mainDoc = null;
+        try {
+            mainDoc = Jsoup.connect(url).header("Authorization", "Basic Y2FyLXBjLW5leHRqc3lJNndab292Om5HM2RsNU5uUHZZRA==").userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36").ignoreContentType(true).get();
+
+        } catch (Exception e) {
+            return false;
+        }
+        if (mainDoc != null) {
+            T_Config_File.method_写文件_根据路径创建文件夹(filePath, fileName, mainDoc.text());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public static boolean downloadImage(String imageUrl, String filePath, String fileName) {
         try {
             File file = new File(filePath);
@@ -198,9 +216,9 @@ public class T_Config_File {
             }
             URL url = new URL(imageUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            if (connection.getResponseCode()==500||connection.getResponseCode()==404){
+            if (connection.getResponseCode() == 500 || connection.getResponseCode() == 404) {
                 return false;
-            }else {
+            } else {
                 InputStream inputStream = connection.getInputStream();
                 OutputStream outputStream = new FileOutputStream(filePath + fileName);
                 byte[] buffer = new byte[2048];

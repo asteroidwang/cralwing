@@ -1,6 +1,5 @@
 package com.wangtiantian.mapper;
 
-import com.sun.corba.se.spi.ior.ObjectKey;
 import com.wangtiantian.dao.T_Config_AutoHome;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.dao.T_Config_Price;

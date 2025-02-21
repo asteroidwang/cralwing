@@ -12,7 +12,7 @@ public class ModelDealerPriceDataBase {
 
     // 1.获取未下载的车型id
     public ArrayList<Object> get_获取未下载首页经销商数据的车型数据() {
-        T_Config_AutoHome_new modelDao = new T_Config_AutoHome_new(0, 0, 2);
+        T_Config_AutoHome_new modelDao = new T_Config_AutoHome_new(2, 0, 2);
         return modelDao.get_查找未下载的数据();
     }
 

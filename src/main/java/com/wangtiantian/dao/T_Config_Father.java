@@ -3,6 +3,7 @@ package com.wangtiantian.dao;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import com.wangtiantian.entity.price.ConfirmCarPriceFile;
 
 import java.lang.reflect.Field;
@@ -43,7 +44,7 @@ public class T_Config_Father {
 //            dbString = dbURL + dbName + jsonRoot.getString("charset");
 //            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
 //        } else {
-            dbString = dbURL + dbName;
+        dbString = dbURL + dbName;
 //            System.out.println("当前使用的是" + dbURL + " 连接的数据库是->" + dbName + "\t当前使用的表是->" + tableName);
 //        }
     }
@@ -66,7 +67,21 @@ public class T_Config_Father {
     public void method_i_d_u(String sql) {
         try {
             method_连接数据库();
-            stmt.executeUpdate(sql);
+//            stmt.executeUpdate(sql);
+            int retryCount = 0;
+            while (retryCount < 5) {
+                try {
+                    stmt.executeUpdate(sql);
+                    break;
+                } catch (SQLServerException e) {
+                    if (e.getErrorCode() == 1205) {
+                        retryCount++;
+                        Thread.sleep(1000);
+                    } else {
+                        System.out.println(e);
+                    }
+                }
+            }
             stmt.close();
             conn.close();
         } catch (Exception e) {
@@ -194,11 +209,11 @@ public class T_Config_Father {
                     if (methods[i].getName().equals("get_C_ID")) {
                         continue;
                     }
-                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().replace("\t","").replace("\n","").replace("\r","").trim();
+                    String value = methods[i].invoke(o) == null ? "-" : methods[i].invoke(o).equals("") ? "-" : methods[i].invoke(o).toString().replace("\t", "").replace("\n", "").replace("\r", "").trim();
                     if (methods[i].getReturnType().equals(new String().getClass())) {
-                        valueList += "N'" + value.replace("'", "''").replace("&nbsp;","").replace("\\u0026nbsp;","") + "',";
+                        valueList += "N'" + value.replace("'", "''").replace("&nbsp;", "").replace("\\u0026nbsp;", "") + "',";
                     } else {
-                        valueList += "" + value.replace("'", "''").replace("&nbsp;","").replace("\\u0026nbsp;","") + ",";
+                        valueList += "" + value.replace("'", "''").replace("&nbsp;", "").replace("\\u0026nbsp;", "") + ",";
                     }
                 }
             }
@@ -247,6 +262,7 @@ public class T_Config_Father {
         }
         return num;
     }
+
     public int get_获取表中组数() {
         int num = 0;
         try {
@@ -268,11 +284,13 @@ public class T_Config_Father {
     }
 
     public ArrayList<Object> get_查找未下载的数据() {
-        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 ");
+        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 order by C_ID");
     }
+
     public ArrayList<Object> get_查找未下载的数据_根据时间(String updateTime) {
-        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 and C_UpdateTime like '%"+updateTime+"%'");
+        return method_有条件的查询("select * from " + tableName + " where C_IsFinish =0 and C_UpdateTime like '%" + updateTime + "%'");
     }
+
     public int get_获取表中数据数量_有查询条件(String sql) {
         int num = 0;
         try {
@@ -310,7 +328,12 @@ public class T_Config_Father {
     }
 
     public ArrayList<Object> method_分页查询未下载的数据10000条每次(int begin) {
-        String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT 10000 ROWS ONLY";
+        String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0  ORDER BY C_ID OFFSET "+begin+" ROWS FETCH NEXT 10000 ROWS ONLY";
+        return method_有条件的查询(sql);
+    }
+
+    public ArrayList<Object> method_分页查询未下载的数据(int begin,int number) {
+        String sql = "SELECT * FROM " + tableName + " where C_IsFinish = 0  ORDER BY C_ID OFFSET " + begin + " ROWS FETCH NEXT "+number+" ROWS ONLY";
         return method_有条件的查询(sql);
     }
 

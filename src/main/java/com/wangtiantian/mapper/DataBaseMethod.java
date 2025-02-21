@@ -3,7 +3,6 @@ package com.wangtiantian.mapper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.corba.se.impl.oa.poa.AOMEntry;
 import com.wangtiantian.dao.T_Config_AutoHome;
 import com.wangtiantian.dao.T_Config_AutoHome_new;
 import com.wangtiantian.dao.T_Config_File;
@@ -12,7 +11,6 @@ import com.wangtiantian.entity.*;
 import com.wangtiantian.entity.configData.Bean_VersionIds;
 import com.wangtiantian.entity.price.SaleModData;
 
-import javax.jws.soap.SOAPBinding;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

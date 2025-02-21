@@ -1,7 +1,7 @@
 [
   {
     "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-    "dbURL": "jdbc:sqlserver://localhost:1433;loginTimeout=1000;databaseName=",
+    "dbURL": "jdbc:sqlserver://192.168.0.108:1433;loginTimeout=1000;databaseName=",
     "userName": "sa",
     "password": "7777",
     "dbItems": [
@@ -668,28 +668,20 @@
         ]
       },
       {
-        "dbName": "carPicture",
+        "dbName": "autohomePic",
         "primary": "C_ID",
         "db_table": [
           {
-            "entity": "com.wangtiantian.entity.picture.PictureVersion",
-            "tableName": "T_Picture_Version"
+            "entity": "com.wangtiantian.entity.picture.ModelCategroy",
+            "tableName": "T_Picture_Category"
           },
           {
-            "entity": "com.wangtiantian.entity.picture.Picture_FenYeUrl",
-            "tableName": "T_Picture_FenYe"
+            "entity": "com.wangtiantian.entity.picture.PictureHtml",
+            "tableName": "T_Picture_List"
           },
           {
-            "entity": "com.wangtiantian.entity.picture.PictureHtmlUrl",
-            "tableName": "T_Picture_Html"
-          },
-          {
-            "entity": "com.wangtiantian.entity.picture.PictureHtmlFileData",
-            "tableName": "T_PictureHtmlFileData"
-          },
-          {
-            "entity": "com.wangtiantian.entity.picture.PictureUrl",
-            "tableName": "T_PictureUrl"
+            "entity": "com.wangtiantian.entity.picture.PictureInfo",
+            "tableName": "T_Picture_Info"
           }
         ]
       },
