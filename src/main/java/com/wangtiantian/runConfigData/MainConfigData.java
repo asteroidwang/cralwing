@@ -32,45 +32,29 @@ public class MainConfigData extends TimerTask {
             MainConfigData mainConfigData = new MainConfigData();
             String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
             String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
-            // 创建表
-            System.out.println(new Date() + "\t数据爬取中");
-            mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-            mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-            mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-            if (mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件")) {
-                mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+            if (T_Config_File.method_判断文件是否存在(filePath+"config_ColumnName.txt")){
+                System.out.println("今日任务已完成");
+            }else {
+                // 创建表
+                System.out.println(new Date() + "\t数据爬取中");
+                mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
+                mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
+                mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
+                if (mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件")) {
+                    mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
+                }
+                mainConfigData.method_下载配置数据(filePath + "params/");
+                mainConfigData.method_解析列名(filePath);
+                mainConfigData.method_创建所有爬取汽车之家配置数据表(currentTime, filePath);
+                mainConfigData.method_解析配置数据(filePath);
+                System.out.println(new Date() + "\t数据完成");
             }
-            mainConfigData.method_下载配置数据(filePath + "params/");
-            mainConfigData.method_解析列名(filePath);
-            mainConfigData.method_创建所有爬取汽车之家配置数据表(currentTime, filePath);
-            mainConfigData.method_解析配置数据(filePath);
-            System.out.println(new Date() + "\t数据完成");
+
         } else {
             System.out.println("现在是" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "还没到时间哦～");
         }
 
     }
-//    private DataBaseMethod new DataBaseMethod() = new DataBaseMethod();
-
-//    public static void main(String[] args) {
-//        MainConfigData mainConfigData = new MainConfigData();
-//        String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
-//        String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
-//        // 创建表
-//        System.out.println(new Date()+"\t数据爬取中");
-//        mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
-//        mainConfigData.method_下载品牌厂商车型数据(filePath + "初始数据/");
-//        mainConfigData.parse_品牌厂商车型数据(filePath + "初始数据/");
-//        if (mainConfigData.method_下载含有版本数据的文件(filePath + "含版本数据的文件")) {
-//            mainConfigData.parse_解析含有版本数据的文件(filePath + "含版本数据的文件");
-//        }
-//        mainConfigData.method_下载配置数据(filePath + "params/");
-//        mainConfigData.method_解析列名(filePath);
-//        mainConfigData.method_创建所有爬取汽车之家配置数据表(currentTime, filePath);
-//        mainConfigData.method_解析配置数据(filePath);
-//        System.out.println(new Date()+"\t数据完成");
-//    }
-
     // 创建爬取汽车之家配置数据所需要的表
     public void method_创建所有爬取汽车之家配置数据需要的表(String currentTime) {
         // 获取当前时间
@@ -798,10 +782,23 @@ public class MainConfigData extends TimerTask {
             String test = "    private String  " + config + "; public void set_" + config + "(String " + config + "){this." + config + "=" + config + ".replace(\"\\n\",\"\").replace(\"\\r\",\"\").replace(\"\\t\",\"\").trim();}public String get_" + config + "(){return " + config + ";}";
             stringBuffer.append(test).append("\n");
         }
-        String beanConfig = T_Config_File.method_读取文件内容("src/main/java/com/wangtiantian/entity/" + fileName + ".java");
-        String tempString = beanConfig.substring(beanConfig.indexOf("return C_PID;") + "return C_PID;".length() + 1, beanConfig.indexOf("    private String  C_UpdateTime;"));
-        beanConfig = beanConfig.replace(tempString, stringBuffer.toString());
-        T_Config_File.method_写文件("src/main/java/com/wangtiantian/entity/" + fileName + ".java", beanConfig);
+//          String beanConfig = T_Config_File.method_读取文件内容("src/main/java/com/wangtiantian/entity/" + fileName + ".java");
+//        String tempString = beanConfig.substring(beanConfig.indexOf("return C_PID;") + "return C_PID;".length() + 1, beanConfig.indexOf("    private String  C_UpdateTime;"));
+//        beanConfig = beanConfig.replace(tempString, stringBuffer.toString());
+        StringBuffer beanConfig = new StringBuffer();
+        beanConfig.append("package com.wangtiantian.entity;\n" +
+                "\n" +
+                "import java.text.SimpleDateFormat;\n" +
+                "import java.util.Date;\n" +
+                "\n" +
+                "public class "+fileName+" {\n" +
+                "    private int  C_ID;public int  get_C_ID(){return C_ID;}public void set_C_ID(int C_ID){this.C_ID=C_ID;}\n" +
+                "    private String  C_PID;public void set_C_PID(String C_PID){this.C_PID=C_PID;}public String  get_C_PID(){return C_PID;}\n");
+        beanConfig.append(stringBuffer.toString());
+        beanConfig.append("    private String  C_UpdateTime;public String  get_C_UpdateTime(){return C_UpdateTime;}public void set_C_UpdateTime(String C_UpdateTime){this.C_UpdateTime=new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date());}\n" +
+                "}");
+//        System.out.println(beanConfig);
+        T_Config_File.method_写文件("src/main/java/com/wangtiantian/entity/" + fileName + ".java", beanConfig.toString());
     }
 
     public static void method_修改ZiDuan_Prams_Config(ArrayList<String> paramsMapList, ArrayList<String> configMapList) {
