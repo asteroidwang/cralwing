@@ -460,6 +460,7 @@ public class T_ZiDuan_Params_Config {
         configMapList.put("车外灯光__场景灯语", "C_车外灯光__场景灯语");
         configMapList.put("屏幕/系统__隐私声盾", "C_屏幕_系统__隐私声盾");
         configMapList.put("屏幕/系统__后排投影系统", "C_屏幕_系统__后排投影系统");
+        configMapList.put("四驱/越野__拖车取电口", "C_四驱_越野__拖车取电口");
         configMapList.put("座椅配置__头颈暖风系统", "C_座椅配置__头颈暖风系统");
         configMapList.put("被动安全__后风挡安全气囊", "C_被动安全__后风挡安全气囊");
         configMapList.put("四驱/越野__涉水喉", "C_四驱_越野__涉水喉");
@@ -478,7 +479,6 @@ public class T_ZiDuan_Params_Config {
         configMapList.put("音响/车内灯光__车外扬声器数量", "C_音响_车内灯光__车外扬声器数量");
         configMapList.put("驾驶硬件__芯片总算力(稠密)", "C_驾驶硬件__芯片总算力_稠密");
         configMapList.put("屏幕/系统__屏幕刷新率[Hz]", "C_屏幕_系统__屏幕刷新率_Hz");
-        configMapList.put("四驱/越野__拖车取电口", "C_四驱_越野__拖车取电口");
         configMapList.put("外观/防盗__投影感应开启", "C_外观_防盗__投影感应开启");
         configMapList.put("外观/防盗__感应前备厢", "C_外观_防盗__感应前备厢");
         configMapList.put("驾驶功能__代客泊车", "C_驾驶功能__代客泊车");

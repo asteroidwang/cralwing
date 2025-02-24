@@ -32,9 +32,9 @@ public class MainConfigData extends TimerTask {
             MainConfigData mainConfigData = new MainConfigData();
             String currentTime = new SimpleDateFormat("yyyyMMdd").format(new Date());
             String filePath = "/Users/wangtiantian/MyDisk/汽车之家/配置数据/" + currentTime + "/";
-            if (T_Config_File.method_判断文件是否存在(filePath+"config_ColumnName.txt")){
+            if (T_Config_File.method_判断文件是否存在(filePath + "config_ColumnName.txt")) {
                 System.out.println("今日任务已完成");
-            }else {
+            } else {
                 // 创建表
                 System.out.println(new Date() + "\t数据爬取中");
                 mainConfigData.method_创建所有爬取汽车之家配置数据需要的表(currentTime);
@@ -55,6 +55,7 @@ public class MainConfigData extends TimerTask {
         }
 
     }
+
     // 创建爬取汽车之家配置数据所需要的表
     public void method_创建所有爬取汽车之家配置数据需要的表(String currentTime) {
         // 获取当前时间
@@ -791,7 +792,7 @@ public class MainConfigData extends TimerTask {
                 "import java.text.SimpleDateFormat;\n" +
                 "import java.util.Date;\n" +
                 "\n" +
-                "public class "+fileName+" {\n" +
+                "public class " + fileName + " {\n" +
                 "    private int  C_ID;public int  get_C_ID(){return C_ID;}public void set_C_ID(int C_ID){this.C_ID=C_ID;}\n" +
                 "    private String  C_PID;public void set_C_PID(String C_PID){this.C_PID=C_PID;}public String  get_C_PID(){return C_PID;}\n");
         beanConfig.append(stringBuffer.toString());
