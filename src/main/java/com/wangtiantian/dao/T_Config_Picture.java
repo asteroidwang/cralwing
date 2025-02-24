@@ -8,7 +8,6 @@ public class T_Config_Picture extends T_Config_Father {
     }
 
 
-
     public void update_修改下载车型分类页面的状态(String html) {
         String sql = "update " + tableName + " set C_IsFinish =1 where C_PictureCategoryMoreHtml = '" + html + "'";
         method_i_d_u(sql);
@@ -16,7 +15,7 @@ public class T_Config_Picture extends T_Config_Father {
 
     public void update_修改下载图片html页面的状态(String htmls) {
         String sql = "update " + tableName + " set C_IsFinish =1 where C_PictureHtml in (" + htmls + ")";
-            method_i_d_u(sql);
+        method_i_d_u(sql);
     }
 
     public void update_修改下载图片html页面的状态为不能下载(String htmlCode) {
@@ -25,13 +24,21 @@ public class T_Config_Picture extends T_Config_Father {
     }
 
 
+    public ArrayList<Object> findPictureByModel(String modelId) {
+        String sql = "select * from " + tableName + " where C_ModelID ='" + modelId + "' order by C_VersionID,C_CategoryCode";
+        return method_有条件的查询(sql);
+    }
+
+    public ArrayList<Object> findPictureShortInfo() {
+        String sql = "select distinct C_BrandID,C_FactoryID,C_ModelID from  " + tableName + "  where C_IsFinish = 0 order by C_BrandID,C_FactoryID,C_ModelID";
+        return method_有条件的查询(sql);
+    }
 
 
-
-
-
-
-
+    public void update_修改下载图片的状态(String codeList) {
+        String sql = "update " + tableName + " set C_IsFinish =1 where C_PictureCode in (" + codeList + ")";
+        method_i_d_u(sql);
+    }
 
 
     public void update_修改已下载数据的版本状态(String versionID) {
@@ -49,18 +56,18 @@ public class T_Config_Picture extends T_Config_Father {
         method_i_d_u(sql);
     }
 
-    public  int get_获取表中未下载的数据总数(){
-        String sql = "select count(*) from "+tableName+ " where C_IsFinish = 0";
+    public int get_获取表中未下载的数据总数() {
+        String sql = "select count(*) from " + tableName + " where C_IsFinish = 0";
         return get_获取表中数据数量_有查询条件(sql);
     }
 
-    public  int get_获取表中已下载的图片具体页面数据总数(){
-        String sql = "select count(*) from "+tableName+ " where C_IsFinish = 0";
+    public int get_获取表中已下载的图片具体页面数据总数() {
+        String sql = "select count(*) from " + tableName + " where C_IsFinish = 0";
         return get_获取表中数据数量_有查询条件(sql);
     }
 
-    public void update_修改厂商id(){
-        String sql ="update T_PictureUrl set T_PictureUrl.C_FactoryID = T_Picture_Version.C_FactoryId from T_Picture_Version where  T_PictureUrl.C_VersionId = T_Picture_Version.C_VersionID";
+    public void update_修改厂商id() {
+        String sql = "update T_PictureUrl set T_PictureUrl.C_FactoryID = T_Picture_Version.C_FactoryId from T_Picture_Version where  T_PictureUrl.C_VersionId = T_Picture_Version.C_VersionID";
         method_i_d_u(sql);
     }
 }
