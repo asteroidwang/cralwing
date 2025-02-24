@@ -58,8 +58,8 @@ public class ThreadPictureInfo implements Runnable {
                     && ((CarBaseInfo) e).get_C_VersionID().equals(versionId)
             ).map(e -> ((CarBaseInfo) e)).collect(Collectors.toList());
             String brandName = carInfo.get(0).get_C_BrandName();
-            String factoryName = carInfo.get(0).get_C_ModelName();
-            String modelName = carInfo.get(0).get_C_FactoryName();
+            String modelName = carInfo.get(0).get_C_ModelName();
+            String factoryName = carInfo.get(0).get_C_FactoryName();
             String versionName = carInfo.get(0).get_C_VersionName();
             String typeName = mapCategory.get(typeCode);
             String folderPath = brandName + "/" + factoryName + "/" + modelName + "/" + versionName + "/" + typeName + "/";

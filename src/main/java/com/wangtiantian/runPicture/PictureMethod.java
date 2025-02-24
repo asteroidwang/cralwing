@@ -412,7 +412,7 @@ public class PictureMethod {
                             .sum(); // 对所有文件大小求和
                 }
                 double doubleSize = Double.parseDouble(String.valueOf(sizeFile)) /fileMaxSizeMac;
-                if (doubleSize>=100){
+                if (doubleSize>=50){
                     break;
                 }
                 String modelCode = ((PictureInfo) modelItem).get_C_ModelID();
@@ -432,8 +432,8 @@ public class PictureMethod {
                                 && ((CarBaseInfo) e).get_C_VersionID().equals(versionId)
                         ).map(e -> ((CarBaseInfo) e)).collect(Collectors.toList());
                         String brandName = carInfo.get(0).get_C_BrandName();
-                        String factoryName = carInfo.get(0).get_C_ModelName();
-                        String modelName = carInfo.get(0).get_C_FactoryName();
+                        String modelName = carInfo.get(0).get_C_ModelName();
+                        String factoryName = carInfo.get(0).get_C_FactoryName();
                         String versionName = carInfo.get(0).get_C_VersionName();
                         String typeName = mapCategory.get(typeCode);
                         String folderPath = brandName + "/" + factoryName + "/" + modelName + "/" + versionName + "/" + typeName + "/";
