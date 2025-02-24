@@ -3,6 +3,7 @@ package com.wangtiantian.runPicture;
 import com.wangtiantian.dao.T_Config_File;
 import com.wangtiantian.entity.Bean_Factory;
 import com.wangtiantian.entity.Bean_Model;
+import com.wangtiantian.entity.configData.CarBaseInfo;
 import com.wangtiantian.entity.picture.ModelCategroy;
 import com.wangtiantian.entity.picture.PictureHtml;
 import com.wangtiantian.entity.picture.PictureInfo;
@@ -12,11 +13,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class PictureMethod {
     // 1.读取图片路径下载的车型首页并解析获取分类信息
@@ -165,9 +172,9 @@ public class PictureMethod {
             int totalCount = dataBaseConnectPic.pictureHtmlCount();
             int a = 0;
             for (int batch = 0; batch < totalCount / 10000; batch++) {
-                if (a>50){
+                if (a > 50) {
                     break;
-                }else {
+                } else {
                     int begin = batch * 10000;
                     ArrayList<Object> dataList = dataBaseConnectPic.findPictureHtmlForeach(begin, 10000);
                     List<String> htmlList = new ArrayList<>();
@@ -176,11 +183,11 @@ public class PictureMethod {
                             String html = ((PictureHtml) o).get_C_PictureHtml();
                             String fileName = ((PictureHtml) o).get_C_PictureHtmlCode() + ".txt";
                             if (!T_Config_File.method_判断文件是否存在(filePath + fileName)) {
-                                if (fileName.startsWith("imgs")){
+                                if (fileName.startsWith("imgs")) {
                                     if (T_Config_File.method_访问url获取网页源码普通版(html, "utf-8", filePath, fileName)) {
                                         htmlList.add(html);
                                     }
-                                }else {
+                                } else {
                                     if (T_Config_File.method_访问url获取网页源码普通版(html, "GBK", filePath, fileName)) {
                                         htmlList.add(html);
                                     }
@@ -193,7 +200,7 @@ public class PictureMethod {
                         for (int i = 0; i < htmlList.size(); i++) {
                             htmls.append("'").append(htmlList.get(i)).append("',");
                         }
-                        dataBaseConnectPic.updatePictureHtmlStatus(htmls.toString().substring(0,htmls.length()-1));
+                        dataBaseConnectPic.updatePictureHtmlStatus(htmls.toString().substring(0, htmls.length() - 1));
                     } else {
                         List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
                                 .collect(Collectors.toList());
@@ -242,8 +249,8 @@ public class PictureMethod {
             int isHigh = 0;
             if (fileName.startsWith("img")) {
                 Elements mainItems = mainDoc.select("#big-img-show");
-                Elements highItems  = mainDoc.select("#gallery-container").select("a");
-                if (highItems.size()>0){
+                Elements highItems = mainDoc.select("#gallery-container").select("a");
+                if (highItems.size() > 0) {
                     highUrl = highItems.attr("href");
                 }
                 navItems = mainDoc.select("nav").select("li").select(".ant-breadcrumb-link");
@@ -261,20 +268,20 @@ public class PictureMethod {
                 imgId = fileName.split("__")[2].replace(".txt", "");
                 typeCode = fileName.split("__")[1];
             }
-            if (navItems.size()==0){
+            if (navItems.size() == 0) {
                 htmls.add(fileName);
             }
         }
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < htmls.size(); i++) {
-            stringBuffer.append("'").append(htmls.get(i).replace(".txt","").replace("__","/")).append("',");
-            File file = new File(filePath+htmls.get(i));
-            if (file.delete()){
+            stringBuffer.append("'").append(htmls.get(i).replace(".txt", "").replace("__", "/")).append("',");
+            File file = new File(filePath + htmls.get(i));
+            if (file.delete()) {
                 System.out.println("已删除");
             }
         }
-        if (htmls.size()>0){
-            dataBaseConnectPic.updatePictureHtmlStatusForNot(stringBuffer.toString().substring(0,stringBuffer.toString().length()-1));
+        if (htmls.size() > 0) {
+            dataBaseConnectPic.updatePictureHtmlStatusForNot(stringBuffer.toString().substring(0, stringBuffer.toString().length() - 1));
         }
 
     }
@@ -298,8 +305,8 @@ public class PictureMethod {
             String highUrl = "";
             if (fileName.startsWith("img")) {
                 Elements mainItems = mainDoc.select("#big-img-show");
-                Elements highItems  = mainDoc.select("#gallery-container").select("a");
-                if (highItems.size()>0){
+                Elements highItems = mainDoc.select("#gallery-container").select("a");
+                if (highItems.size() > 0) {
                     highUrl = highItems.attr("href");
                 }
                 navItems = mainDoc.select("nav").select("li").select(".ant-breadcrumb-link");
@@ -338,7 +345,7 @@ public class PictureMethod {
             pictureInfo.set_C_PictureHtmlCode(fileName.replace(".txt", ""));
             pictureInfo.set_C_PictureHtmlUrl(htmlUrl);
             pictureInfo.set_C_IsFinish(0);
-            pictureInfo.set_C_IsHigh(highUrl.equals("")?0:1);
+            pictureInfo.set_C_IsHigh(highUrl.equals("") ? 0 : 1);
             dataList.add(pictureInfo);
         }
         ArrayList<Object> resultList = new ArrayList<>();
@@ -352,17 +359,121 @@ public class PictureMethod {
         }
         dataBaseConnectPic.insertPictureInfoList(resultList);
     }
-    public void deleteFile(String filePath){
+
+    public void deleteFile(String filePath) {
         ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
         System.out.println(fileList.size());
         for (int i = 0; i < fileList.size(); i++) {
-            if (i>500000){
-                File deFile = new File(filePath+fileList.get(i));
-                if (deFile.delete()){
+            if (i > 500000) {
+                File deFile = new File(filePath + fileList.get(i));
+                if (deFile.delete()) {
                     System.out.println("1");
                 }
             }
 
+        }
+    }
+
+    // 6.下载图片
+    public void downloadPicture(String filePath) {
+        try {
+            Map<String, String> mapCategory = new HashMap<>();
+            mapCategory.put("10", "中控");
+            mapCategory.put("51", "改装");
+            mapCategory.put("3", "座椅");
+            mapCategory.put("12", "细节");
+            mapCategory.put("14", "特点");
+            mapCategory.put("55", "车展");
+            mapCategory.put("1", "外观");
+            mapCategory.put("13", "评测");
+            mapCategory.put("200", "网友实拍");
+            mapCategory.put("15", "活动");
+            mapCategory.put("53", "官图");
+            mapCategory.put("54", "硬致");
+            DataBaseConnectPic dataBaseConnectPic = new DataBaseConnectPic();
+            ArrayList<Object> carInfoList = dataBaseConnectPic.findBaseInfoCar();
+            ArrayList<Object> carShortInfo = dataBaseConnectPic.carShortInfo();
+            for (Object modelItem : carShortInfo) {
+                long fileMaxSizeWindows = 1024 * 1024*1024;
+                long fileMaxSizeMac = 1000*1000*1000;
+                Path path = Paths.get(filePath);
+                long sizeFile = 0;
+                try (Stream<Path> walk = Files.walk(path)) {
+                     sizeFile = walk
+                            .filter(Files::isRegularFile) // 仅统计普通文件
+                            .mapToLong(p -> {
+                                try {
+                                    return Files.size(p);
+                                } catch (IOException e) {
+                                    System.err.println("无法读取文件: " + p);
+                                    return 0L;
+                                }
+                            })
+                            .sum(); // 对所有文件大小求和
+                }
+                double doubleSize = Double.parseDouble(String.valueOf(sizeFile)) /fileMaxSizeMac;
+                if (doubleSize>=100){
+                    break;
+                }
+                String modelCode = ((PictureInfo) modelItem).get_C_ModelID();
+                ArrayList<Object> dataList = dataBaseConnectPic.findPictureByModel(modelCode);
+                List<String> htmlList = new ArrayList<>();
+                if (dataList.size() < 32) {
+                    for (Object o : dataList) {
+                        String brandId = ((PictureInfo) o).get_C_BrandID();
+                        String factoryId = ((PictureInfo) o).get_C_FactoryID();
+                        String modelId = ((PictureInfo) o).get_C_ModelID();
+                        String versionId = ((PictureInfo) o).get_C_VersionID();
+                        String typeCode = ((PictureInfo) o).get_C_CategoryCode();
+                        String imgCode = ((PictureInfo) o).get_C_PictureCode();
+                        List<CarBaseInfo> carInfo = carInfoList.stream().filter(e -> ((CarBaseInfo) e).get_C_BrandID().equals(brandId)
+                                && ((CarBaseInfo) e).get_C_FactoryID().equals(factoryId)
+                                && ((CarBaseInfo) e).get_C_ModelID().equals(modelId)
+                                && ((CarBaseInfo) e).get_C_VersionID().equals(versionId)
+                        ).map(e -> ((CarBaseInfo) e)).collect(Collectors.toList());
+                        String brandName = carInfo.get(0).get_C_BrandName();
+                        String factoryName = carInfo.get(0).get_C_ModelName();
+                        String modelName = carInfo.get(0).get_C_FactoryName();
+                        String versionName = carInfo.get(0).get_C_VersionName();
+                        String typeName = mapCategory.get(typeCode);
+                        String folderPath = brandName + "/" + factoryName + "/" + modelName + "/" + versionName + "/" + typeName + "/";
+                        String fileName = imgCode + ".jpg";
+                        String imgUrl = ((PictureInfo) o).get_C_IsHigh() == 1 ? ((PictureInfo) o).get_C_PictureHighUrl() : ((PictureInfo) o).get_C_PictureUrl();
+                        if (!T_Config_File.method_判断文件是否存在(filePath + folderPath + fileName)) {
+                            if (T_Config_File.downloadImage(imgUrl, filePath + folderPath, fileName)) {
+                                htmlList.add(imgCode);
+                            }
+                        } else {
+                            htmlList.add(imgCode);
+                        }
+                    }
+                    if (htmlList.size() > 0) {
+                        StringBuffer htmls = new StringBuffer();
+                        for (int i = 0; i < htmlList.size(); i++) {
+                            htmls.append("'").append(htmlList.get(i)).append("',");
+                        }
+                        dataBaseConnectPic.updateImgStatus(htmls.toString().substring(0, htmls.toString().length() - 1));
+                    }
+                } else {
+                    List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                            .collect(Collectors.toList());
+                    CountDownLatch latch = new CountDownLatch(list.size());
+                    for (int i = 0; i < list.size(); i++) {
+                        ThreadPictureInfo moreThread = new ThreadPictureInfo(list.get(i), filePath, latch, carInfoList);
+                        Thread thread = new Thread(() -> {
+                            try {
+                                moreThread.run();
+                            } finally {
+                                latch.countDown();
+                            }
+                        });
+                        thread.start();
+                    }
+                    latch.await();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

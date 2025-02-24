@@ -590,8 +590,8 @@
             "tableName": "T_汽车之家_选装包_20250220"
           },
           {
-            "entity": "entity.BeanColor",
-            "tableName": "T_外观颜色"
+            "entity": "com.wangtiantian.entity.configData.CarBaseInfo",
+            "tableName": "T_车辆基本信息"
           },
           {
             "entity": "entity.BeanColor",
