@@ -163,53 +163,60 @@ public class PictureMethod {
         try {
             DataBaseConnectPic dataBaseConnectPic = new DataBaseConnectPic();
             int totalCount = dataBaseConnectPic.pictureHtmlCount();
+            int a = 0;
             for (int batch = 0; batch < totalCount / 10000; batch++) {
-                int begin = batch * 10000;
-                ArrayList<Object> dataList = dataBaseConnectPic.findPictureHtmlForeach(begin, 10000);
-                List<String> htmlList = new ArrayList<>();
-                if (dataList.size() < 32) {
-                    for (Object o : dataList) {
-                        String html = ((PictureHtml) o).get_C_PictureHtml();
-                        String fileName = ((PictureHtml) o).get_C_PictureHtmlCode() + ".txt";
-                        if (!T_Config_File.method_判断文件是否存在(filePath + fileName)) {
-                            if (fileName.startsWith("imgs")){
-                                if (T_Config_File.method_访问url获取网页源码普通版(html, "utf-8", filePath, fileName)) {
-                                    htmlList.add(html);
+                if (a>50){
+                    break;
+                }else {
+                    int begin = batch * 10000;
+                    ArrayList<Object> dataList = dataBaseConnectPic.findPictureHtmlForeach(begin, 10000);
+                    List<String> htmlList = new ArrayList<>();
+                    if (dataList.size() < 32) {
+                        for (Object o : dataList) {
+                            String html = ((PictureHtml) o).get_C_PictureHtml();
+                            String fileName = ((PictureHtml) o).get_C_PictureHtmlCode() + ".txt";
+                            if (!T_Config_File.method_判断文件是否存在(filePath + fileName)) {
+                                if (fileName.startsWith("imgs")){
+                                    if (T_Config_File.method_访问url获取网页源码普通版(html, "utf-8", filePath, fileName)) {
+                                        htmlList.add(html);
+                                    }
+                                }else {
+                                    if (T_Config_File.method_访问url获取网页源码普通版(html, "GBK", filePath, fileName)) {
+                                        htmlList.add(html);
+                                    }
                                 }
-                            }else {
-                                if (T_Config_File.method_访问url获取网页源码普通版(html, "GBK", filePath, fileName)) {
-                                    htmlList.add(html);
-                                }
+                            } else {
+                                htmlList.add(html);
                             }
-                        } else {
-                            htmlList.add(html);
                         }
+                        StringBuffer htmls = new StringBuffer();
+                        for (int i = 0; i < htmlList.size(); i++) {
+                            htmls.append("'").append(htmlList.get(i)).append("',");
+                        }
+                        dataBaseConnectPic.updatePictureHtmlStatus(htmls.toString().substring(0,htmls.length()-1));
+                    } else {
+                        List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                                .collect(Collectors.toList());
+                        CountDownLatch latch = new CountDownLatch(list.size());
+                        for (int i = 0; i < list.size(); i++) {
+                            ThreadPictureHtml moreThread = new ThreadPictureHtml(list.get(i), filePath, latch);
+                            Thread thread = new Thread(() -> {
+                                try {
+                                    moreThread.run();
+                                } finally {
+                                    latch.countDown();
+                                }
+                            });
+                            thread.start();
+                        }
+                        latch.await();
                     }
-                    StringBuffer htmls = new StringBuffer();
-                    for (int i = 0; i < htmlList.size(); i++) {
-                        htmls.append("'").append(htmlList.get(i)).append("',");
-                    }
-                    dataBaseConnectPic.updatePictureHtmlStatus(htmls.toString().substring(0,htmls.length()-1));
-                } else {
-                    List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
-                            .collect(Collectors.toList());
-                    CountDownLatch latch = new CountDownLatch(list.size());
-                    for (int i = 0; i < list.size(); i++) {
-                        ThreadPictureHtml moreThread = new ThreadPictureHtml(list.get(i), filePath, latch);
-                        Thread thread = new Thread(() -> {
-                            try {
-                                moreThread.run();
-                            } finally {
-                                latch.countDown();
-                            }
-                        });
-                        thread.start();
-                    }
-                    latch.await();
+                    a++;
                 }
+
             }
-
-
+            checkPictureHtml(filePath);
+            parsePictureHtml(filePath);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -343,7 +350,20 @@ public class PictureMethod {
                 resultList.add(o);
             }
         }
-//        dataBaseConnectPic.insertPictureInfoList(resultList);
+        dataBaseConnectPic.insertPictureInfoList(resultList);
+    }
+    public void deleteFile(String filePath){
+        ArrayList<String> fileList = T_Config_File.method_获取文件名称(filePath);
+        System.out.println(fileList.size());
+        for (int i = 0; i < fileList.size(); i++) {
+            if (i>500000){
+                File deFile = new File(filePath+fileList.get(i));
+                if (deFile.delete()){
+                    System.out.println("1");
+                }
+            }
+
+        }
     }
 
 
