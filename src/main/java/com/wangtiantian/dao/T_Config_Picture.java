@@ -25,12 +25,12 @@ public class T_Config_Picture extends T_Config_Father {
 
 
     public ArrayList<Object> findPictureByModel(String modelId) {
-        String sql = "select * from " + tableName + " where C_ModelID ='" + modelId + "' order by C_VersionID,C_CategoryCode";
+        String sql = "select * from " + tableName + " where C_IsFinish=0 and C_ModelID ='" + modelId + "' order by C_VersionID,C_CategoryCode";
         return method_有条件的查询(sql);
     }
 
     public ArrayList<Object> findPictureShortInfo() {
-        String sql = "select distinct C_BrandID,C_FactoryID,C_ModelID from  " + tableName + "  where C_IsFinish = 0 order by C_BrandID,C_FactoryID,C_ModelID";
+        String sql = "select distinct C_BrandID,C_FactoryID,C_ModelID from  " + tableName + "  where C_IsFinish = 0 and C_BrandID in ('120') order by C_BrandID,C_FactoryID,C_ModelID";
         return method_有条件的查询(sql);
     }
 

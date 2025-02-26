@@ -9,7 +9,7 @@ public class MainPicture {
         // pictureMethod.parseModelHomePage(filePath);
         // pictureMethod.downloadModelCategory(filePathPic+"车型类型页面/");
         // pictureMethod.parsePicListPage(filePathPic + "车型类型页面/");
-        pictureMethod.downloadPictureHtml(filePathPic + "图片html页面_第四部分/");
+        pictureMethod.downloadPictureHtml(filePathPic + "图片html页面_第七部分/");
         // pictureMethod.downloadPicture(filePathPic + "图片/");
     }
 }

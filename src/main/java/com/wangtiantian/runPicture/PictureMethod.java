@@ -170,55 +170,72 @@ public class PictureMethod {
         try {
             DataBaseConnectPic dataBaseConnectPic = new DataBaseConnectPic();
             int totalCount = dataBaseConnectPic.pictureHtmlCount();
-            int a = 0;
             for (int batch = 0; batch < totalCount / 10000; batch++) {
-                if (a > 50) {
-                    break;
-                } else {
-                    int begin = batch * 10000;
-                    ArrayList<Object> dataList = dataBaseConnectPic.findPictureHtmlForeach(begin, 10000);
-                    List<String> htmlList = new ArrayList<>();
-                    if (dataList.size() < 32) {
-                        for (Object o : dataList) {
-                            String html = ((PictureHtml) o).get_C_PictureHtml();
-                            String fileName = ((PictureHtml) o).get_C_PictureHtmlCode() + ".txt";
-                            if (!T_Config_File.method_判断文件是否存在(filePath + fileName)) {
-                                if (fileName.startsWith("imgs")) {
-                                    if (T_Config_File.method_访问url获取网页源码普通版(html, "utf-8", filePath, fileName)) {
-                                        htmlList.add(html);
+                long fileMaxSizeWindows = 1024 * 1024 * 1024;
+                long fileMaxSizeMac = 1000 * 1000 * 1000;
+                if (T_Config_File.method_判断文件是否存在(filePath)) {
+                    Path path = Paths.get(filePath);
+                    long sizeFile = 0;
+                    try (Stream<Path> walk = Files.walk(path)) {
+                        sizeFile = walk
+                                .filter(Files::isRegularFile) // 仅统计普通文件
+                                .mapToLong(p -> {
+                                    try {
+                                        return Files.size(p);
+                                    } catch (IOException e) {
+                                        System.err.println("无法读取文件: " + p);
+                                        return 0L;
                                     }
-                                } else {
-                                    if (T_Config_File.method_访问url获取网页源码普通版(html, "GBK", filePath, fileName)) {
-                                        htmlList.add(html);
-                                    }
+                                })
+                                .sum(); // 对所有文件大小求和
+                    }
+                    double doubleSize = Double.parseDouble(String.valueOf(sizeFile)) / fileMaxSizeMac;
+                    if (doubleSize >= 100) {
+                        break;
+                    }
+                }
+                int begin = batch * 10000;
+                ArrayList<Object> dataList = dataBaseConnectPic.findPictureHtmlForeach(begin, 10000);
+                List<String> htmlList = new ArrayList<>();
+                if (dataList.size() < 32) {
+                    for (Object o : dataList) {
+                        String html = ((PictureHtml) o).get_C_PictureHtml();
+                        String fileName = ((PictureHtml) o).get_C_PictureHtmlCode() + ".txt";
+                        if (!T_Config_File.method_判断文件是否存在(filePath + fileName)) {
+                            if (fileName.startsWith("imgs")) {
+                                if (T_Config_File.method_访问url获取网页源码普通版(html, "utf-8", filePath, fileName)) {
+                                    htmlList.add(html);
                                 }
                             } else {
-                                htmlList.add(html);
-                            }
-                        }
-                        StringBuffer htmls = new StringBuffer();
-                        for (int i = 0; i < htmlList.size(); i++) {
-                            htmls.append("'").append(htmlList.get(i)).append("',");
-                        }
-                        dataBaseConnectPic.updatePictureHtmlStatus(htmls.toString().substring(0, htmls.length() - 1));
-                    } else {
-                        List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
-                                .collect(Collectors.toList());
-                        CountDownLatch latch = new CountDownLatch(list.size());
-                        for (int i = 0; i < list.size(); i++) {
-                            ThreadPictureHtml moreThread = new ThreadPictureHtml(list.get(i), filePath, latch);
-                            Thread thread = new Thread(() -> {
-                                try {
-                                    moreThread.run();
-                                } finally {
-                                    latch.countDown();
+                                if (T_Config_File.method_访问url获取网页源码普通版(html, "GBK", filePath, fileName)) {
+                                    htmlList.add(html);
                                 }
-                            });
-                            thread.start();
+                            }
+                        } else {
+                            htmlList.add(html);
                         }
-                        latch.await();
                     }
-                    a++;
+                    StringBuffer htmls = new StringBuffer();
+                    for (int i = 0; i < htmlList.size(); i++) {
+                        htmls.append("'").append(htmlList.get(i)).append("',");
+                    }
+                    dataBaseConnectPic.updatePictureHtmlStatus(htmls.toString().substring(0, htmls.length() - 1));
+                } else {
+                    List<List<Object>> list = IntStream.range(0, 6).mapToObj(i -> dataList.subList(i * (dataList.size() + 5) / 6, Math.min((i + 1) * (dataList.size() + 5) / 6, dataList.size())))
+                            .collect(Collectors.toList());
+                    CountDownLatch latch = new CountDownLatch(list.size());
+                    for (int i = 0; i < list.size(); i++) {
+                        ThreadPictureHtml moreThread = new ThreadPictureHtml(list.get(i), filePath, latch);
+                        Thread thread = new Thread(() -> {
+                            try {
+                                moreThread.run();
+                            } finally {
+                                latch.countDown();
+                            }
+                        });
+                        thread.start();
+                    }
+                    latch.await();
                 }
 
             }
@@ -394,27 +411,30 @@ public class PictureMethod {
             ArrayList<Object> carInfoList = dataBaseConnectPic.findBaseInfoCar();
             ArrayList<Object> carShortInfo = dataBaseConnectPic.carShortInfo();
             for (Object modelItem : carShortInfo) {
-                long fileMaxSizeWindows = 1024 * 1024*1024;
-                long fileMaxSizeMac = 1000*1000*1000;
-                Path path = Paths.get(filePath);
-                long sizeFile = 0;
-                try (Stream<Path> walk = Files.walk(path)) {
-                     sizeFile = walk
-                            .filter(Files::isRegularFile) // 仅统计普通文件
-                            .mapToLong(p -> {
-                                try {
-                                    return Files.size(p);
-                                } catch (IOException e) {
-                                    System.err.println("无法读取文件: " + p);
-                                    return 0L;
-                                }
-                            })
-                            .sum(); // 对所有文件大小求和
+                long fileMaxSizeWindows = 1024 * 1024 * 1024;
+                long fileMaxSizeMac = 1000 * 1000 * 1000;
+                if (T_Config_File.method_判断文件是否存在(filePath)) {
+                    Path path = Paths.get(filePath);
+                    long sizeFile = 0;
+                    try (Stream<Path> walk = Files.walk(path)) {
+                        sizeFile = walk
+                                .filter(Files::isRegularFile) // 仅统计普通文件
+                                .mapToLong(p -> {
+                                    try {
+                                        return Files.size(p);
+                                    } catch (IOException e) {
+                                        System.err.println("无法读取文件: " + p);
+                                        return 0L;
+                                    }
+                                })
+                                .sum(); // 对所有文件大小求和
+                    }
+                    double doubleSize = Double.parseDouble(String.valueOf(sizeFile)) / fileMaxSizeMac;
+                    if (doubleSize >= 50) {
+                        break;
+                    }
                 }
-                double doubleSize = Double.parseDouble(String.valueOf(sizeFile)) /fileMaxSizeMac;
-                if (doubleSize>=50){
-                    break;
-                }
+
                 String modelCode = ((PictureInfo) modelItem).get_C_ModelID();
                 ArrayList<Object> dataList = dataBaseConnectPic.findPictureByModel(modelCode);
                 List<String> htmlList = new ArrayList<>();
