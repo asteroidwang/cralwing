@@ -241,6 +241,7 @@ public class PictureMethod {
             }
             checkPictureHtml(filePath);
             parsePictureHtml(filePath);
+            T_Config_File.method_压缩文件(filePath,filePath.substring(0,filePath.indexOf("图片html页面"))+"图片html页面.zip");
         } catch (Exception e) {
             e.printStackTrace();
         }
