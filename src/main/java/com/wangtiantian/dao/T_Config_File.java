@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class T_Config_File {
     //读取文件内容
@@ -256,6 +259,41 @@ public class T_Config_File {
             e.printStackTrace();
         }
         return encodedString;
+    }
+
+
+    public static void method_压缩文件(String sourceFolderPath,String zipFilePath) {
+        try (FileOutputStream fos = new FileOutputStream(zipFilePath);
+             ZipOutputStream zos = new ZipOutputStream(fos)) {
+
+            File folderToZip = new File(sourceFolderPath);
+            compressDirectoryToZipfile(folderToZip, folderToZip, zos);
+
+            System.out.println("文件夹压缩成功");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void compressDirectoryToZipfile(File rootDir, File dirToZip, ZipOutputStream zos) throws IOException {
+        for (File file : dirToZip.listFiles()) {
+            if (file.isDirectory()) {
+                compressDirectoryToZipfile(rootDir, file, zos);
+            } else {
+                try (FileInputStream fis = new FileInputStream(file)) {
+                    String zipFilePath = file.getCanonicalPath().substring(rootDir.getCanonicalPath().length() + 1);
+                    ZipEntry zipEntry = new ZipEntry(zipFilePath);
+                    zos.putNextEntry(zipEntry);
+
+                    byte[] bytes = new byte[1024];
+                    int length;
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zos.write(bytes, 0, length);
+                    }
+                    zos.closeEntry();
+                }
+            }
+        }
     }
 
 }
